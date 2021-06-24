@@ -1,0 +1,170 @@
+PODS:
+  - Alamofire (5.4.3)
+  - Bugly (2.5.90)
+  - Differentiator (5.0.0)
+  - GrowingTextView (0.7.2)
+  - IQKeyboardManager (6.5.6)
+  - ISEmojiView (0.2.6)
+  - Kingfisher (6.3.0)
+  - MJRefresh (3.6.1)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - Pecker (0.4.0)
+  - Pulsator (0.6.0)
+  - R.swift (5.4.0):
+    - R.swift.Library (~> 5.3.0)
+  - R.swift.Library (5.3.0)
+  - RCVoiceRoomLib (0.9.1):
+    - RongCloudIM/IMLib (= 5.1.2.1)
+    - RongCloudRTC/RongRTCLib (= 5.1.2.1)
+  - ReactorKit (3.0.0):
+    - RxSwift (~> 6.0)
+    - WeakMapTable (~> 1.1)
+  - Reusable (4.1.1):
+    - Reusable/Storyboard (= 4.1.1)
+    - Reusable/View (= 4.1.1)
+  - Reusable/Storyboard (4.1.1)
+  - Reusable/View (4.1.1)
+  - RongCloudIM/ChatRoom (5.1.2.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/CustomerService (5.1.2.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/Discussion (5.1.2.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/IMKit (5.1.2.1):
+    - RongCloudIM/IMLib
+  - RongCloudIM/IMLib (5.1.2.1):
+    - RongCloudIM/ChatRoom
+    - RongCloudIM/CustomerService
+    - RongCloudIM/Discussion
+    - RongCloudIM/IMLibCore
+    - RongCloudIM/Location
+    - RongCloudIM/PublicService
+  - RongCloudIM/IMLibCore (5.1.2.1)
+  - RongCloudIM/Location (5.1.2.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/PublicService (5.1.2.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudRTC/RongRTCLib (5.1.2.1):
+    - RongCloudIM/IMLibCore (>= 5.1.2)
+  - RxCocoa (6.2.0):
+    - RxRelay (= 6.2.0)
+    - RxSwift (= 6.2.0)
+  - RxDataSources (5.0.0):
+    - Differentiator (~> 5.0)
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxGesture (4.0.2):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxRelay (6.2.0):
+    - RxSwift (= 6.2.0)
+  - RxSwift (6.2.0)
+  - RxViewController (2.0.0):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - SnapKit (5.0.1)
+  - SVProgressHUD (2.2.5)
+  - SwiftyBeaver (1.9.5)
+  - UMCommon (7.3.0):
+    - UMDevice
+  - UMDevice (2.0.1)
+  - ViewAnimator (3.1.0)
+  - WeakMapTable (1.2.0)
+
+DEPENDENCIES:
+  - Bugly
+  - GrowingTextView (= 0.7.2)
+  - IQKeyboardManager
+  - ISEmojiView
+  - Kingfisher
+  - MJRefresh
+  - Moya
+  - Pecker
+  - Pulsator
+  - R.swift
+  - RCVoiceRoomLib
+  - ReactorKit
+  - Reusable
+  - RongCloudIM/IMKit
+  - RxDataSources
+  - RxGesture
+  - RxViewController
+  - SnapKit
+  - SVProgressHUD
+  - SwiftyBeaver
+  - UMCommon
+  - ViewAnimator
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Bugly
+    - Differentiator
+    - GrowingTextView
+    - IQKeyboardManager
+    - ISEmojiView
+    - Kingfisher
+    - MJRefresh
+    - Moya
+    - Pecker
+    - Pulsator
+    - R.swift
+    - R.swift.Library
+    - RCVoiceRoomLib
+    - ReactorKit
+    - Reusable
+    - RongCloudIM
+    - RongCloudRTC
+    - RxCocoa
+    - RxDataSources
+    - RxGesture
+    - RxRelay
+    - RxSwift
+    - RxViewController
+    - SnapKit
+    - SVProgressHUD
+    - SwiftyBeaver
+    - UMCommon
+    - UMDevice
+    - ViewAnimator
+    - WeakMapTable
+
+SPEC CHECKSUMS:
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
+  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
+  IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
+  ISEmojiView: f7cd94a6c93307f429ec5da001293d0b02247f03
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
+  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  Pecker: 5025913055924d4d6c786935e4ba7dc241d36359
+  Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  R.swift: c533450b0f7dc494e0993f5f1a1db925d84c3006
+  R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
+  RCVoiceRoomLib: 8859ad451ffe4ad73fddf4330b23c58b90b123ec
+  ReactorKit: 5348c9881dcb546605b451e32759dccc9937d36e
+  Reusable: 53a9acf5c536f229b31b5865782414b508252ddb
+  RongCloudIM: 2360a6fc17ad572a6643faf1af2d78740fd11482
+  RongCloudRTC: fc130784cfaba4649a2ece0cbba1a09df42e36c7
+  RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
+  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
+  RxGesture: f059f2aeef966fb17dad56ee440e76410f10e55f
+  RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
+  RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
+  RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
+  UMCommon: d654d43e83dcccb3dbb95d97f7b88045733a1380
+  UMDevice: f9ed639486a73620bc7c800d1657f110df50c3e1
+  ViewAnimator: a9ceed80266e00fd435ec4fb99b2df64d580d0e4
+  WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
+
+PODFILE CHECKSUM: a246c45e9dc55379dc338d59c5eafc9cee4552e9
+
+COCOAPODS: 1.10.1

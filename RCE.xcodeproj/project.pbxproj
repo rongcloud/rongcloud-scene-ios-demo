@@ -1,0 +1,2236 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00187F697F8E5FC3AEAE79F8 /* Pods_RCEUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26392A0CD15031DCFE110BD0 /* Pods_RCEUITests.framework */; };
+		A72E36B663FA5DC5B4937FC7 /* Pods_RCETests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F57F138B2CDFB95035E2E72 /* Pods_RCETests.framework */; };
+		CB133A2C26576A2F00CF1C11 /* RoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB133A2B26576A2F00CF1C11 /* RoomListTableViewCell.swift */; };
+		CB133A2E265787B300CF1C11 /* VoiceRoomUserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB133A2D265787B300CF1C11 /* VoiceRoomUserListViewController.swift */; };
+		CB133A332657AAF400CF1C11 /* AppStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB133A322657AAF400CF1C11 /* AppStyle.swift */; };
+		CB133A362657C4FF00CF1C11 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB133A352657C4FF00CF1C11 /* HomeCollectionViewCell.swift */; };
+		CB1DE080266A09AC0032F120 /* RefreshToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1DE07F266A09AC0032F120 /* RefreshToken.swift */; };
+		CB275E02265B8AE1003552CF /* VoiceRoomMusicControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB275E01265B8AE1003552CF /* VoiceRoomMusicControlViewController.swift */; };
+		CB275E0B265CEA66003552CF /* ChatroomConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB275E0A265CEA66003552CF /* ChatroomConversationListViewController.swift */; };
+		CB275E0E265CECD3003552CF /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB275E0D265CECD3003552CF /* ConversationTableViewCell.swift */; };
+		CB275E10265D0BDB003552CF /* VoiceRoomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB275E0F265D0BDB003552CF /* VoiceRoomAlertViewController.swift */; };
+		CB275E12265D0E71003552CF /* VoiceRoomNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB275E11265D0E71003552CF /* VoiceRoomNotification.swift */; };
+		CB296E88263819B400DFADD8 /* AppResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB296E87263819B400DFADD8 /* AppResponse.swift */; };
+		CB296E9026381A0700DFADD8 /* VoiceRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB296E8F26381A0700DFADD8 /* VoiceRoom.swift */; };
+		CB296E9526381D4300DFADD8 /* SendCodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB296E9426381D4300DFADD8 /* SendCodeResponse.swift */; };
+		CB31A046266E40DB00601294 /* RxDataSources+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB31A045266E40DB00601294 /* RxDataSources+Extension.swift */; };
+		CB3599DA262D67B100B5F5ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3599D9262D67B100B5F5ED /* AppDelegate.swift */; };
+		CB3599E3262D67B200B5F5ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3599E2262D67B200B5F5ED /* Assets.xcassets */; };
+		CB3599E6262D67B200B5F5ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB3599E4262D67B200B5F5ED /* LaunchScreen.storyboard */; };
+		CB3599FC262D67B300B5F5ED /* RCEUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3599FB262D67B300B5F5ED /* RCEUITests.swift */; };
+		CB359A29262D69BE00B5F5ED /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A28262D69BE00B5F5ED /* Environment.swift */; };
+		CB359A38262D6A1800B5F5ED /* AppDenpendency.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A37262D6A1800B5F5ED /* AppDenpendency.swift */; };
+		CB359A5A262D6BA700B5F5ED /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A59262D6BA700B5F5ED /* R.generated.swift */; };
+		CB359A62262D6BE100B5F5ED /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A61262D6BE100B5F5ED /* HomeViewController.swift */; };
+		CB359A6B262D6C1000B5F5ED /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A6A262D6C1000B5F5ED /* HomeReactor.swift */; };
+		CB359A89262D715700B5F5ED /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB359A88262D715700B5F5ED /* HomeSection.swift */; };
+		CB47390C2631906700490EF4 /* UMengEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47390B2631906700490EF4 /* UMengEvent.swift */; };
+		CB47392926327A6600490EF4 /* TestRCVoiceRoomSeatInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47392826327A6600490EF4 /* TestRCVoiceRoomSeatInfo.swift */; };
+		CB47394C26327D0E00490EF4 /* TestCommonUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47394B26327D0E00490EF4 /* TestCommonUtil.swift */; };
+		CB47395F26329A0100490EF4 /* Observable+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47395C26329A0100490EF4 /* Observable+Response.swift */; };
+		CB47396026329A0100490EF4 /* MoyaProvider+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47395D26329A0100490EF4 /* MoyaProvider+Rx.swift */; };
+		CB47396126329A0100490EF4 /* Single+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB47395E26329A0100490EF4 /* Single+Response.swift */; };
+		CB4739EB2632BBCF00490EF4 /* Reactive+Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4739EA2632BBCF00490EF4 /* Reactive+Navigator.swift */; };
+		CB473A0A2635015000490EF4 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A092635015000490EF4 /* Router.swift */; };
+		CB473A0F263513BC00490EF4 /* CreateVoiceRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A0E263513BC00490EF4 /* CreateVoiceRoomViewController.swift */; };
+		CB473A4226351B3500490EF4 /* ViewAdaptiveUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A4126351B3500490EF4 /* ViewAdaptiveUtil.swift */; };
+		CB473A4E2635340800490EF4 /* CreateVoiceRoomReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A4D2635340800490EF4 /* CreateVoiceRoomReactor.swift */; };
+		CB473A56263559D100490EF4 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A55263559D100490EF4 /* GradientButton.swift */; };
+		CB473A5B26355B1700490EF4 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB473A5A26355B1700490EF4 /* Colors.xcassets */; };
+		CB473A6026355F1900490EF4 /* SelectVoiceRoomBgImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A5F26355F1900490EF4 /* SelectVoiceRoomBgImageCollectionViewCell.swift */; };
+		CB473A65263560E000490EF4 /* SelectRoomBackgroundSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A64263560E000490EF4 /* SelectRoomBackgroundSection.swift */; };
+		CB473A6A263564A700490EF4 /* UIImagePicker+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A69263564A700490EF4 /* UIImagePicker+Reactive.swift */; };
+		CB473AA02635744700490EF4 /* OwnerSeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473A9F2635744700490EF4 /* OwnerSeatView.swift */; };
+		CB473AA52635746800490EF4 /* GiftValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473AA42635746800490EF4 /* GiftValueView.swift */; };
+		CB473AAA263578E800490EF4 /* RoomInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473AA9263578E800490EF4 /* RoomInfoView.swift */; };
+		CB473AAF2636532500490EF4 /* SeatIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB473AAE2636532500490EF4 /* SeatIndexView.swift */; };
+		CB5C7086264E37D80066A189 /* VoiceRoomPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C7085264E37D80066A189 /* VoiceRoomPasswordViewController.swift */; };
+		CB5C7088264E470C0066A189 /* PasswordNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C7087264E470C0066A189 /* PasswordNumberView.swift */; };
+		CB5C708A264E926C0066A189 /* ManageRequestSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C7089264E926C0066A189 /* ManageRequestSeatViewController.swift */; };
+		CB5C70F226538A930066A189 /* ChangeBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C70F126538A930066A189 /* ChangeBackgroundViewController.swift */; };
+		CB5C70F426538B2D0066A189 /* BackgroundImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C70F326538B2D0066A189 /* BackgroundImageCollectionViewCell.swift */; };
+		CB5C70F82653C4530066A189 /* UIImageView+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5C70F72653C4530066A189 /* UIImageView+Reactive.swift */; };
+		CB781F8A2638FB9C007F8646 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F892638FB9C007F8646 /* UserDefaults+Extension.swift */; };
+		CB781F8C263915AD007F8646 /* privacy_cn.html in Resources */ = {isa = PBXBuildFile; fileRef = CB781F8B263915AD007F8646 /* privacy_cn.html */; };
+		CB781F8E26393412007F8646 /* RoomListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F8D26393412007F8646 /* RoomListSection.swift */; };
+		CB781F9026393462007F8646 /* VoiceRoomListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F8F26393462007F8646 /* VoiceRoomListReactor.swift */; };
+		CB781F9226393572007F8646 /* MJRefresh+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F9126393572007F8646 /* MJRefresh+Reactive.swift */; };
+		CB781F9826438878007F8646 /* RoomSettingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F9726438878007F8646 /* RoomSettingSection.swift */; };
+		CB781F9A26438EC7007F8646 /* VoiceRoomSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F9926438EC7007F8646 /* VoiceRoomSettingViewController.swift */; };
+		CB781F9C26438F38007F8646 /* VoiceRoomSettingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F9B26438F38007F8646 /* VoiceRoomSettingCollectionViewCell.swift */; };
+		CB781F9E2644D72D007F8646 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781F9D2644D72D007F8646 /* UIView+Extension.swift */; };
+		CB781FA42645150F007F8646 /* RequestSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FA32645150F007F8646 /* RequestSeatViewController.swift */; };
+		CB781FA62646767C007F8646 /* RequestSeatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FA52646767C007F8646 /* RequestSeatTableViewCell.swift */; };
+		CB781FA82648D8B2007F8646 /* RequestOrInviteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FA72648D8B2007F8646 /* RequestOrInviteViewController.swift */; };
+		CB781FAC26491908007F8646 /* OwnerSeatPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FAB26491908007F8646 /* OwnerSeatPopView.swift */; };
+		CB781FAE26493557007F8646 /* VoiceRoomScrollHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FAD26493557007F8646 /* VoiceRoomScrollHeader.swift */; };
+		CB781FB02649493E007F8646 /* InviteSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FAF2649493E007F8646 /* InviteSeatViewController.swift */; };
+		CB781FB2264A1D83007F8646 /* InviteSeatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FB1264A1D83007F8646 /* InviteSeatTableViewCell.swift */; };
+		CB781FB4264A2438007F8646 /* UserInfoDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FB3264A2438007F8646 /* UserInfoDownloader.swift */; };
+		CB781FB6264A381D007F8646 /* ManageOwnerSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FB5264A381D007F8646 /* ManageOwnerSeatViewController.swift */; };
+		CB781FB8264A7303007F8646 /* ManageOwnSeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FB7264A7303007F8646 /* ManageOwnSeatViewController.swift */; };
+		CB781FBA264A883F007F8646 /* ManageUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FB9264A883E007F8646 /* ManageUserViewController.swift */; };
+		CB781FBC264A9E52007F8646 /* ManageEmptySeatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FBB264A9E52007F8646 /* ManageEmptySeatViewController.swift */; };
+		CB781FC5264CC028007F8646 /* UploadfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FC4264CC028007F8646 /* UploadfileResponse.swift */; };
+		CB781FC7264CE90A007F8646 /* VoiceRoomTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FC6264CE90A007F8646 /* VoiceRoomTextInputViewController.swift */; };
+		CB781FC9264CE94F007F8646 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB781FC8264CE94F007F8646 /* UIColor+Extension.swift */; };
+		CBA21428266F4FEC0060A51B /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA21427266F4FEC0060A51B /* UIButton+Extension.swift */; };
+		CBA2143B2671ABEA0060A51B /* VoiceRoomUserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA2143A2671ABEA0060A51B /* VoiceRoomUserType.swift */; };
+		CBA2143D267326800060A51B /* VoiceRoomSharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA2143C267326800060A51B /* VoiceRoomSharedContext.swift */; };
+		CBB18E5F26845254003C9E21 /* UIViewController+Swizzled.m in Sources */ = {isa = PBXBuildFile; fileRef = CBB18E5D26845254003C9E21 /* UIViewController+Swizzled.m */; };
+		CBCFE888266105D100474134 /* HomeMainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE887266105D100474134 /* HomeMainCollectionViewCell.swift */; };
+		CBCFE8AA266477AF00474134 /* VoiceRoomMusicListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8A9266477AF00474134 /* VoiceRoomMusicListViewController.swift */; };
+		CBCFE8AC2664780200474134 /* VoiceRoomMusicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8AB2664780200474134 /* VoiceRoomMusicTableViewCell.swift */; };
+		CBCFE8AE2664789600474134 /* VoiceRoomMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8AD2664789600474134 /* VoiceRoomMusic.swift */; };
+		CBCFE8B026647B6900474134 /* VoiceRoomMusicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8AF26647B6900474134 /* VoiceRoomMusicSection.swift */; };
+		CBCFE8B226647D2B00474134 /* VoiceRoomMusicListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8B126647D2B00474134 /* VoiceRoomMusicListReactor.swift */; };
+		CBCFE8B42664816C00474134 /* VoiceRoomUserAddedMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8B32664816C00474134 /* VoiceRoomUserAddedMusicViewController.swift */; };
+		CBCFE8B62664853600474134 /* MusicControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8B52664853600474134 /* MusicControlHeader.swift */; };
+		CBCFE8B82664882600474134 /* VoiceRoomMusicMixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8B72664882600474134 /* VoiceRoomMusicMixerViewController.swift */; };
+		CBCFE8BA26648EA000474134 /* VoiceRoomMusicControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8B926648EA000474134 /* VoiceRoomMusicControlTableViewCell.swift */; };
+		CBCFE8BD2664E02E00474134 /* MusicEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8BC2664E02E00474134 /* MusicEmptyView.swift */; };
+		CBCFE8BF2664E1E500474134 /* VoiceRoomAddedMusicReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8BE2664E1E500474134 /* VoiceRoomAddedMusicReactor.swift */; };
+		CBCFE8C12664F4A200474134 /* MusicDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCFE8C02664F4A200474134 /* MusicDownloader.swift */; };
+		CBD3ED872666198C005782C1 /* VoiceRoomlistEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD3ED862666198C005782C1 /* VoiceRoomlistEmptyView.swift */; };
+		CBD3EDAA2668F00B005782C1 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD3EDA92668F00B005782C1 /* UIViewController+Extension.swift */; };
+		CBD3EDAF2668F110005782C1 /* clap_effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBD3EDAC2668F110005782C1 /* clap_effect.mp3 */; };
+		CBD3EDB02668F110005782C1 /* cheering_effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBD3EDAD2668F110005782C1 /* cheering_effect.mp3 */; };
+		CBD3EDB12668F110005782C1 /* intro_effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBD3EDAE2668F110005782C1 /* intro_effect.mp3 */; };
+		CBD3EDB32669C05C005782C1 /* VoiceRoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD3EDB22669C05C005782C1 /* VoiceRoomState.swift */; };
+		CBEE2CB6262E80D6003F51ED /* RCNetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2CB5262E80D6003F51ED /* RCNetworkAPI.swift */; };
+		CBEE2CBF262E8120003F51ED /* RCAppNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2CBE262E8120003F51ED /* RCAppNavigation.swift */; };
+		CBEE2CC9262E9816003F51ED /* VoiceRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2CC8262E9816003F51ED /* VoiceRoomViewController.swift */; };
+		CBEE2D13262ECF0B003F51ED /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D12262ECF0B003F51ED /* SettingViewController.swift */; };
+		CBEE2D18262ECFCA003F51ED /* ApperanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D17262ECFCA003F51ED /* ApperanceManager.swift */; };
+		CBEE2D1D262EDCDD003F51ED /* VoiceRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D1C262EDCDD003F51ED /* VoiceRoomListViewController.swift */; };
+		CBEE2D23262EDDB9003F51ED /* SettingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D22262EDDB9003F51ED /* SettingSection.swift */; };
+		CBEE2D2C262EDE74003F51ED /* VoiceRoomSeatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D2B262EDE74003F51ED /* VoiceRoomSeatCollectionViewCell.swift */; };
+		CBEE2D63262EE2AC003F51ED /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CBEE2D65262EE2AC003F51ED /* Localizable.strings */; };
+		CBEE2D6C262FB87D003F51ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D6B262FB87D003F51ED /* User.swift */; };
+		CBEE2D7F262FBF32003F51ED /* LoginReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D7E262FBF32003F51ED /* LoginReactor.swift */; };
+		CBEE2D8A262FC11B003F51ED /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D89262FC11B003F51ED /* LoginViewController.swift */; };
+		CBEE2D97262FC554003F51ED /* ReactorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D96262FC554003F51ED /* ReactorError.swift */; };
+		CBEE2D9F262FC5EF003F51ED /* ReactorSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2D9E262FC5EF003F51ED /* ReactorSuccess.swift */; };
+		CBEE2DA4262FC761003F51ED /* SVProgressHud+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE2DA3262FC761003F51ED /* SVProgressHud+Reactive.swift */; };
+		D2324C1345382F67F331AE05 /* Pods_RCE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29DDECB594A0C84AA29D979 /* Pods_RCE.framework */; };
+		D728F8092668BBBC00B2AE67 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */; };
+		D728F80B2668C82D00B2AE67 /* VoiceRoomMusicSoundEffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F80A2668C82D00B2AE67 /* VoiceRoomMusicSoundEffectCell.swift */; };
+		D728F80D2668C8CD00B2AE67 /* VoiceRoomSoundEffectSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F80C2668C8CD00B2AE67 /* VoiceRoomSoundEffectSection.swift */; };
+		D728F80F2668CA4100B2AE67 /* VoiceRoomSoundEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F80E2668CA4100B2AE67 /* VoiceRoomSoundEffectView.swift */; };
+		D728F8162668E15600B2AE67 /* VoiceRoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F8152668E15600B2AE67 /* VoiceRoomManager.swift */; };
+		D749AC6F266793B70064204D /* UserInfoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D749AC6E266793B70064204D /* UserInfoEditViewController.swift */; };
+		D749AC71266793D70064204D /* UserInfoEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D749AC70266793D70064204D /* UserInfoEditReactor.swift */; };
+		D75CA054266A1642005E71BE /* RCNetworkState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75CA053266A1642005E71BE /* RCNetworkState.swift */; };
+		D75CA05C266DC688005E71BE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75CA05B266DC688005E71BE /* CloudKit.framework */; };
+		D7628C73267C3C6B001F87F5 /* VoiceRoomViewController+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C72267C3C6B001F87F5 /* VoiceRoomViewController+Chat.swift */; };
+		D7628C75267C40A6001F87F5 /* VoiceRoomToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C74267C40A6001F87F5 /* VoiceRoomToolBarView.swift */; };
+		D7628C77267C8103001F87F5 /* VoiceRoomViewController+Seats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C76267C8103001F87F5 /* VoiceRoomViewController+Seats.swift */; };
+		D7628C79267C933E001F87F5 /* VoiceRoomViewController+Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C78267C933E001F87F5 /* VoiceRoomViewController+Setting.swift */; };
+		D7628C7B267CAE42001F87F5 /* VoiceRoomViewController+Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C7A267CAE42001F87F5 /* VoiceRoomViewController+Engine.swift */; };
+		D7628C8326802865001F87F5 /* VoiceRoomViewController+Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C8226802865001F87F5 /* VoiceRoomViewController+Gift.swift */; };
+		D7628C8626803615001F87F5 /* VoiceRoomViewController+Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C8526803615001F87F5 /* VoiceRoomViewController+Users.swift */; };
+		D7628C8826803970001F87F5 /* VoiceRoomViewController+RoomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7628C8726803970001F87F5 /* VoiceRoomViewController+RoomInfo.swift */; };
+		D762B2A526817C6E00CC14BE /* VoiceRoomViewController+Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D762B2A426817C6E00CC14BE /* VoiceRoomViewController+Message.swift */; };
+		D762B2A72681945200CC14BE /* VoiceRoomViewController+More.swift in Sources */ = {isa = PBXBuildFile; fileRef = D762B2A62681945200CC14BE /* VoiceRoomViewController+More.swift */; };
+		D77051BB265CD32D00C6C759 /* RCChatroomKickOut.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051B9265CD32D00C6C759 /* RCChatroomKickOut.m */; };
+		D77051BE265CE08F00C6C759 /* RCChatroomGift.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051BC265CE08E00C6C759 /* RCChatroomGift.m */; };
+		D77051C4265CE2C600C6C759 /* RCChatroomAdmin.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051C1265CE2C600C6C759 /* RCChatroomAdmin.m */; };
+		D77051C7265CE2D500C6C759 /* RCChatroomGiftAll.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051C6265CE2D500C6C759 /* RCChatroomGiftAll.m */; };
+		D77051CA265CE34B00C6C759 /* RCChatroomSeats.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051C8265CE34B00C6C759 /* RCChatroomSeats.m */; };
+		D77051CD265CEA6300C6C759 /* RCChatroomEnter.m in Sources */ = {isa = PBXBuildFile; fileRef = D77051CC265CEA6300C6C759 /* RCChatroomEnter.m */; };
+		D7921A54265B6D3E004B7C2E /* VoiceRoomChatEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7921A53265B6D3E004B7C2E /* VoiceRoomChatEvent.swift */; };
+		D7921A86265C8E7C004B7C2E /* RCChatroomMessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = D7921A85265C8E7C004B7C2E /* RCChatroomMessageCenter.m */; };
+		D7921AC2265CCDC6004B7C2E /* RCChatroomBarrage.m in Sources */ = {isa = PBXBuildFile; fileRef = D7921AC0265CCDC5004B7C2E /* RCChatroomBarrage.m */; };
+		D79DF22F2665D14E00A6C5B2 /* HomeMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79DF22E2665D14E00A6C5B2 /* HomeMessageButton.swift */; };
+		D7BDAEE0265CF37D00C9D5DE /* VoiceRoomGiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BDAEDF265CF37D00C9D5DE /* VoiceRoomGiftViewController.swift */; };
+		D7D0D7CD2660F5F500840B26 /* VoiceRoomChatBageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D0D7CC2660F5F500840B26 /* VoiceRoomChatBageView.swift */; };
+		D7D0D7CF2664780E00840B26 /* VoiceRoomViewController+Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D0D7CE2664780E00840B26 /* VoiceRoomViewController+Like.swift */; };
+		D7D0D7D22664784B00840B26 /* RCChatroomLike.m in Sources */ = {isa = PBXBuildFile; fileRef = D7D0D7D12664784B00840B26 /* RCChatroomLike.m */; };
+		D7D0D7D42664800800840B26 /* VoiceRoomLikeIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D0D7D32664800800840B26 /* VoiceRoomLikeIconView.swift */; };
+		D7D507B1265F33BB002EB5F7 /* VoiceRoomGiftCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D507B0265F33BB002EB5F7 /* VoiceRoomGiftCountViewController.swift */; };
+		D7D507B3265F64BB002EB5F7 /* ChatroomConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D507B2265F64BB002EB5F7 /* ChatroomConversationViewController.swift */; };
+		D7D97844266F627E00B7DDDC /* RCTapGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D97843266F627D00B7DDDC /* RCTapGestureView.swift */; };
+		D7D97C642670C22700B7DDDC /* VoiceRoomLeaveAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D97C632670C22700B7DDDC /* VoiceRoomLeaveAlertViewController.swift */; };
+		D7D97C662671BEA600B7DDDC /* VoiceRoomUserListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D97C652671BEA600B7DDDC /* VoiceRoomUserListEmptyView.swift */; };
+		D7D97C6A2671F5FE00B7DDDC /* UIImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D97C692671F5FE00B7DDDC /* UIImageView+Kingfisher.swift */; };
+		D7EF5139265E630800D544E9 /* VoiceRoomGiftSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EF5134265E630700D544E9 /* VoiceRoomGiftSendView.swift */; };
+		D7EF513A265E630800D544E9 /* VoiceRoomGiftSeatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EF5135265E630700D544E9 /* VoiceRoomGiftSeatsView.swift */; };
+		D7EF513B265E630800D544E9 /* VoiceRoomGiftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EF5136265E630800D544E9 /* VoiceRoomGiftCell.swift */; };
+		D7EF513C265E630800D544E9 /* VoiceRoomGiftListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EF5137265E630800D544E9 /* VoiceRoomGiftListView.swift */; };
+		D7EF513D265E630800D544E9 /* VoiceRoomGiftSeatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EF5138265E630800D544E9 /* VoiceRoomGiftSeatCell.swift */; };
+		D7F11F7F2656028C00AA6A9D /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F11F7E2656028C00AA6A9D /* ChatMessageView.swift */; };
+		D7F11F8726560A6500AA6A9D /* ChatEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F11F8626560A6500AA6A9D /* ChatEventTableViewCell.swift */; };
+		D7F11F892656398C00AA6A9D /* VoiceRoomInputMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F11F882656398C00AA6A9D /* VoiceRoomInputMessageViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CB3599ED262D67B300B5F5ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB3599CE262D67B100B5F5ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB3599D5262D67B100B5F5ED;
+			remoteInfo = RCE;
+		};
+		CB3599F8262D67B300B5F5ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB3599CE262D67B100B5F5ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB3599D5262D67B100B5F5ED;
+			remoteInfo = RCE;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		15FAD4367B7FCDC978EA2219 /* Pods-RCE.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCE.production.xcconfig"; path = "Target Support Files/Pods-RCE/Pods-RCE.production.xcconfig"; sourceTree = "<group>"; };
+		1610665B0D5A7A5E35C45985 /* Pods-RCE-RCEUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCE-RCEUITests.release.xcconfig"; path = "Target Support Files/Pods-RCE-RCEUITests/Pods-RCE-RCEUITests.release.xcconfig"; sourceTree = "<group>"; };
+		26392A0CD15031DCFE110BD0 /* Pods_RCEUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RCEUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		35F4991298AFABB3721282C6 /* Pods-RCE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCE.debug.xcconfig"; path = "Target Support Files/Pods-RCE/Pods-RCE.debug.xcconfig"; sourceTree = "<group>"; };
+		36FD99DE9B19286AFB3EE237 /* Pods-RCEUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCEUITests.release.xcconfig"; path = "Target Support Files/Pods-RCEUITests/Pods-RCEUITests.release.xcconfig"; sourceTree = "<group>"; };
+		5BC5C18CE6E23A60F88DB2B3 /* Pods-RCE-RCEUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCE-RCEUITests.debug.xcconfig"; path = "Target Support Files/Pods-RCE-RCEUITests/Pods-RCE-RCEUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		5D65527976A973E6FD0EA77F /* Pods-RCETests.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCETests.production.xcconfig"; path = "Target Support Files/Pods-RCETests/Pods-RCETests.production.xcconfig"; sourceTree = "<group>"; };
+		5F57F138B2CDFB95035E2E72 /* Pods_RCETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RCETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		89843CC73441CDB301EA1109 /* Pods-RCETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCETests.release.xcconfig"; path = "Target Support Files/Pods-RCETests/Pods-RCETests.release.xcconfig"; sourceTree = "<group>"; };
+		9DD7B8368A8D16ECA3164F7D /* Pods-RCE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCE.release.xcconfig"; path = "Target Support Files/Pods-RCE/Pods-RCE.release.xcconfig"; sourceTree = "<group>"; };
+		A29DDECB594A0C84AA29D979 /* Pods_RCE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RCE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7265CF050951154B42E2736 /* Pods-RCETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCETests.debug.xcconfig"; path = "Target Support Files/Pods-RCETests/Pods-RCETests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB133A2B26576A2F00CF1C11 /* RoomListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListTableViewCell.swift; sourceTree = "<group>"; };
+		CB133A2D265787B300CF1C11 /* VoiceRoomUserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomUserListViewController.swift; sourceTree = "<group>"; };
+		CB133A322657AAF400CF1C11 /* AppStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyle.swift; sourceTree = "<group>"; };
+		CB133A352657C4FF00CF1C11 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		CB1DE07F266A09AC0032F120 /* RefreshToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshToken.swift; sourceTree = "<group>"; };
+		CB275E01265B8AE1003552CF /* VoiceRoomMusicControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicControlViewController.swift; sourceTree = "<group>"; };
+		CB275E0A265CEA66003552CF /* ChatroomConversationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatroomConversationListViewController.swift; sourceTree = "<group>"; };
+		CB275E0D265CECD3003552CF /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		CB275E0F265D0BDB003552CF /* VoiceRoomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomAlertViewController.swift; sourceTree = "<group>"; };
+		CB275E11265D0E71003552CF /* VoiceRoomNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomNotification.swift; sourceTree = "<group>"; };
+		CB296E87263819B400DFADD8 /* AppResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResponse.swift; sourceTree = "<group>"; };
+		CB296E8F26381A0700DFADD8 /* VoiceRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoom.swift; sourceTree = "<group>"; };
+		CB296E9426381D4300DFADD8 /* SendCodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeResponse.swift; sourceTree = "<group>"; };
+		CB31A045266E40DB00601294 /* RxDataSources+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxDataSources+Extension.swift"; sourceTree = "<group>"; };
+		CB3599D6262D67B100B5F5ED /* RCE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RCE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB3599D9262D67B100B5F5ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CB3599E2262D67B200B5F5ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CB3599E5262D67B200B5F5ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CB3599EC262D67B300B5F5ED /* RCETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RCETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB3599F2262D67B300B5F5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB3599F7262D67B300B5F5ED /* RCEUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RCEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB3599FB262D67B300B5F5ED /* RCEUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCEUITests.swift; sourceTree = "<group>"; };
+		CB3599FD262D67B300B5F5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB359A28262D69BE00B5F5ED /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		CB359A37262D6A1800B5F5ED /* AppDenpendency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDenpendency.swift; sourceTree = "<group>"; };
+		CB359A3D262D6AA300B5F5ED /* RCE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCE-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB359A59262D6BA700B5F5ED /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		CB359A61262D6BE100B5F5ED /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		CB359A6A262D6C1000B5F5ED /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		CB359A88262D715700B5F5ED /* HomeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
+		CB47390B2631906700490EF4 /* UMengEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMengEvent.swift; sourceTree = "<group>"; };
+		CB47392726327A6600490EF4 /* RCETests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCETests-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB47392826327A6600490EF4 /* TestRCVoiceRoomSeatInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRCVoiceRoomSeatInfo.swift; sourceTree = "<group>"; };
+		CB47394B26327D0E00490EF4 /* TestCommonUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCommonUtil.swift; sourceTree = "<group>"; };
+		CB47395C26329A0100490EF4 /* Observable+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Response.swift"; sourceTree = "<group>"; };
+		CB47395D26329A0100490EF4 /* MoyaProvider+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+Rx.swift"; sourceTree = "<group>"; };
+		CB47395E26329A0100490EF4 /* Single+Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Single+Response.swift"; sourceTree = "<group>"; };
+		CB4739EA2632BBCF00490EF4 /* Reactive+Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+Navigator.swift"; sourceTree = "<group>"; };
+		CB473A092635015000490EF4 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		CB473A0E263513BC00490EF4 /* CreateVoiceRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVoiceRoomViewController.swift; sourceTree = "<group>"; };
+		CB473A4126351B3500490EF4 /* ViewAdaptiveUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAdaptiveUtil.swift; sourceTree = "<group>"; };
+		CB473A4D2635340800490EF4 /* CreateVoiceRoomReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVoiceRoomReactor.swift; sourceTree = "<group>"; };
+		CB473A55263559D100490EF4 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
+		CB473A5A26355B1700490EF4 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		CB473A5F26355F1900490EF4 /* SelectVoiceRoomBgImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectVoiceRoomBgImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		CB473A64263560E000490EF4 /* SelectRoomBackgroundSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomBackgroundSection.swift; sourceTree = "<group>"; };
+		CB473A69263564A700490EF4 /* UIImagePicker+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImagePicker+Reactive.swift"; sourceTree = "<group>"; };
+		CB473A9F2635744700490EF4 /* OwnerSeatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerSeatView.swift; sourceTree = "<group>"; };
+		CB473AA42635746800490EF4 /* GiftValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftValueView.swift; sourceTree = "<group>"; };
+		CB473AA9263578E800490EF4 /* RoomInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoView.swift; sourceTree = "<group>"; };
+		CB473AAE2636532500490EF4 /* SeatIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeatIndexView.swift; sourceTree = "<group>"; };
+		CB5C7085264E37D80066A189 /* VoiceRoomPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomPasswordViewController.swift; sourceTree = "<group>"; };
+		CB5C7087264E470C0066A189 /* PasswordNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordNumberView.swift; sourceTree = "<group>"; };
+		CB5C7089264E926C0066A189 /* ManageRequestSeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRequestSeatViewController.swift; sourceTree = "<group>"; };
+		CB5C70F126538A930066A189 /* ChangeBackgroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeBackgroundViewController.swift; sourceTree = "<group>"; };
+		CB5C70F326538B2D0066A189 /* BackgroundImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		CB5C70F72653C4530066A189 /* UIImageView+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Reactive.swift"; sourceTree = "<group>"; };
+		CB781F892638FB9C007F8646 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		CB781F8B263915AD007F8646 /* privacy_cn.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacy_cn.html; sourceTree = "<group>"; };
+		CB781F8D26393412007F8646 /* RoomListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListSection.swift; sourceTree = "<group>"; };
+		CB781F8F26393462007F8646 /* VoiceRoomListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomListReactor.swift; sourceTree = "<group>"; };
+		CB781F9126393572007F8646 /* MJRefresh+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MJRefresh+Reactive.swift"; sourceTree = "<group>"; };
+		CB781F9726438878007F8646 /* RoomSettingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSettingSection.swift; sourceTree = "<group>"; };
+		CB781F9926438EC7007F8646 /* VoiceRoomSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSettingViewController.swift; sourceTree = "<group>"; };
+		CB781F9B26438F38007F8646 /* VoiceRoomSettingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSettingCollectionViewCell.swift; sourceTree = "<group>"; };
+		CB781F9D2644D72D007F8646 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		CB781FA32645150F007F8646 /* RequestSeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSeatViewController.swift; sourceTree = "<group>"; };
+		CB781FA52646767C007F8646 /* RequestSeatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSeatTableViewCell.swift; sourceTree = "<group>"; };
+		CB781FA72648D8B2007F8646 /* RequestOrInviteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestOrInviteViewController.swift; sourceTree = "<group>"; };
+		CB781FAB26491908007F8646 /* OwnerSeatPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerSeatPopView.swift; sourceTree = "<group>"; };
+		CB781FAD26493557007F8646 /* VoiceRoomScrollHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomScrollHeader.swift; sourceTree = "<group>"; };
+		CB781FAF2649493E007F8646 /* InviteSeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteSeatViewController.swift; sourceTree = "<group>"; };
+		CB781FB1264A1D83007F8646 /* InviteSeatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteSeatTableViewCell.swift; sourceTree = "<group>"; };
+		CB781FB3264A2438007F8646 /* UserInfoDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoDownloader.swift; sourceTree = "<group>"; };
+		CB781FB5264A381D007F8646 /* ManageOwnerSeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageOwnerSeatViewController.swift; sourceTree = "<group>"; };
+		CB781FB7264A7303007F8646 /* ManageOwnSeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageOwnSeatViewController.swift; sourceTree = "<group>"; };
+		CB781FB9264A883E007F8646 /* ManageUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageUserViewController.swift; sourceTree = "<group>"; };
+		CB781FBB264A9E52007F8646 /* ManageEmptySeatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageEmptySeatViewController.swift; sourceTree = "<group>"; };
+		CB781FC4264CC028007F8646 /* UploadfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadfileResponse.swift; sourceTree = "<group>"; };
+		CB781FC6264CE90A007F8646 /* VoiceRoomTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomTextInputViewController.swift; sourceTree = "<group>"; };
+		CB781FC8264CE94F007F8646 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		CBA21427266F4FEC0060A51B /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		CBA2143A2671ABEA0060A51B /* VoiceRoomUserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomUserType.swift; sourceTree = "<group>"; };
+		CBA2143C267326800060A51B /* VoiceRoomSharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSharedContext.swift; sourceTree = "<group>"; };
+		CBB18E5D26845254003C9E21 /* UIViewController+Swizzled.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Swizzled.m"; sourceTree = "<group>"; };
+		CBB18E5E26845254003C9E21 /* UIViewController+Swizzled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Swizzled.h"; sourceTree = "<group>"; };
+		CBCFE887266105D100474134 /* HomeMainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainCollectionViewCell.swift; sourceTree = "<group>"; };
+		CBCFE8A9266477AF00474134 /* VoiceRoomMusicListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicListViewController.swift; sourceTree = "<group>"; };
+		CBCFE8AB2664780200474134 /* VoiceRoomMusicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicTableViewCell.swift; sourceTree = "<group>"; };
+		CBCFE8AD2664789600474134 /* VoiceRoomMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusic.swift; sourceTree = "<group>"; };
+		CBCFE8AF26647B6900474134 /* VoiceRoomMusicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicSection.swift; sourceTree = "<group>"; };
+		CBCFE8B126647D2B00474134 /* VoiceRoomMusicListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicListReactor.swift; sourceTree = "<group>"; };
+		CBCFE8B32664816C00474134 /* VoiceRoomUserAddedMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomUserAddedMusicViewController.swift; sourceTree = "<group>"; };
+		CBCFE8B52664853600474134 /* MusicControlHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicControlHeader.swift; sourceTree = "<group>"; };
+		CBCFE8B72664882600474134 /* VoiceRoomMusicMixerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicMixerViewController.swift; sourceTree = "<group>"; };
+		CBCFE8B926648EA000474134 /* VoiceRoomMusicControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicControlTableViewCell.swift; sourceTree = "<group>"; };
+		CBCFE8BC2664E02E00474134 /* MusicEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicEmptyView.swift; sourceTree = "<group>"; };
+		CBCFE8BE2664E1E500474134 /* VoiceRoomAddedMusicReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomAddedMusicReactor.swift; sourceTree = "<group>"; };
+		CBCFE8C02664F4A200474134 /* MusicDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDownloader.swift; sourceTree = "<group>"; };
+		CBD3ED862666198C005782C1 /* VoiceRoomlistEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomlistEmptyView.swift; sourceTree = "<group>"; };
+		CBD3EDA92668F00B005782C1 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		CBD3EDAC2668F110005782C1 /* clap_effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clap_effect.mp3; sourceTree = "<group>"; };
+		CBD3EDAD2668F110005782C1 /* cheering_effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cheering_effect.mp3; sourceTree = "<group>"; };
+		CBD3EDAE2668F110005782C1 /* intro_effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = intro_effect.mp3; sourceTree = "<group>"; };
+		CBD3EDB22669C05C005782C1 /* VoiceRoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomState.swift; sourceTree = "<group>"; };
+		CBDC382826786D4A007990E3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBEE2CB5262E80D6003F51ED /* RCNetworkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCNetworkAPI.swift; sourceTree = "<group>"; };
+		CBEE2CBE262E8120003F51ED /* RCAppNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCAppNavigation.swift; sourceTree = "<group>"; };
+		CBEE2CC8262E9816003F51ED /* VoiceRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomViewController.swift; sourceTree = "<group>"; };
+		CBEE2D12262ECF0B003F51ED /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		CBEE2D17262ECFCA003F51ED /* ApperanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApperanceManager.swift; sourceTree = "<group>"; };
+		CBEE2D1C262EDCDD003F51ED /* VoiceRoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomListViewController.swift; sourceTree = "<group>"; };
+		CBEE2D22262EDDB9003F51ED /* SettingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSection.swift; sourceTree = "<group>"; };
+		CBEE2D2B262EDE74003F51ED /* VoiceRoomSeatCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSeatCollectionViewCell.swift; sourceTree = "<group>"; };
+		CBEE2D4D262EE250003F51ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		CBEE2D64262EE2AC003F51ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CBEE2D69262EE2B0003F51ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CBEE2D6B262FB87D003F51ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CBEE2D7E262FBF32003F51ED /* LoginReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginReactor.swift; sourceTree = "<group>"; };
+		CBEE2D89262FC11B003F51ED /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		CBEE2D96262FC554003F51ED /* ReactorError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorError.swift; sourceTree = "<group>"; };
+		CBEE2D9E262FC5EF003F51ED /* ReactorSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorSuccess.swift; sourceTree = "<group>"; };
+		CBEE2DA3262FC761003F51ED /* SVProgressHud+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SVProgressHud+Reactive.swift"; sourceTree = "<group>"; };
+		D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
+		D728F80A2668C82D00B2AE67 /* VoiceRoomMusicSoundEffectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomMusicSoundEffectCell.swift; sourceTree = "<group>"; };
+		D728F80C2668C8CD00B2AE67 /* VoiceRoomSoundEffectSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSoundEffectSection.swift; sourceTree = "<group>"; };
+		D728F80E2668CA4100B2AE67 /* VoiceRoomSoundEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomSoundEffectView.swift; sourceTree = "<group>"; };
+		D728F8152668E15600B2AE67 /* VoiceRoomManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomManager.swift; sourceTree = "<group>"; };
+		D749AC6E266793B70064204D /* UserInfoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoEditViewController.swift; sourceTree = "<group>"; };
+		D749AC70266793D70064204D /* UserInfoEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoEditReactor.swift; sourceTree = "<group>"; };
+		D75CA053266A1642005E71BE /* RCNetworkState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCNetworkState.swift; sourceTree = "<group>"; };
+		D75CA05A266DC67C005E71BE /* RCE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RCE.entitlements; sourceTree = "<group>"; };
+		D75CA05B266DC688005E71BE /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		D7628C72267C3C6B001F87F5 /* VoiceRoomViewController+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Chat.swift"; sourceTree = "<group>"; };
+		D7628C74267C40A6001F87F5 /* VoiceRoomToolBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomToolBarView.swift; sourceTree = "<group>"; };
+		D7628C76267C8103001F87F5 /* VoiceRoomViewController+Seats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Seats.swift"; sourceTree = "<group>"; };
+		D7628C78267C933E001F87F5 /* VoiceRoomViewController+Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Setting.swift"; sourceTree = "<group>"; };
+		D7628C7A267CAE42001F87F5 /* VoiceRoomViewController+Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Engine.swift"; sourceTree = "<group>"; };
+		D7628C8226802865001F87F5 /* VoiceRoomViewController+Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Gift.swift"; sourceTree = "<group>"; };
+		D7628C8526803615001F87F5 /* VoiceRoomViewController+Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Users.swift"; sourceTree = "<group>"; };
+		D7628C8726803970001F87F5 /* VoiceRoomViewController+RoomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+RoomInfo.swift"; sourceTree = "<group>"; };
+		D762B2A426817C6E00CC14BE /* VoiceRoomViewController+Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Message.swift"; sourceTree = "<group>"; };
+		D762B2A62681945200CC14BE /* VoiceRoomViewController+More.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+More.swift"; sourceTree = "<group>"; };
+		D77051B9265CD32D00C6C759 /* RCChatroomKickOut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomKickOut.m; sourceTree = "<group>"; };
+		D77051BA265CD32D00C6C759 /* RCChatroomKickOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomKickOut.h; sourceTree = "<group>"; };
+		D77051BC265CE08E00C6C759 /* RCChatroomGift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomGift.m; sourceTree = "<group>"; };
+		D77051BD265CE08F00C6C759 /* RCChatroomGift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomGift.h; sourceTree = "<group>"; };
+		D77051C1265CE2C600C6C759 /* RCChatroomAdmin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomAdmin.m; sourceTree = "<group>"; };
+		D77051C2265CE2C600C6C759 /* RCChatroomAdmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomAdmin.h; sourceTree = "<group>"; };
+		D77051C5265CE2D500C6C759 /* RCChatroomGiftAll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCChatroomGiftAll.h; sourceTree = "<group>"; };
+		D77051C6265CE2D500C6C759 /* RCChatroomGiftAll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCChatroomGiftAll.m; sourceTree = "<group>"; };
+		D77051C8265CE34B00C6C759 /* RCChatroomSeats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomSeats.m; sourceTree = "<group>"; };
+		D77051C9265CE34B00C6C759 /* RCChatroomSeats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomSeats.h; sourceTree = "<group>"; };
+		D77051CB265CEA6300C6C759 /* RCChatroomEnter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomEnter.h; sourceTree = "<group>"; };
+		D77051CC265CEA6300C6C759 /* RCChatroomEnter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomEnter.m; sourceTree = "<group>"; };
+		D7921A53265B6D3E004B7C2E /* VoiceRoomChatEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomChatEvent.swift; sourceTree = "<group>"; };
+		D7921A84265C8E7C004B7C2E /* RCChatroomMessageCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCChatroomMessageCenter.h; sourceTree = "<group>"; };
+		D7921A85265C8E7C004B7C2E /* RCChatroomMessageCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCChatroomMessageCenter.m; sourceTree = "<group>"; };
+		D7921AC0265CCDC5004B7C2E /* RCChatroomBarrage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomBarrage.m; sourceTree = "<group>"; };
+		D7921AC1265CCDC6004B7C2E /* RCChatroomBarrage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomBarrage.h; sourceTree = "<group>"; };
+		D79DF22E2665D14E00A6C5B2 /* HomeMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMessageButton.swift; sourceTree = "<group>"; };
+		D7BDAEDF265CF37D00C9D5DE /* VoiceRoomGiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftViewController.swift; sourceTree = "<group>"; };
+		D7D0D7CC2660F5F500840B26 /* VoiceRoomChatBageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomChatBageView.swift; sourceTree = "<group>"; };
+		D7D0D7CE2664780E00840B26 /* VoiceRoomViewController+Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceRoomViewController+Like.swift"; sourceTree = "<group>"; };
+		D7D0D7D02664784B00840B26 /* RCChatroomLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCChatroomLike.h; sourceTree = "<group>"; };
+		D7D0D7D12664784B00840B26 /* RCChatroomLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCChatroomLike.m; sourceTree = "<group>"; };
+		D7D0D7D32664800800840B26 /* VoiceRoomLikeIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomLikeIconView.swift; sourceTree = "<group>"; };
+		D7D507B0265F33BB002EB5F7 /* VoiceRoomGiftCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftCountViewController.swift; sourceTree = "<group>"; };
+		D7D507B2265F64BB002EB5F7 /* ChatroomConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatroomConversationViewController.swift; sourceTree = "<group>"; };
+		D7D97843266F627D00B7DDDC /* RCTapGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTapGestureView.swift; sourceTree = "<group>"; };
+		D7D97C632670C22700B7DDDC /* VoiceRoomLeaveAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomLeaveAlertViewController.swift; sourceTree = "<group>"; };
+		D7D97C652671BEA600B7DDDC /* VoiceRoomUserListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomUserListEmptyView.swift; sourceTree = "<group>"; };
+		D7D97C692671F5FE00B7DDDC /* UIImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Kingfisher.swift"; sourceTree = "<group>"; };
+		D7EF5134265E630700D544E9 /* VoiceRoomGiftSendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftSendView.swift; sourceTree = "<group>"; };
+		D7EF5135265E630700D544E9 /* VoiceRoomGiftSeatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftSeatsView.swift; sourceTree = "<group>"; };
+		D7EF5136265E630800D544E9 /* VoiceRoomGiftCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftCell.swift; sourceTree = "<group>"; };
+		D7EF5137265E630800D544E9 /* VoiceRoomGiftListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftListView.swift; sourceTree = "<group>"; };
+		D7EF5138265E630800D544E9 /* VoiceRoomGiftSeatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomGiftSeatCell.swift; sourceTree = "<group>"; };
+		D7F11F7E2656028C00AA6A9D /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		D7F11F8626560A6500AA6A9D /* ChatEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEventTableViewCell.swift; sourceTree = "<group>"; };
+		D7F11F882656398C00AA6A9D /* VoiceRoomInputMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRoomInputMessageViewController.swift; sourceTree = "<group>"; };
+		D8776E93216BC691C102DC25 /* Pods-RCEUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCEUITests.debug.xcconfig"; path = "Target Support Files/Pods-RCEUITests/Pods-RCEUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		F811AB254EC56FFBA5790E8D /* Pods-RCEUITests.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCEUITests.production.xcconfig"; path = "Target Support Files/Pods-RCEUITests/Pods-RCEUITests.production.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB3599D3262D67B100B5F5ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2324C1345382F67F331AE05 /* Pods_RCE.framework in Frameworks */,
+				D75CA05C266DC688005E71BE /* CloudKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599E9262D67B300B5F5ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72E36B663FA5DC5B4937FC7 /* Pods_RCETests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599F4262D67B300B5F5ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00187F697F8E5FC3AEAE79F8 /* Pods_RCEUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9ED50DF90441B4518B4D8618 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D75CA05B266DC688005E71BE /* CloudKit.framework */,
+				A29DDECB594A0C84AA29D979 /* Pods_RCE.framework */,
+				5F57F138B2CDFB95035E2E72 /* Pods_RCETests.framework */,
+				26392A0CD15031DCFE110BD0 /* Pods_RCEUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB133A2F2657995E00CF1C11 /* SharedContext */ = {
+			isa = PBXGroup;
+			children = (
+				CB275E11265D0E71003552CF /* VoiceRoomNotification.swift */,
+				CBA2143C267326800060A51B /* VoiceRoomSharedContext.swift */,
+			);
+			path = SharedContext;
+			sourceTree = "<group>";
+		};
+		CB133A342657C4F000CF1C11 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB133A352657C4FF00CF1C11 /* HomeCollectionViewCell.swift */,
+				CBCFE887266105D100474134 /* HomeMainCollectionViewCell.swift */,
+				D79DF22E2665D14E00A6C5B2 /* HomeMessageButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CB275E08265CEA2C003552CF /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				CB275E0C265CECC5003552CF /* View */,
+				CB275E09265CEA30003552CF /* ViewController */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		CB275E09265CEA30003552CF /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB275E0A265CEA66003552CF /* ChatroomConversationListViewController.swift */,
+				D7D507B2265F64BB002EB5F7 /* ChatroomConversationViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CB275E0C265CECC5003552CF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB275E0D265CECD3003552CF /* ConversationTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CB3599CD262D67B100B5F5ED = {
+			isa = PBXGroup;
+			children = (
+				CB3599D8262D67B100B5F5ED /* RCE */,
+				CB3599EF262D67B300B5F5ED /* RCETests */,
+				CB3599FA262D67B300B5F5ED /* RCEUITests */,
+				CB3599D7262D67B100B5F5ED /* Products */,
+				E4CE142008CFD7C6B1DC8E12 /* Pods */,
+				9ED50DF90441B4518B4D8618 /* Frameworks */,
+				CBD3EDA626689D0B005782C1 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		CB3599D7262D67B100B5F5ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB3599D6262D67B100B5F5ED /* RCE.app */,
+				CB3599EC262D67B300B5F5ED /* RCETests.xctest */,
+				CB3599F7262D67B300B5F5ED /* RCEUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB3599D8262D67B100B5F5ED /* RCE */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC382826786D4A007990E3 /* Info.plist */,
+				D75CA05A266DC67C005E71BE /* RCE.entitlements */,
+				CBEE2DF0263004C9003F51ED /* ThirdPart */,
+				CBEE2D95262FC54B003F51ED /* Util */,
+				CBEE2D52262EE25A003F51ED /* i18n */,
+				CBEE2CBD262E8119003F51ED /* Router */,
+				CBEE2CB4262E80CA003F51ED /* Network */,
+				CB359A5E262D6BCC00B5F5ED /* Feature */,
+				CB359A4E262D6AAC00B5F5ED /* Bridging */,
+				CB359A2D262D69D000B5F5ED /* Resource */,
+				CB359A27262D69B400B5F5ED /* Manager */,
+				CB359A20262D698800B5F5ED /* Entry */,
+			);
+			path = RCE;
+			sourceTree = "<group>";
+		};
+		CB3599EF262D67B300B5F5ED /* RCETests */ = {
+			isa = PBXGroup;
+			children = (
+				CB47394A26327CFE00490EF4 /* CommonTests */,
+				CB4739102632781F00490EF4 /* RCVoiceRoomEngineTests */,
+				CB3599F2262D67B300B5F5ED /* Info.plist */,
+			);
+			path = RCETests;
+			sourceTree = "<group>";
+		};
+		CB3599FA262D67B300B5F5ED /* RCEUITests */ = {
+			isa = PBXGroup;
+			children = (
+				CB3599FB262D67B300B5F5ED /* RCEUITests.swift */,
+				CB3599FD262D67B300B5F5ED /* Info.plist */,
+			);
+			path = RCEUITests;
+			sourceTree = "<group>";
+		};
+		CB359A20262D698800B5F5ED /* Entry */ = {
+			isa = PBXGroup;
+			children = (
+				CB3599D9262D67B100B5F5ED /* AppDelegate.swift */,
+				CB359A37262D6A1800B5F5ED /* AppDenpendency.swift */,
+			);
+			path = Entry;
+			sourceTree = "<group>";
+		};
+		CB359A27262D69B400B5F5ED /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				CB359A28262D69BE00B5F5ED /* Environment.swift */,
+				CBEE2D17262ECFCA003F51ED /* ApperanceManager.swift */,
+				CB47390B2631906700490EF4 /* UMengEvent.swift */,
+				CB781F892638FB9C007F8646 /* UserDefaults+Extension.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		CB359A2D262D69D000B5F5ED /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				CBD3EDAB2668F108005782C1 /* AudioEffect */,
+				CB781F8B263915AD007F8646 /* privacy_cn.html */,
+				CB359A59262D6BA700B5F5ED /* R.generated.swift */,
+				CB3599E2262D67B200B5F5ED /* Assets.xcassets */,
+				CB473A5A26355B1700490EF4 /* Colors.xcassets */,
+				CB3599E4262D67B200B5F5ED /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		CB359A4E262D6AAC00B5F5ED /* Bridging */ = {
+			isa = PBXGroup;
+			children = (
+				CB359A3D262D6AA300B5F5ED /* RCE-Bridging-Header.h */,
+			);
+			path = Bridging;
+			sourceTree = "<group>";
+		};
+		CB359A5E262D6BCC00B5F5ED /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				D7EF5130265E62DF00D544E9 /* Gift */,
+				CB275E08265CEA2C003552CF /* Chat */,
+				CBEE2D73262FBF04003F51ED /* Login */,
+				CBEE2D04262ECEBC003F51ED /* Setting */,
+				CBEE2CC6262E9800003F51ED /* VoiceRoomModule */,
+				CB359A5F262D6BD100B5F5ED /* Home */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
+		CB359A5F262D6BD100B5F5ED /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				CB133A342657C4F000CF1C11 /* View */,
+				CB359A72262D705600B5F5ED /* Section */,
+				CB359A69262D6C0700B5F5ED /* Reactor */,
+				CB359A60262D6BD600B5F5ED /* ViewController */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		CB359A60262D6BD600B5F5ED /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB359A61262D6BE100B5F5ED /* HomeViewController.swift */,
+				D749AC6E266793B70064204D /* UserInfoEditViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CB359A69262D6C0700B5F5ED /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				CB359A6A262D6C1000B5F5ED /* HomeReactor.swift */,
+				D749AC70266793D70064204D /* UserInfoEditReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		CB359A72262D705600B5F5ED /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				CB359A88262D715700B5F5ED /* HomeSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		CB4739102632781F00490EF4 /* RCVoiceRoomEngineTests */ = {
+			isa = PBXGroup;
+			children = (
+				CB47392826327A6600490EF4 /* TestRCVoiceRoomSeatInfo.swift */,
+				CB47392726327A6600490EF4 /* RCETests-Bridging-Header.h */,
+			);
+			path = RCVoiceRoomEngineTests;
+			sourceTree = "<group>";
+		};
+		CB47394A26327CFE00490EF4 /* CommonTests */ = {
+			isa = PBXGroup;
+			children = (
+				CB47394B26327D0E00490EF4 /* TestCommonUtil.swift */,
+			);
+			path = CommonTests;
+			sourceTree = "<group>";
+		};
+		CB47395B26329A0100490EF4 /* RxMoya */ = {
+			isa = PBXGroup;
+			children = (
+				CB47395C26329A0100490EF4 /* Observable+Response.swift */,
+				CB47395D26329A0100490EF4 /* MoyaProvider+Rx.swift */,
+				CB47395E26329A0100490EF4 /* Single+Response.swift */,
+			);
+			path = RxMoya;
+			sourceTree = "<group>";
+		};
+		CB5C70FB2655F5220066A189 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381F26783BAE007990E3 /* View */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		CBA214372671A85E0060A51B /* ManageSeat */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC382026783BEF007990E3 /* View */,
+				CBA214392671ABCC0060A51B /* Model */,
+				CBA214382671A8670060A51B /* ViewController */,
+			);
+			path = ManageSeat;
+			sourceTree = "<group>";
+		};
+		CBA214382671A8670060A51B /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB781FBB264A9E52007F8646 /* ManageEmptySeatViewController.swift */,
+				CB781FB5264A381D007F8646 /* ManageOwnerSeatViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBA214392671ABCC0060A51B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CBA2143A2671ABEA0060A51B /* VoiceRoomUserType.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CBB18E5C26845245003C9E21 /* UIViewController+Swizzle */ = {
+			isa = PBXGroup;
+			children = (
+				CBB18E5E26845254003C9E21 /* UIViewController+Swizzled.h */,
+				CBB18E5D26845254003C9E21 /* UIViewController+Swizzled.m */,
+			);
+			path = "UIViewController+Swizzle";
+			sourceTree = "<group>";
+		};
+		CBCFE8A82664774600474134 /* PopMenu */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C7089264E926C0066A189 /* ManageRequestSeatViewController.swift */,
+				CB781FB7264A7303007F8646 /* ManageOwnSeatViewController.swift */,
+				CB275E0F265D0BDB003552CF /* VoiceRoomAlertViewController.swift */,
+			);
+			path = PopMenu;
+			sourceTree = "<group>";
+		};
+		CBD3EDA626689D0B005782C1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		CBD3EDAB2668F108005782C1 /* AudioEffect */ = {
+			isa = PBXGroup;
+			children = (
+				CBD3EDAD2668F110005782C1 /* cheering_effect.mp3 */,
+				CBD3EDAC2668F110005782C1 /* clap_effect.mp3 */,
+				CBD3EDAE2668F110005782C1 /* intro_effect.mp3 */,
+			);
+			path = AudioEffect;
+			sourceTree = "<group>";
+		};
+		CBDC37FD26783789007990E3 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC380826783850007990E3 /* Section */,
+				CBDC3800267837BD007990E3 /* Reactor */,
+				CBDC37FF267837AF007990E3 /* View */,
+				CBDC37FE2678378F007990E3 /* ViewController */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		CBDC37FE2678378F007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB275E01265B8AE1003552CF /* VoiceRoomMusicControlViewController.swift */,
+				CBCFE8A9266477AF00474134 /* VoiceRoomMusicListViewController.swift */,
+				CBCFE8B32664816C00474134 /* VoiceRoomUserAddedMusicViewController.swift */,
+				CBCFE8B72664882600474134 /* VoiceRoomMusicMixerViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC37FF267837AF007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D728F80E2668CA4100B2AE67 /* VoiceRoomSoundEffectView.swift */,
+				D728F80A2668C82D00B2AE67 /* VoiceRoomMusicSoundEffectCell.swift */,
+				CBCFE8AB2664780200474134 /* VoiceRoomMusicTableViewCell.swift */,
+				CBCFE8B52664853600474134 /* MusicControlHeader.swift */,
+				CBCFE8B926648EA000474134 /* VoiceRoomMusicControlTableViewCell.swift */,
+				CBCFE8BC2664E02E00474134 /* MusicEmptyView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC3800267837BD007990E3 /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				CBCFE8B126647D2B00474134 /* VoiceRoomMusicListReactor.swift */,
+				CBCFE8BE2664E1E500474134 /* VoiceRoomAddedMusicReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		CBDC3801267837D7007990E3 /* VoiceRoomList */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC380E267838E8007990E3 /* View */,
+				CBDC38072678383E007990E3 /* Section */,
+				CBDC380326783815007990E3 /* Reactor */,
+				CBDC3802267837DE007990E3 /* ViewController */,
+			);
+			path = VoiceRoomList;
+			sourceTree = "<group>";
+		};
+		CBDC3802267837DE007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D1C262EDCDD003F51ED /* VoiceRoomListViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC380326783815007990E3 /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				CB781F8F26393462007F8646 /* VoiceRoomListReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		CBDC380426783820007990E3 /* CreateVoiceRoom */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381B26783B30007990E3 /* View */,
+				CBDC381726783A9E007990E3 /* ViewController */,
+				CBDC380626783833007990E3 /* Section */,
+				CBDC380526783826007990E3 /* Reactor */,
+			);
+			path = CreateVoiceRoom;
+			sourceTree = "<group>";
+		};
+		CBDC380526783826007990E3 /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				CB473A4D2635340800490EF4 /* CreateVoiceRoomReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		CBDC380626783833007990E3 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				CB473A64263560E000490EF4 /* SelectRoomBackgroundSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		CBDC38072678383E007990E3 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				CB781F8D26393412007F8646 /* RoomListSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		CBDC380826783850007990E3 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				D728F80C2668C8CD00B2AE67 /* VoiceRoomSoundEffectSection.swift */,
+				CBCFE8AF26647B6900474134 /* VoiceRoomMusicSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		CBDC38092678388D007990E3 /* VoiceRoomSetting */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC380B2678389A007990E3 /* View */,
+				CBDC380A26783894007990E3 /* ViewController */,
+			);
+			path = VoiceRoomSetting;
+			sourceTree = "<group>";
+		};
+		CBDC380A26783894007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB781F9926438EC7007F8646 /* VoiceRoomSettingViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC380B2678389A007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB781F9B26438F38007F8646 /* VoiceRoomSettingCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC380C267838AE007990E3 /* VoiceRoomInvite */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381126783966007990E3 /* ViewController */,
+				CBDC380D267838B7007990E3 /* View */,
+			);
+			path = VoiceRoomInvite;
+			sourceTree = "<group>";
+		};
+		CBDC380D267838B7007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB781FAD26493557007F8646 /* VoiceRoomScrollHeader.swift */,
+				CB781FA52646767C007F8646 /* RequestSeatTableViewCell.swift */,
+				CB781FB1264A1D83007F8646 /* InviteSeatTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC380E267838E8007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB133A2B26576A2F00CF1C11 /* RoomListTableViewCell.swift */,
+				CBD3ED862666198C005782C1 /* VoiceRoomlistEmptyView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC380F26783918007990E3 /* VoiceRoomBackgroundSetting */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381626783A47007990E3 /* View */,
+				CBDC381026783921007990E3 /* ViewController */,
+			);
+			path = VoiceRoomBackgroundSetting;
+			sourceTree = "<group>";
+		};
+		CBDC381026783921007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C70F126538A930066A189 /* ChangeBackgroundViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC381126783966007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB781FA72648D8B2007F8646 /* RequestOrInviteViewController.swift */,
+				CB781FA32645150F007F8646 /* RequestSeatViewController.swift */,
+				CB781FAF2649493E007F8646 /* InviteSeatViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC381426783A2B007990E3 /* VoiceRoom */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC382126783E28007990E3 /* Model */,
+				CBEE2CC7262E9806003F51ED /* ViewController */,
+				CBDC381526783A30007990E3 /* View */,
+			);
+			path = VoiceRoom;
+			sourceTree = "<group>";
+		};
+		CBDC381526783A30007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D2B262EDE74003F51ED /* VoiceRoomSeatCollectionViewCell.swift */,
+				CB473A55263559D100490EF4 /* GradientButton.swift */,
+				CB473AA42635746800490EF4 /* GiftValueView.swift */,
+				CB473AA9263578E800490EF4 /* RoomInfoView.swift */,
+				CB473AAE2636532500490EF4 /* SeatIndexView.swift */,
+				CB473A9F2635744700490EF4 /* OwnerSeatView.swift */,
+				D7D0D7CC2660F5F500840B26 /* VoiceRoomChatBageView.swift */,
+				D7D0D7D32664800800840B26 /* VoiceRoomLikeIconView.swift */,
+				D7628C74267C40A6001F87F5 /* VoiceRoomToolBarView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC381626783A47007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C70F326538B2D0066A189 /* BackgroundImageCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC381726783A9E007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB473A0E263513BC00490EF4 /* CreateVoiceRoomViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC381826783AC0007990E3 /* VoiceRoomUserList */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381A26783AFE007990E3 /* View */,
+				CBDC381926783AC9007990E3 /* ViewController */,
+			);
+			path = VoiceRoomUserList;
+			sourceTree = "<group>";
+		};
+		CBDC381926783AC9007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB133A2D265787B300CF1C11 /* VoiceRoomUserListViewController.swift */,
+				CB781FB9264A883E007F8646 /* ManageUserViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC381A26783AFE007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D7D97C652671BEA600B7DDDC /* VoiceRoomUserListEmptyView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC381B26783B30007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB473A5F26355F1900490EF4 /* SelectVoiceRoomBgImageCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC381C26783B5C007990E3 /* VoiceRoomPassword */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381E26783B68007990E3 /* View */,
+				CBDC381D26783B62007990E3 /* ViewController */,
+			);
+			path = VoiceRoomPassword;
+			sourceTree = "<group>";
+		};
+		CBDC381D26783B62007990E3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C7085264E37D80066A189 /* VoiceRoomPasswordViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBDC381E26783B68007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C7087264E470C0066A189 /* PasswordNumberView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC381F26783BAE007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D7F11F7E2656028C00AA6A9D /* ChatMessageView.swift */,
+				D7F11F8626560A6500AA6A9D /* ChatEventTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC382026783BEF007990E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CB781FAB26491908007F8646 /* OwnerSeatPopView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CBDC382126783E28007990E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CB781F9726438878007F8646 /* RoomSettingSection.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CBEE2CB4262E80CA003F51ED /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D6A262FB875003F51ED /* Model */,
+				CBEE2CB5262E80D6003F51ED /* RCNetworkAPI.swift */,
+				D75CA053266A1642005E71BE /* RCNetworkState.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CBEE2CBD262E8119003F51ED /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2CBE262E8120003F51ED /* RCAppNavigation.swift */,
+				CB473A092635015000490EF4 /* Router.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		CBEE2CC6262E9800003F51ED /* VoiceRoomModule */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC381C26783B5C007990E3 /* VoiceRoomPassword */,
+				CBDC381826783AC0007990E3 /* VoiceRoomUserList */,
+				CBDC381426783A2B007990E3 /* VoiceRoom */,
+				CBDC380F26783918007990E3 /* VoiceRoomBackgroundSetting */,
+				CBDC380C267838AE007990E3 /* VoiceRoomInvite */,
+				CBDC38092678388D007990E3 /* VoiceRoomSetting */,
+				CBDC380426783820007990E3 /* CreateVoiceRoom */,
+				CBDC3801267837D7007990E3 /* VoiceRoomList */,
+				CBDC37FD26783789007990E3 /* Music */,
+				CBA214372671A85E0060A51B /* ManageSeat */,
+				CB133A2F2657995E00CF1C11 /* SharedContext */,
+				CB5C70FB2655F5220066A189 /* Message */,
+			);
+			path = VoiceRoomModule;
+			sourceTree = "<group>";
+		};
+		CBEE2CC7262E9806003F51ED /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CBCFE8A82664774600474134 /* PopMenu */,
+				CBEE2CC8262E9816003F51ED /* VoiceRoomViewController.swift */,
+				D7628C8726803970001F87F5 /* VoiceRoomViewController+RoomInfo.swift */,
+				D762B2A62681945200CC14BE /* VoiceRoomViewController+More.swift */,
+				D7628C76267C8103001F87F5 /* VoiceRoomViewController+Seats.swift */,
+				D7628C7A267CAE42001F87F5 /* VoiceRoomViewController+Engine.swift */,
+				D7628C72267C3C6B001F87F5 /* VoiceRoomViewController+Chat.swift */,
+				D7628C8526803615001F87F5 /* VoiceRoomViewController+Users.swift */,
+				D7628C8226802865001F87F5 /* VoiceRoomViewController+Gift.swift */,
+				D7628C78267C933E001F87F5 /* VoiceRoomViewController+Setting.swift */,
+				D762B2A426817C6E00CC14BE /* VoiceRoomViewController+Message.swift */,
+				D7D0D7CE2664780E00840B26 /* VoiceRoomViewController+Like.swift */,
+				CB781FC6264CE90A007F8646 /* VoiceRoomTextInputViewController.swift */,
+				D7F11F882656398C00AA6A9D /* VoiceRoomInputMessageViewController.swift */,
+				D7D97C632670C22700B7DDDC /* VoiceRoomLeaveAlertViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBEE2D04262ECEBC003F51ED /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D21262EDDAC003F51ED /* Section */,
+				CBEE2D05262ECEC1003F51ED /* ViewController */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		CBEE2D05262ECEC1003F51ED /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D12262ECF0B003F51ED /* SettingViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBEE2D21262EDDAC003F51ED /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D22262EDDB9003F51ED /* SettingSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		CBEE2D52262EE25A003F51ED /* i18n */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D65262EE2AC003F51ED /* Localizable.strings */,
+			);
+			path = i18n;
+			sourceTree = "<group>";
+		};
+		CBEE2D6A262FB875003F51ED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D6B262FB87D003F51ED /* User.swift */,
+				CB296E9426381D4300DFADD8 /* SendCodeResponse.swift */,
+				CB296E87263819B400DFADD8 /* AppResponse.swift */,
+				CB296E8F26381A0700DFADD8 /* VoiceRoom.swift */,
+				CB781FC4264CC028007F8646 /* UploadfileResponse.swift */,
+				D7921A53265B6D3E004B7C2E /* VoiceRoomChatEvent.swift */,
+				CBCFE8AD2664789600474134 /* VoiceRoomMusic.swift */,
+				CBD3EDB22669C05C005782C1 /* VoiceRoomState.swift */,
+				CB1DE07F266A09AC0032F120 /* RefreshToken.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CBEE2D73262FBF04003F51ED /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D7D262FBF27003F51ED /* Reactor */,
+				CBEE2D74262FBF09003F51ED /* ViewController */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		CBEE2D74262FBF09003F51ED /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D89262FC11B003F51ED /* LoginViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBEE2D7D262FBF27003F51ED /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				CBEE2D7E262FBF32003F51ED /* LoginReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		CBEE2D95262FC54B003F51ED /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				CB31A045266E40DB00601294 /* RxDataSources+Extension.swift */,
+				CBEE2D96262FC554003F51ED /* ReactorError.swift */,
+				CBEE2D9E262FC5EF003F51ED /* ReactorSuccess.swift */,
+				CBEE2DA3262FC761003F51ED /* SVProgressHud+Reactive.swift */,
+				CB4739EA2632BBCF00490EF4 /* Reactive+Navigator.swift */,
+				CB473A4126351B3500490EF4 /* ViewAdaptiveUtil.swift */,
+				CB473A69263564A700490EF4 /* UIImagePicker+Reactive.swift */,
+				CB5C70F72653C4530066A189 /* UIImageView+Reactive.swift */,
+				D7D97C692671F5FE00B7DDDC /* UIImageView+Kingfisher.swift */,
+				CB781F9126393572007F8646 /* MJRefresh+Reactive.swift */,
+				CB781F9D2644D72D007F8646 /* UIView+Extension.swift */,
+				CB781FB3264A2438007F8646 /* UserInfoDownloader.swift */,
+				CB781FC8264CE94F007F8646 /* UIColor+Extension.swift */,
+				CB133A322657AAF400CF1C11 /* AppStyle.swift */,
+				CBCFE8C02664F4A200474134 /* MusicDownloader.swift */,
+				D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */,
+				D728F8152668E15600B2AE67 /* VoiceRoomManager.swift */,
+				CBD3EDA92668F00B005782C1 /* UIViewController+Extension.swift */,
+				CBA21427266F4FEC0060A51B /* UIButton+Extension.swift */,
+				D7D97843266F627D00B7DDDC /* RCTapGestureView.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		CBEE2DF0263004C9003F51ED /* ThirdPart */ = {
+			isa = PBXGroup;
+			children = (
+				CBB18E5C26845245003C9E21 /* UIViewController+Swizzle */,
+				D7921A83265C8E23004B7C2E /* ChatroomMessage */,
+				CB47395B26329A0100490EF4 /* RxMoya */,
+			);
+			path = ThirdPart;
+			sourceTree = "<group>";
+		};
+		D7921A83265C8E23004B7C2E /* ChatroomMessage */ = {
+			isa = PBXGroup;
+			children = (
+				D7D0D7D02664784B00840B26 /* RCChatroomLike.h */,
+				D7D0D7D12664784B00840B26 /* RCChatroomLike.m */,
+				D7921A84265C8E7C004B7C2E /* RCChatroomMessageCenter.h */,
+				D7921A85265C8E7C004B7C2E /* RCChatroomMessageCenter.m */,
+				D77051CB265CEA6300C6C759 /* RCChatroomEnter.h */,
+				D77051CC265CEA6300C6C759 /* RCChatroomEnter.m */,
+				D7921AC1265CCDC6004B7C2E /* RCChatroomBarrage.h */,
+				D7921AC0265CCDC5004B7C2E /* RCChatroomBarrage.m */,
+				D77051BA265CD32D00C6C759 /* RCChatroomKickOut.h */,
+				D77051B9265CD32D00C6C759 /* RCChatroomKickOut.m */,
+				D77051BD265CE08F00C6C759 /* RCChatroomGift.h */,
+				D77051BC265CE08E00C6C759 /* RCChatroomGift.m */,
+				D77051C5265CE2D500C6C759 /* RCChatroomGiftAll.h */,
+				D77051C6265CE2D500C6C759 /* RCChatroomGiftAll.m */,
+				D77051C2265CE2C600C6C759 /* RCChatroomAdmin.h */,
+				D77051C1265CE2C600C6C759 /* RCChatroomAdmin.m */,
+				D77051C9265CE34B00C6C759 /* RCChatroomSeats.h */,
+				D77051C8265CE34B00C6C759 /* RCChatroomSeats.m */,
+			);
+			path = ChatroomMessage;
+			sourceTree = "<group>";
+		};
+		D7EF5130265E62DF00D544E9 /* Gift */ = {
+			isa = PBXGroup;
+			children = (
+				D7EF5132265E62ED00D544E9 /* View */,
+				D7EF5131265E62E600D544E9 /* ViewController */,
+			);
+			path = Gift;
+			sourceTree = "<group>";
+		};
+		D7EF5131265E62E600D544E9 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D7BDAEDF265CF37D00C9D5DE /* VoiceRoomGiftViewController.swift */,
+				D7D507B0265F33BB002EB5F7 /* VoiceRoomGiftCountViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		D7EF5132265E62ED00D544E9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D7EF5135265E630700D544E9 /* VoiceRoomGiftSeatsView.swift */,
+				D7EF5138265E630800D544E9 /* VoiceRoomGiftSeatCell.swift */,
+				D7EF5137265E630800D544E9 /* VoiceRoomGiftListView.swift */,
+				D7EF5136265E630800D544E9 /* VoiceRoomGiftCell.swift */,
+				D7EF5134265E630700D544E9 /* VoiceRoomGiftSendView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E4CE142008CFD7C6B1DC8E12 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				35F4991298AFABB3721282C6 /* Pods-RCE.debug.xcconfig */,
+				9DD7B8368A8D16ECA3164F7D /* Pods-RCE.release.xcconfig */,
+				5BC5C18CE6E23A60F88DB2B3 /* Pods-RCE-RCEUITests.debug.xcconfig */,
+				1610665B0D5A7A5E35C45985 /* Pods-RCE-RCEUITests.release.xcconfig */,
+				A7265CF050951154B42E2736 /* Pods-RCETests.debug.xcconfig */,
+				89843CC73441CDB301EA1109 /* Pods-RCETests.release.xcconfig */,
+				D8776E93216BC691C102DC25 /* Pods-RCEUITests.debug.xcconfig */,
+				36FD99DE9B19286AFB3EE237 /* Pods-RCEUITests.release.xcconfig */,
+				15FAD4367B7FCDC978EA2219 /* Pods-RCE.production.xcconfig */,
+				5D65527976A973E6FD0EA77F /* Pods-RCETests.production.xcconfig */,
+				F811AB254EC56FFBA5790E8D /* Pods-RCEUITests.production.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB3599D5262D67B100B5F5ED /* RCE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB359A00262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCE" */;
+			buildPhases = (
+				094F0828549F0859D325F048 /* [CP] Check Pods Manifest.lock */,
+				CB359A55262D6B8100B5F5ED /* R.swift */,
+				CB3599D2262D67B100B5F5ED /* Sources */,
+				CBB18DE6268333B9003C9E21 /* Pecker */,
+				CB3599D3262D67B100B5F5ED /* Frameworks */,
+				CB3599D4262D67B100B5F5ED /* Resources */,
+				30C548EF9FDB5AE5BBF8F89D /* [CP] Embed Pods Frameworks */,
+				306146D60FA2C44390B26233 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RCE;
+			productName = RCE;
+			productReference = CB3599D6262D67B100B5F5ED /* RCE.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CB3599EB262D67B300B5F5ED /* RCETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB359A03262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCETests" */;
+			buildPhases = (
+				16FF8029C74CACAF2075123E /* [CP] Check Pods Manifest.lock */,
+				CB3599E8262D67B300B5F5ED /* Sources */,
+				CB3599E9262D67B300B5F5ED /* Frameworks */,
+				CB3599EA262D67B300B5F5ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB3599EE262D67B300B5F5ED /* PBXTargetDependency */,
+			);
+			name = RCETests;
+			productName = RCETests;
+			productReference = CB3599EC262D67B300B5F5ED /* RCETests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CB3599F6262D67B300B5F5ED /* RCEUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB359A06262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCEUITests" */;
+			buildPhases = (
+				9A3F378B500E6CF0D2FBDB84 /* [CP] Check Pods Manifest.lock */,
+				CB3599F3262D67B300B5F5ED /* Sources */,
+				CB3599F4262D67B300B5F5ED /* Frameworks */,
+				CB3599F5262D67B300B5F5ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB3599F9262D67B300B5F5ED /* PBXTargetDependency */,
+			);
+			name = RCEUITests;
+			productName = RCEUITests;
+			productReference = CB3599F7262D67B300B5F5ED /* RCEUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB3599CE262D67B100B5F5ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					CB3599D5262D67B100B5F5ED = {
+						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
+					};
+					CB3599EB262D67B300B5F5ED = {
+						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
+						TestTargetID = CB3599D5262D67B100B5F5ED;
+					};
+					CB3599F6262D67B300B5F5ED = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = CB3599D5262D67B100B5F5ED;
+					};
+				};
+			};
+			buildConfigurationList = CB3599D1262D67B100B5F5ED /* Build configuration list for PBXProject "RCE" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = CB3599CD262D67B100B5F5ED;
+			productRefGroup = CB3599D7262D67B100B5F5ED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB3599D5262D67B100B5F5ED /* RCE */,
+				CB3599EB262D67B300B5F5ED /* RCETests */,
+				CB3599F6262D67B300B5F5ED /* RCEUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CB3599D4262D67B100B5F5ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB3599E6262D67B200B5F5ED /* LaunchScreen.storyboard in Resources */,
+				CB473A5B26355B1700490EF4 /* Colors.xcassets in Resources */,
+				CBEE2D63262EE2AC003F51ED /* Localizable.strings in Resources */,
+				CB781F8C263915AD007F8646 /* privacy_cn.html in Resources */,
+				CBD3EDB02668F110005782C1 /* cheering_effect.mp3 in Resources */,
+				CB3599E3262D67B200B5F5ED /* Assets.xcassets in Resources */,
+				CBD3EDB12668F110005782C1 /* intro_effect.mp3 in Resources */,
+				CBD3EDAF2668F110005782C1 /* clap_effect.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599EA262D67B300B5F5ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599F5262D67B300B5F5ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		094F0828549F0859D325F048 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RCE-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		16FF8029C74CACAF2075123E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RCETests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		306146D60FA2C44390B26233 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		30C548EF9FDB5AE5BBF8F89D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RCE/Pods-RCE-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9A3F378B500E6CF0D2FBDB84 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RCEUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB359A55262D6B8100B5F5ED /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			name = R.swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n\n";
+		};
+		CBB18DE6268333B9003C9E21 /* Pecker */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Pecker;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/Pecker/bin/pecker\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB3599D2262D67B100B5F5ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBEE2D1D262EDCDD003F51ED /* VoiceRoomListViewController.swift in Sources */,
+				CBEE2D7F262FBF32003F51ED /* LoginReactor.swift in Sources */,
+				D77051CD265CEA6300C6C759 /* RCChatroomEnter.m in Sources */,
+				CB781F9A26438EC7007F8646 /* VoiceRoomSettingViewController.swift in Sources */,
+				CBCFE8B62664853600474134 /* MusicControlHeader.swift in Sources */,
+				CB781FAC26491908007F8646 /* OwnerSeatPopView.swift in Sources */,
+				CB781F9E2644D72D007F8646 /* UIView+Extension.swift in Sources */,
+				CB781FC7264CE90A007F8646 /* VoiceRoomTextInputViewController.swift in Sources */,
+				D77051BE265CE08F00C6C759 /* RCChatroomGift.m in Sources */,
+				CB781FB02649493E007F8646 /* InviteSeatViewController.swift in Sources */,
+				D7D97C662671BEA600B7DDDC /* VoiceRoomUserListEmptyView.swift in Sources */,
+				CB781FAE26493557007F8646 /* VoiceRoomScrollHeader.swift in Sources */,
+				CBEE2D8A262FC11B003F51ED /* LoginViewController.swift in Sources */,
+				CB473AA52635746800490EF4 /* GiftValueView.swift in Sources */,
+				CB296E88263819B400DFADD8 /* AppResponse.swift in Sources */,
+				CBA2143B2671ABEA0060A51B /* VoiceRoomUserType.swift in Sources */,
+				CBCFE8B42664816C00474134 /* VoiceRoomUserAddedMusicViewController.swift in Sources */,
+				D7628C8626803615001F87F5 /* VoiceRoomViewController+Users.swift in Sources */,
+				CB359A5A262D6BA700B5F5ED /* R.generated.swift in Sources */,
+				D7EF5139265E630800D544E9 /* VoiceRoomGiftSendView.swift in Sources */,
+				D762B2A72681945200CC14BE /* VoiceRoomViewController+More.swift in Sources */,
+				CBCFE8B026647B6900474134 /* VoiceRoomMusicSection.swift in Sources */,
+				CBB18E5F26845254003C9E21 /* UIViewController+Swizzled.m in Sources */,
+				CBCFE8AC2664780200474134 /* VoiceRoomMusicTableViewCell.swift in Sources */,
+				D749AC71266793D70064204D /* UserInfoEditReactor.swift in Sources */,
+				CB359A38262D6A1800B5F5ED /* AppDenpendency.swift in Sources */,
+				CB4739EB2632BBCF00490EF4 /* Reactive+Navigator.swift in Sources */,
+				D728F8162668E15600B2AE67 /* VoiceRoomManager.swift in Sources */,
+				CB473A4E2635340800490EF4 /* CreateVoiceRoomReactor.swift in Sources */,
+				CBEE2D13262ECF0B003F51ED /* SettingViewController.swift in Sources */,
+				CB275E0B265CEA66003552CF /* ChatroomConversationListViewController.swift in Sources */,
+				CB1DE080266A09AC0032F120 /* RefreshToken.swift in Sources */,
+				D762B2A526817C6E00CC14BE /* VoiceRoomViewController+Message.swift in Sources */,
+				CB781FC5264CC028007F8646 /* UploadfileResponse.swift in Sources */,
+				D7F11F8726560A6500AA6A9D /* ChatEventTableViewCell.swift in Sources */,
+				CB781FB2264A1D83007F8646 /* InviteSeatTableViewCell.swift in Sources */,
+				CB473A0A2635015000490EF4 /* Router.swift in Sources */,
+				D75CA054266A1642005E71BE /* RCNetworkState.swift in Sources */,
+				CB296E9026381A0700DFADD8 /* VoiceRoom.swift in Sources */,
+				CB781FA42645150F007F8646 /* RequestSeatViewController.swift in Sources */,
+				D7628C8326802865001F87F5 /* VoiceRoomViewController+Gift.swift in Sources */,
+				CBEE2CC9262E9816003F51ED /* VoiceRoomViewController.swift in Sources */,
+				CB359A62262D6BE100B5F5ED /* HomeViewController.swift in Sources */,
+				CB473A0F263513BC00490EF4 /* CreateVoiceRoomViewController.swift in Sources */,
+				CBA21428266F4FEC0060A51B /* UIButton+Extension.swift in Sources */,
+				CB473A56263559D100490EF4 /* GradientButton.swift in Sources */,
+				D7EF513D265E630800D544E9 /* VoiceRoomGiftSeatCell.swift in Sources */,
+				CB133A2E265787B300CF1C11 /* VoiceRoomUserListViewController.swift in Sources */,
+				CB47390C2631906700490EF4 /* UMengEvent.swift in Sources */,
+				CB781FA62646767C007F8646 /* RequestSeatTableViewCell.swift in Sources */,
+				CB781FB6264A381D007F8646 /* ManageOwnerSeatViewController.swift in Sources */,
+				D7628C7B267CAE42001F87F5 /* VoiceRoomViewController+Engine.swift in Sources */,
+				CBCFE8AE2664789600474134 /* VoiceRoomMusic.swift in Sources */,
+				CBD3EDB32669C05C005782C1 /* VoiceRoomState.swift in Sources */,
+				D77051CA265CE34B00C6C759 /* RCChatroomSeats.m in Sources */,
+				CB3599DA262D67B100B5F5ED /* AppDelegate.swift in Sources */,
+				D7921A54265B6D3E004B7C2E /* VoiceRoomChatEvent.swift in Sources */,
+				CB359A6B262D6C1000B5F5ED /* HomeReactor.swift in Sources */,
+				CB781F9226393572007F8646 /* MJRefresh+Reactive.swift in Sources */,
+				CB473AA02635744700490EF4 /* OwnerSeatView.swift in Sources */,
+				D728F8092668BBBC00B2AE67 /* Notification+Extension.swift in Sources */,
+				D7628C79267C933E001F87F5 /* VoiceRoomViewController+Setting.swift in Sources */,
+				CB133A362657C4FF00CF1C11 /* HomeCollectionViewCell.swift in Sources */,
+				CB275E12265D0E71003552CF /* VoiceRoomNotification.swift in Sources */,
+				D728F80D2668C8CD00B2AE67 /* VoiceRoomSoundEffectSection.swift in Sources */,
+				CBCFE8BD2664E02E00474134 /* MusicEmptyView.swift in Sources */,
+				CB359A89262D715700B5F5ED /* HomeSection.swift in Sources */,
+				D728F80F2668CA4100B2AE67 /* VoiceRoomSoundEffectView.swift in Sources */,
+				D7628C8826803970001F87F5 /* VoiceRoomViewController+RoomInfo.swift in Sources */,
+				CBEE2D9F262FC5EF003F51ED /* ReactorSuccess.swift in Sources */,
+				CBEE2CB6262E80D6003F51ED /* RCNetworkAPI.swift in Sources */,
+				D728F80B2668C82D00B2AE67 /* VoiceRoomMusicSoundEffectCell.swift in Sources */,
+				CB781FA82648D8B2007F8646 /* RequestOrInviteViewController.swift in Sources */,
+				CBEE2D2C262EDE74003F51ED /* VoiceRoomSeatCollectionViewCell.swift in Sources */,
+				CB275E10265D0BDB003552CF /* VoiceRoomAlertViewController.swift in Sources */,
+				CB473AAA263578E800490EF4 /* RoomInfoView.swift in Sources */,
+				D7EF513C265E630800D544E9 /* VoiceRoomGiftListView.swift in Sources */,
+				CBCFE8BF2664E1E500474134 /* VoiceRoomAddedMusicReactor.swift in Sources */,
+				CB133A2C26576A2F00CF1C11 /* RoomListTableViewCell.swift in Sources */,
+				CBCFE8B226647D2B00474134 /* VoiceRoomMusicListReactor.swift in Sources */,
+				CBCFE8BA26648EA000474134 /* VoiceRoomMusicControlTableViewCell.swift in Sources */,
+				D7BDAEE0265CF37D00C9D5DE /* VoiceRoomGiftViewController.swift in Sources */,
+				CBD3EDAA2668F00B005782C1 /* UIViewController+Extension.swift in Sources */,
+				D7628C75267C40A6001F87F5 /* VoiceRoomToolBarView.swift in Sources */,
+				CBCFE8C12664F4A200474134 /* MusicDownloader.swift in Sources */,
+				CB5C70F82653C4530066A189 /* UIImageView+Reactive.swift in Sources */,
+				D7EF513A265E630800D544E9 /* VoiceRoomGiftSeatsView.swift in Sources */,
+				CBEE2DA4262FC761003F51ED /* SVProgressHud+Reactive.swift in Sources */,
+				CB47395F26329A0100490EF4 /* Observable+Response.swift in Sources */,
+				CBD3ED872666198C005782C1 /* VoiceRoomlistEmptyView.swift in Sources */,
+				CB47396026329A0100490EF4 /* MoyaProvider+Rx.swift in Sources */,
+				D7628C73267C3C6B001F87F5 /* VoiceRoomViewController+Chat.swift in Sources */,
+				D7F11F7F2656028C00AA6A9D /* ChatMessageView.swift in Sources */,
+				CB296E9526381D4300DFADD8 /* SendCodeResponse.swift in Sources */,
+				CBCFE888266105D100474134 /* HomeMainCollectionViewCell.swift in Sources */,
+				CB5C7086264E37D80066A189 /* VoiceRoomPasswordViewController.swift in Sources */,
+				CBCFE8AA266477AF00474134 /* VoiceRoomMusicListViewController.swift in Sources */,
+				CBEE2D23262EDDB9003F51ED /* SettingSection.swift in Sources */,
+				CB473AAF2636532500490EF4 /* SeatIndexView.swift in Sources */,
+				D77051C4265CE2C600C6C759 /* RCChatroomAdmin.m in Sources */,
+				D7D0D7CD2660F5F500840B26 /* VoiceRoomChatBageView.swift in Sources */,
+				CB781FBC264A9E52007F8646 /* ManageEmptySeatViewController.swift in Sources */,
+				CB781FB4264A2438007F8646 /* UserInfoDownloader.swift in Sources */,
+				CB5C70F226538A930066A189 /* ChangeBackgroundViewController.swift in Sources */,
+				D749AC6F266793B70064204D /* UserInfoEditViewController.swift in Sources */,
+				CB473A65263560E000490EF4 /* SelectRoomBackgroundSection.swift in Sources */,
+				CB781FBA264A883F007F8646 /* ManageUserViewController.swift in Sources */,
+				CB781FB8264A7303007F8646 /* ManageOwnSeatViewController.swift in Sources */,
+				CB5C7088264E470C0066A189 /* PasswordNumberView.swift in Sources */,
+				D7D0D7D22664784B00840B26 /* RCChatroomLike.m in Sources */,
+				D7921AC2265CCDC6004B7C2E /* RCChatroomBarrage.m in Sources */,
+				CB133A332657AAF400CF1C11 /* AppStyle.swift in Sources */,
+				CB359A29262D69BE00B5F5ED /* Environment.swift in Sources */,
+				CB47396126329A0100490EF4 /* Single+Response.swift in Sources */,
+				D7628C77267C8103001F87F5 /* VoiceRoomViewController+Seats.swift in Sources */,
+				CB31A046266E40DB00601294 /* RxDataSources+Extension.swift in Sources */,
+				CB473A6026355F1900490EF4 /* SelectVoiceRoomBgImageCollectionViewCell.swift in Sources */,
+				D7D507B1265F33BB002EB5F7 /* VoiceRoomGiftCountViewController.swift in Sources */,
+				CB5C70F426538B2D0066A189 /* BackgroundImageCollectionViewCell.swift in Sources */,
+				D7D0D7CF2664780E00840B26 /* VoiceRoomViewController+Like.swift in Sources */,
+				CB781F9826438878007F8646 /* RoomSettingSection.swift in Sources */,
+				D77051C7265CE2D500C6C759 /* RCChatroomGiftAll.m in Sources */,
+				CB473A4226351B3500490EF4 /* ViewAdaptiveUtil.swift in Sources */,
+				CB275E0E265CECD3003552CF /* ConversationTableViewCell.swift in Sources */,
+				CB275E02265B8AE1003552CF /* VoiceRoomMusicControlViewController.swift in Sources */,
+				D79DF22F2665D14E00A6C5B2 /* HomeMessageButton.swift in Sources */,
+				CB473A6A263564A700490EF4 /* UIImagePicker+Reactive.swift in Sources */,
+				CB781F9026393462007F8646 /* VoiceRoomListReactor.swift in Sources */,
+				CB781F8E26393412007F8646 /* RoomListSection.swift in Sources */,
+				D7D97C6A2671F5FE00B7DDDC /* UIImageView+Kingfisher.swift in Sources */,
+				D7EF513B265E630800D544E9 /* VoiceRoomGiftCell.swift in Sources */,
+				D7D97844266F627E00B7DDDC /* RCTapGestureView.swift in Sources */,
+				D7921A86265C8E7C004B7C2E /* RCChatroomMessageCenter.m in Sources */,
+				CBEE2CBF262E8120003F51ED /* RCAppNavigation.swift in Sources */,
+				CB5C708A264E926C0066A189 /* ManageRequestSeatViewController.swift in Sources */,
+				CBEE2D18262ECFCA003F51ED /* ApperanceManager.swift in Sources */,
+				D7D97C642670C22700B7DDDC /* VoiceRoomLeaveAlertViewController.swift in Sources */,
+				CBEE2D6C262FB87D003F51ED /* User.swift in Sources */,
+				CB781F8A2638FB9C007F8646 /* UserDefaults+Extension.swift in Sources */,
+				CB781FC9264CE94F007F8646 /* UIColor+Extension.swift in Sources */,
+				CBCFE8B82664882600474134 /* VoiceRoomMusicMixerViewController.swift in Sources */,
+				D7D507B3265F64BB002EB5F7 /* ChatroomConversationViewController.swift in Sources */,
+				CBEE2D97262FC554003F51ED /* ReactorError.swift in Sources */,
+				D77051BB265CD32D00C6C759 /* RCChatroomKickOut.m in Sources */,
+				CBA2143D267326800060A51B /* VoiceRoomSharedContext.swift in Sources */,
+				D7F11F892656398C00AA6A9D /* VoiceRoomInputMessageViewController.swift in Sources */,
+				D7D0D7D42664800800840B26 /* VoiceRoomLikeIconView.swift in Sources */,
+				CB781F9C26438F38007F8646 /* VoiceRoomSettingCollectionViewCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599E8262D67B300B5F5ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB47394C26327D0E00490EF4 /* TestCommonUtil.swift in Sources */,
+				CB47392926327A6600490EF4 /* TestRCVoiceRoomSeatInfo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB3599F3262D67B300B5F5ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB3599FC262D67B300B5F5ED /* RCEUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CB3599EE262D67B300B5F5ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB3599D5262D67B100B5F5ED /* RCE */;
+			targetProxy = CB3599ED262D67B300B5F5ED /* PBXContainerItemProxy */;
+		};
+		CB3599F9262D67B300B5F5ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB3599D5262D67B100B5F5ED /* RCE */;
+			targetProxy = CB3599F8262D67B300B5F5ED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CB3599E4262D67B200B5F5ED /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB3599E5262D67B200B5F5ED /* Base */,
+				CBEE2D4D262EE250003F51ED /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		CBEE2D65262EE2AC003F51ED /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CBEE2D64262EE2AC003F51ED /* en */,
+				CBEE2D69262EE2B0003F51ED /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CB3599FE262D67B300B5F5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CB3599FF262D67B300B5F5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CB359A01262D67B300B5F5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 35F4991298AFABB3721282C6 /* Pods-RCE.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9CVMN4UZK4;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.rongcloud.appmatrix.inhouse;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "RCE/Bridging/RCE-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CB359A02262D67B300B5F5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9DD7B8368A8D16ECA3164F7D /* Pods-RCE.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9CVMN4UZK4;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.rongcloud.appmatrix.inhouse;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = RELEASE;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCE/Bridging/RCE-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CB359A04262D67B300B5F5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7265CF050951154B42E2736 /* Pods-RCETests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCETests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RCETests/RCVoiceRoomEngineTests/RCETests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RCE.app/RCE";
+			};
+			name = Debug;
+		};
+		CB359A05262D67B300B5F5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89843CC73441CDB301EA1109 /* Pods-RCETests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCETests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RCETests/RCVoiceRoomEngineTests/RCETests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RCE.app/RCE";
+			};
+			name = Release;
+		};
+		CB359A07262D67B300B5F5ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D8776E93216BC691C102DC25 /* Pods-RCEUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCEUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RCE;
+			};
+			name = Debug;
+		};
+		CB359A08262D67B300B5F5ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 36FD99DE9B19286AFB3EE237 /* Pods-RCEUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCEUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RCE;
+			};
+			name = Release;
+		};
+		CBDC382A2679B7AC007990E3 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Production;
+		};
+		CBDC382B2679B7AC007990E3 /* Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15FAD4367B7FCDC978EA2219 /* Pods-RCE.production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9CVMN4UZK4;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.rongcloud.appmatrix.inhouse;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PRODUCTION;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCE/Bridging/RCE-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Production;
+		};
+		CBDC382C2679B7AD007990E3 /* Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D65527976A973E6FD0EA77F /* Pods-RCETests.production.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCETests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RCETests/RCVoiceRoomEngineTests/RCETests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RCE.app/RCE";
+			};
+			name = Production;
+		};
+		CBDC382D2679B7AD007990E3 /* Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F811AB254EC56FFBA5790E8D /* Pods-RCEUITests.production.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XDGAK6XCMW;
+				INFOPLIST_FILE = RCEUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zangqilong.RCEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RCE;
+			};
+			name = Production;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB3599D1262D67B100B5F5ED /* Build configuration list for PBXProject "RCE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB3599FE262D67B300B5F5ED /* Debug */,
+				CB3599FF262D67B300B5F5ED /* Release */,
+				CBDC382A2679B7AC007990E3 /* Production */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB359A00262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB359A01262D67B300B5F5ED /* Debug */,
+				CB359A02262D67B300B5F5ED /* Release */,
+				CBDC382B2679B7AC007990E3 /* Production */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB359A03262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB359A04262D67B300B5F5ED /* Debug */,
+				CB359A05262D67B300B5F5ED /* Release */,
+				CBDC382C2679B7AD007990E3 /* Production */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB359A06262D67B300B5F5ED /* Build configuration list for PBXNativeTarget "RCEUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB359A07262D67B300B5F5ED /* Debug */,
+				CB359A08262D67B300B5F5ED /* Release */,
+				CBDC382D2679B7AD007990E3 /* Production */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB3599CE262D67B100B5F5ED /* Project object */;
+}
