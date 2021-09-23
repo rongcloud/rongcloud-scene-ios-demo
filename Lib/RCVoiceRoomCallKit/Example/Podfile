@@ -1,0 +1,11 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'RCVoiceRoomCallKit_Example' do
+  pod 'RCVoiceRoomCallKit', :path => '../'
+
+  target 'RCVoiceRoomCallKit_Tests' do
+    inherit! :search_paths
+  end
+end

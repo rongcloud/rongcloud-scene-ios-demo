@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "dial_keyboard_icon.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
