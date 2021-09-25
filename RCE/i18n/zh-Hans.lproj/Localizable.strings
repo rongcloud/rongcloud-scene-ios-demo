@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  RCE
+
+  Created by 叶孤城 on 2021/4/20.
+  
+*/
+"CFBundleDisplayName" = "融云 RTC";
+"login" = "登录";
+"input_phone_placeholder" = "请输入您的手机号码";
+"input_verify_code_placeholder" = "请输入验证码";
+"get_verify_code" = "获取验证码";
+"resend_verify_code" = "重新发送";
+"Audio_Chat_Room" = "语聊房";
+"Radio" = "电台";
+"Audio_Call" = "语音通话";
+"Video_Call" = "视频通话";
+"Audio_Chat_Room_DESC" = "";

@@ -1,0 +1,27 @@
+PODS:
+  - Alamofire (4.9.1)
+  - RCRTCAudio (0.0.1):
+    - Alamofire
+    - SVProgressHUD
+  - SVProgressHUD (2.2.5)
+
+DEPENDENCIES:
+  - RCRTCAudio (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - SVProgressHUD
+
+EXTERNAL SOURCES:
+  RCRTCAudio:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  RCRTCAudio: 4a76fc300bfe42736002e57acf3729a08d452a48
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+
+PODFILE CHECKSUM: e242ae669f7c97b8f92bf9c8238ee8a0cc63d991
+
+COCOAPODS: 1.11.0.beta.1

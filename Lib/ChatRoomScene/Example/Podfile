@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'ChatRoomScene_Example' do
+  pod 'ChatRoomScene', :path => '../'
+
+  target 'ChatRoomScene_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

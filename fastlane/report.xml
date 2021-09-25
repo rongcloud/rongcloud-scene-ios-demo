@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.00038">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: increment_build_number" time="1.236014">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: update_app_identifier" time="0.210916">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: get_certificates" time="8.032212">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: get_provisioning_profile" time="4.228127">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: build_app" time="125.773178">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: deliver" time="611.646735">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

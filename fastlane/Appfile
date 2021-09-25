@@ -1,0 +1,6 @@
+app_identifier("cn.rongcloud.rcrtc.appstore") # The bundle identifier of your app
+apple_id("zangqilong1@rongcloud.cn") # Your Apple email address
+itc_team_id "117780133"
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
