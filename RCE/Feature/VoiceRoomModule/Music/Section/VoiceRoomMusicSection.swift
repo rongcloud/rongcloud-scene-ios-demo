@@ -25,3 +25,32 @@ extension VoiceRoomMusicSection: SectionModelType {
         self.items = items
     }
 }
+
+struct MusicChannelSection: Codable, Equatable {
+    var items: [MusicChannel]
+}
+
+extension MusicChannelSection: SectionModelType {
+    typealias Item = MusicChannel
+    init(original: MusicChannelSection, items: [MusicChannel]) {
+        self = original
+        self.items = items
+    }
+}
+
+struct MusicRecordItem {
+    let record: MusicRecord
+    var state: MusicListState
+}
+
+struct MusicRecordSection {
+    var items: [MusicRecordItem]
+}
+
+extension MusicRecordSection {
+    typealias Item = MusicRecordItem
+    init(original: MusicRecordSection, items: [MusicRecordItem]) {
+        self = original
+        self.items = items
+    }
+}

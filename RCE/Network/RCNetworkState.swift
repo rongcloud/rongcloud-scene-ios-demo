@@ -35,10 +35,19 @@ extension Result where Success == Moya.Response, Failure == MoyaError {
         case let .failure(error):
             return .failure(NetError(error.localizedDescription))
         case let .success(response):
-            guard let model = try? JSONDecoder().decode(type, from: response.data) else {
-                return .failure(NetError("数据解析失败"))
+            do {
+                let model = try JSONDecoder().decode(type, from: response.data)
+                return .success(model)
+            } catch {
+                debugPrint("map fail: \(error.localizedDescription)")
             }
-            return .success(model)
+//            do {
+//                let model = try JSONDecoder().decode(RCNetworkWapper<T>.self, from: response.data)
+//                if let data = model.data { return .success(data) }
+//            } catch {
+//                debugPrint("map wrapped fail: \(error.localizedDescription)")
+//            }
+            return .failure(NetError("数据解析失败"))
         }
     }
 }

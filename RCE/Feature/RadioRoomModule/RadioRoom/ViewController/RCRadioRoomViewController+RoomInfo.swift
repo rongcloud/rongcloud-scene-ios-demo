@@ -43,9 +43,7 @@ extension RCRadioRoomViewController {
 
 extension RCRadioRoomViewController: RoomInfoViewClickProtocol {
     func roomInfoDidClick() {
-        let dependency = VoiceRoomUserOperationDependency(roomId: roomInfo.roomId,
-                                                          roomCreator: roomInfo.userId,
-                                                          presentUserId: "")
+        let dependency = VoiceRoomUserOperationDependency(room: roomInfo, presentUserId: "")
         navigator(.userlist(dependency: dependency, delegate: self))
     }
 }

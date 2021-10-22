@@ -14,7 +14,6 @@ extension VoiceRoomViewController {
         setupModules()
         moreButton.setImage(R.image.more_icon(), for: .normal)
         moreButton.addTarget(self, action: #selector(handleMoreButton), for: .touchUpInside)
-        navigationController?.delegate = self
     }
     
     //MARK: - Button Click Action
@@ -68,19 +67,6 @@ extension VoiceRoomViewController: VoiceRoomAlertProtocol {
             leaveRoom()
         default:
             ()
-        }
-    }
-}
-
-extension VoiceRoomViewController: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if let coordinator = navigationController.topViewController?.transitionCoordinator {
-            coordinator.notifyWhenInteractionChanges { context in
-                if !context.isCancelled {
-                    guard let controller = self.parent as? RCRoomContainerViewController else { return }
-                    RCRoomFloatingManager.shared.show(controller)
-                }
-            }
         }
     }
 }

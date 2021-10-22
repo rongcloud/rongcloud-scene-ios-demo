@@ -60,8 +60,6 @@ class RequestOrInviteViewController: UIViewController {
     }()
     private let onSeatUserIds: [String]
     
-    private lazy var tapGestureView = RCTapGestureView(self)
-    
     init(roomId: String, delegate: HandleRequestSeatProtocol, showPage: Int, onSeatUserIds: [String]) {
         self.delegate = delegate
         self.roomId = roomId
@@ -91,14 +89,10 @@ class RequestOrInviteViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(blurView)
         view.addSubview(header)
         view.addSubview(scrollView)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         scrollView.addSubview(contentView)
         header.snp.makeConstraints { (make) in

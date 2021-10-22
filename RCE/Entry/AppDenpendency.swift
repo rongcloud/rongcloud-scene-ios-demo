@@ -30,12 +30,6 @@ final class CompositionRoot: NSObject {
     
     static func configWindow() -> UIWindow {
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let home: UINavigationController = {
-            let instance = UINavigationController(rootViewController: HomeViewController())
-            instance.tabBarItem = UITabBarItem(title: "首页", image: nil, selectedImage: nil)
-            return instance
-        }()
-        window.rootViewController = home
         return window
     }
     
@@ -123,7 +117,7 @@ final class CompositionRoot: NSObject {
         
         // HIFIVE
         if Environment.currentUserId.count > 0 {
-            HFOpenApiManager.shared().registerApp(withAppId: "a1ad4f9f99604901b3d2f6dd3cb96664", serverCode: "129fcd962e2e49f5b6", clientId: Environment.currentUserId, version: "4.1.1") { _ in
+            HFOpenApiManager.shared().registerApp(withAppId: "hifive app id", serverCode: "hifive server code", clientId: Environment.currentUserId, version: "V4.1.2") { _ in
                 log.verbose("register hifive success")
             } fail: { error in
                 fatalError("Register Hi five failed")
@@ -132,5 +126,7 @@ final class CompositionRoot: NSObject {
         // log
 //        RCIMClient.shared().logLevel = .log_Level_Verbose
 //        NSString.redirectNSlogToDocumentFolder()
+        
+        MHSDK.shareInstance().`init`("美狐美颜key")
     }
 }

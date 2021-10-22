@@ -63,6 +63,7 @@ enum RCNetworkAPI {
     case pkInfo(roomId: String)
     case checkCurrentRoom
     case isPK(roomId: String)
+    case checkCreatedRoom
 }
 
 extension RCNetworkAPI: TargetType {
@@ -150,6 +151,8 @@ extension RCNetworkAPI: TargetType {
             return "user/check"
         case let .isPK(roomId):
             return "/mic/room/pk/\(roomId)/isPk"
+        case .checkCreatedRoom:
+            return "/mic/room/create/check"
         }
     }
     
@@ -233,6 +236,8 @@ extension RCNetworkAPI: TargetType {
             return .get
         case .isPK:
             return .get
+        case .checkCreatedRoom:
+            return .put
         }
     }
     
@@ -352,6 +357,8 @@ extension RCNetworkAPI: TargetType {
         case .checkCurrentRoom:
             return.requestPlain
         case .isPK:
+            return .requestPlain
+        case .checkCreatedRoom:
             return .requestPlain
         }
     }

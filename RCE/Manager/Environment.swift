@@ -19,9 +19,9 @@ extension Environment {
     var url: URL {
         switch self {
         case .debug:
-            return URL(string: "")!
+            return URL(string: "您的测试服务器地址")!
         default:
-            return URL(string: "")!
+            return URL(string: "您的正式服务器地址")!
         }
     }
     
@@ -42,18 +42,18 @@ extension Environment {
     var rcKey: String {
         switch self {
         case .debug:
-            return ""
+            return "测试环境appKey"
         default:
-            return ""
+            return "正式环境appKey"
         }
     }
     
     var umengKey: String {
-        return ""
+        return "友盟key"
     }
     
     var buglyKey: String {
-        return ""
+        return "bugly key"
     }
     
     static var currentUser: User? {

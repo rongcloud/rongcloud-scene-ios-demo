@@ -5,6 +5,7 @@
 //  Created by 叶孤城 on 2021/4/19.
 //
 
+import XCoordinator
 import SVProgressHUD
 
 private struct Constants {
@@ -42,8 +43,17 @@ class HomeViewController: UIViewController {
         return instance
     }()
     private lazy var messageButton = HomeMessageButton()
-    
     private var items = HomeItem.allCases
+    private let router: UnownedRouter<HomeRouter>
+    
+    init(router: UnownedRouter<HomeRouter>) {
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +83,7 @@ class HomeViewController: UIViewController {
         }
         navigationController?.popToRootViewController(animated: true)
         navigator(.login)
-        VoiceRoomManager.shared.leave { _ in }
+        SceneRoomManager.shared.leave { _ in }
     }
     
     private func buildLayout() {
@@ -132,12 +142,13 @@ extension HomeViewController: UICollectionViewDataSource {
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.item]
-        currentSceneType = item
+        SceneRoomManager.scene = item
         switch item {
-        case .audioRoom: navigator(.voiceRoomEntrance)
-        case .radioRoom: navigator(.voiceRoomEntrance)
+        case .audioRoom: router.trigger(.voiceRoom)
+        case .radioRoom: router.trigger(.radioRoom)
         case .audioCall: enterCallIfAvailable(item)
         case .videoCall: enterCallIfAvailable(item)
+        case .liveVideo: router.trigger(.liveVideo)
         }
         item.umengEvent.trigger()
     }
@@ -147,8 +158,8 @@ extension HomeViewController: UICollectionViewDelegate {
             return SVProgressHUD.showInfo(withStatus: "请先退出房间，再进行通话")
         }
         switch item {
-        case .audioCall: navigator(.dial(type: .audio))
-        case .videoCall: navigator(.dial(type: .video))
+        case .audioCall: router.trigger(.audioCall)
+        case .videoCall: router.trigger(.videoCall)
         default: ()
         }
     }
@@ -161,7 +172,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         case .audioRoom:
             let cellWidth = collectionView.bounds.width - Constants.contentInset * 2
             return CGSize(width: floor(cellWidth), height: floor(cellWidth / 333 * 157))
-        case .audioCall, .videoCall, .radioRoom:
+        case .audioCall, .videoCall, .radioRoom, .liveVideo:
             let cellWidth = (collectionView.bounds.width - Constants.contentInset * 2 - Constants.itemPadding)/2
             return CGSize(width: floor(cellWidth), height: floor(cellWidth / 158 * 195))
         }

@@ -34,6 +34,28 @@ NSString *const Action_KHQListen = @"KHQListen";
 NSString *const Action_TrafficReportListen = @"TrafficReportListen";
 NSString *const Action_UGCReportListen = @"UGCReportListen";
 NSString *const Action_KReportListen = @"KReportListen";
+//4.1.2
+
+/// 创建会员歌单
+NSString *const Action_CreateMemberSheet = @"CreateMemberSheet";
+/// 删除会员歌单
+NSString *const Action_DeleteMemberSheet = @"DeleteMemberSheet";
+///获取会员歌单
+NSString *const Action_MemberSheet = @"MemberSheet";
+///获取会员歌单歌曲
+NSString *const Action_MemberSheetMusic = @"MemberSheetMusic";
+/// 增加会员歌单歌曲
+NSString *const Action_AddMemberSheetMusic = @"AddMemberSheetMusic";
+/// 移除会员歌单歌曲
+NSString *const Action_RemoveMemberSheetMusic = @"RemoveMemberSheetMusic";
+/// 清除会员歌单歌曲
+NSString *const Action_ClearMemberSheetMusic = @"ClearMemberSheetMusic";
+
+
+
+
+
+
 
 
 @end

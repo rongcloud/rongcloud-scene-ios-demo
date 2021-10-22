@@ -43,8 +43,9 @@ struct VoiceRoom: Codable, Identifiable, Equatable {
     let updateDt: TimeInterval
     let createUser: VoiceRoomUser?
     var userTotal: Int
-    let roomType: Int?
+    let roomType: Int?  /// (1 || null):语聊房,2:电台,3:直播
     let stop: Bool
+    var notice: String?
 }
 
 extension VoiceRoom {

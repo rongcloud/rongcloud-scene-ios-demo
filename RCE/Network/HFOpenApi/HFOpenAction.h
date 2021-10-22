@@ -72,7 +72,22 @@ extern NSString *const Action_TrafficReportListen;
 extern NSString *const Action_UGCReportListen;
 extern NSString *const Action_KReportListen;
 
+//4.1.2
 
+/// 创建会员歌单
+extern NSString *const Action_CreateMemberSheet ;
+/// 删除会员歌单
+extern NSString *const Action_DeleteMemberSheet ;
+///获取会员歌单
+extern NSString *const Action_MemberSheet ;
+///获取会员歌单歌曲
+extern NSString *const Action_MemberSheetMusic ;
+/// 增加会员歌单歌曲
+extern NSString *const Action_AddMemberSheetMusic ;
+/// 移除会员歌单歌曲
+extern NSString *const Action_RemoveMemberSheetMusic ;
+/// 清除会员歌单歌曲
+extern NSString *const Action_ClearMemberSheetMusic ;
 @end
 
 

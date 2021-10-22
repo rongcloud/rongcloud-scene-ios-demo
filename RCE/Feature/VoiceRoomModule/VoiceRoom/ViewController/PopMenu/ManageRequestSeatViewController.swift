@@ -53,8 +53,6 @@ class ManageRequestSeatViewController: UIViewController {
         return instance
     }()
     
-    private lazy var tapGestureView = RCTapGestureView(self)
-    
     init(delegate: RequestSeatPopProtocol) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -70,16 +68,12 @@ class ManageRequestSeatViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(titleLabel)
         container.addSubview(cancelRequestButton)
         container.addSubview(cancelButton)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         container.snp.makeConstraints { make in
             make.left.bottom.right.equalToSuperview()

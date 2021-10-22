@@ -8,8 +8,6 @@
 import SVProgressHUD
 import RCRTCAudio
 
-fileprivate var RCVRecordAlertRef = 1
-
 extension RCRadioRoomViewController {
     @_dynamicReplacement(for: managerlist)
     private var chat_managerlist: [VoiceRoomUser] {
@@ -26,9 +24,6 @@ extension RCRadioRoomViewController {
         RCIM.shared().receiveMessageDelegate = self
         roomToolBarView.add(chat: self, action: #selector(handleInputButtonClick))
         roomToolBarView.add(message: self, action: #selector(handlePrivateMessageButtonClick))
-        roomToolBarView.recordButton.recordStateChanged = { [unowned self] state in
-            recordStateChanged(state)
-        }
         roomToolBarView.recordButton.recordDidSuccess = { [unowned self] result in
             recordDidSuccess(result)
         }
@@ -56,37 +51,7 @@ extension RCRadioRoomViewController {
     @objc private func handleInputButtonClick() {
         navigator(.inputMessage(roomId: roomInfo.roomId, delegate: self))
     }
-    
-    private var recordAlertController: RCVRVoiceAlertViewController {
-        get {
-            var controller = objc_getAssociatedObject(self, &RCVRecordAlertRef)
-            if controller == nil {
-                controller = RCVRVoiceAlertViewController()
-                self.recordAlertController = controller as! RCVRVoiceAlertViewController
-            }
-             return controller as! RCVRVoiceAlertViewController
-        }
-        set {
-            objc_setAssociatedObject(self, &RCVRecordAlertRef, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    private func recordStateChanged(_ state: RCVRVoiceButtonState) {
-        recordAlertController.update(state)
-        switch state {
-        case .none: ()
-        case .begin, .lack:
-            if presentedViewController == recordAlertController { break }
-            recordAlertController.modalTransitionStyle = .crossDissolve
-            recordAlertController.modalPresentationStyle = .overFullScreen
-            present(recordAlertController, animated: true, completion: nil)
-        case .recording: ()
-        case .outArea: ()
-        case .cancel, .end:
-            recordAlertController.dismiss(animated: true, completion: nil)
-        }
-    }
-    
+        
     private func recordDidSuccess(_ result: (url: URL, time: TimeInterval)?) {
         guard let result = result else { return }
         let url = result.url
@@ -175,8 +140,7 @@ extension RCRadioRoomViewController: RCVRMViewDelegate {
     func voiceRoomView(_ view: RCVRMView, didClick userId: String) {
         let currentUserId = Environment.currentUserId
         if userId == currentUserId { return }
-        let dependency = VoiceRoomUserOperationDependency(roomId: roomInfo.roomId,
-                                                          roomCreator: roomInfo.userId,
+        let dependency = VoiceRoomUserOperationDependency(room: roomInfo,
                                                           presentUserId: userId)
         navigator(.manageUser(dependency: dependency, delegate: self))
     }

@@ -21,7 +21,7 @@ final class RCEntranceTitleView: UIView {
     
     private lazy var roomButton: UIButton = {
         let instance = UIButton()
-        let title = currentSceneType?.name ?? "房间"
+        let title = SceneRoomManager.scene.name
         let normalTitle = NSAttributedString(string: title, attributes: normalAttributes)
         let selectedTitle = NSAttributedString(string: title, attributes: selectedAttributes)
         instance.setAttributedTitle(normalTitle, for: .normal)
@@ -71,7 +71,7 @@ final class RCEntranceTitleView: UIView {
         
         roomButton.snp.makeConstraints { make in
             make.top.bottom.left.equalToSuperview()
-            make.width.equalTo(76)
+            make.width.greaterThanOrEqualTo(76)
             make.height.equalTo(44)
         }
         

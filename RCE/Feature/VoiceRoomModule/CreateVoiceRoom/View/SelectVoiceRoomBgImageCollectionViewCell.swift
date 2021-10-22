@@ -58,7 +58,7 @@ class SelectVoiceRoomBgImageCollectionViewCell: UICollectionViewCell, Reusable {
         }
         
         gifLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(3)
+            make.left.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().inset(3)
         }
     }

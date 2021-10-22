@@ -10,8 +10,8 @@ import SVProgressHUD
 final class RCRadioRoomViewController: RCModuleViewController {
     private(set) lazy var queue = DispatchQueue(label: "rc_radio_room_queue")
     
-    private(set) lazy var roomInfoView = RoomInfoView(roomId: roomInfo.roomId, networkEnable: false)
-    private(set) lazy var roomNoticeView = RoomNoticeView(icon: R.image.room_notice_icon(), title: "公告")
+    private(set) lazy var roomInfoView = SceneRoomInfoView(roomInfo)
+    private(set) lazy var roomNoticeView = SceneRoomNoticeView()
     private(set) lazy var roomOwnerView = RCRadioRoomOwnerView()
     private(set) lazy var roomSuspendView = RCRadioRoomSuspendView(roomInfo)
     private(set) lazy var messageView = RCVRMView()
@@ -85,7 +85,8 @@ extension RCRadioRoomViewController {
         }
         
         messageView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(278.0 / 375)
             $0.bottom.equalTo(roomToolBarView.snp.top).offset(-8.resize)
             $0.top.equalTo(roomOwnerView.snp.bottom).offset(24.resize)
         }

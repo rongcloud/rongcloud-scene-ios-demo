@@ -9,7 +9,6 @@ import UIKit
 
 final class FriendCardViewController: UIViewController {
     
-    private lazy var tapView = RCTapGestureView(self)
     private lazy var cardView = UIView()
     private lazy var shapeLayer = CAShapeLayer()
     private lazy var avatarImageView = UIImageView(image: R.image.default_avatar())
@@ -59,6 +58,7 @@ final class FriendCardViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.black.alpha(0.7)
+        enableClickingDismiss()
         
         setupConstraint()
         
@@ -84,16 +84,11 @@ final class FriendCardViewController: UIViewController {
 
 extension FriendCardViewController {
     private func setupConstraint() {
-        view.addSubview(tapView)
         view.addSubview(cardView)
         cardView.layer.addSublayer(shapeLayer)
         cardView.addSubview(avatarImageView)
         cardView.addSubview(nameLabel)
         cardView.addSubview(chatButton)
-        
-        tapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         cardView.backgroundColor = .clear
         cardView.snp.makeConstraints { make in

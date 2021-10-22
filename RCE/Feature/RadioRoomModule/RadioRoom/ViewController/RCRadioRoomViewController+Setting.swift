@@ -26,7 +26,7 @@ extension RCRadioRoomViewController {
             .roomBackground,
             .forbidden,
             .music,
-            .suspend(roomKVState.suspend)
+            .suspend,
         ]
     }
     
@@ -76,7 +76,7 @@ extension RCRadioRoomViewController: VoiceRoomSettingProtocol {
     }
     /// 房间背景
     func modifyRoomBackgroundDidClick() {
-        navigator(.changeBackground(imagelist: VoiceRoomManager.shared.backgroundlist ,delegate: self))
+        navigator(.changeBackground(imagelist: SceneRoomManager.shared.backgroundlist ,delegate: self))
     }
     
     func forbiddenDidClick() {

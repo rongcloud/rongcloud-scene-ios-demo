@@ -20,7 +20,6 @@ protocol VoiceRoomInputMessageProtocol: AnyObject {
 class VoiceRoomInputMessageViewController: UIViewController {
     private weak var delegate: VoiceRoomInputMessageProtocol?
     private let roomId: String
-    private lazy var tapGestureView = RCTapGestureView(self)
     private lazy var containterView = UIView()
     private lazy var containterLineView = UIView()
     private lazy var backImageView = UIImageView(image: R.image.message_background())
@@ -77,7 +76,7 @@ class VoiceRoomInputMessageViewController: UIViewController {
                 let data = response.data
                 let responseModel = try? JSONDecoder().decode(VoiceRoomForbiddenResponse.self, from: data)
                 let wordlist = responseModel?.data ?? []
-                VoiceRoomManager.shared.forbiddenWordlist = wordlist.map(\.name)
+                SceneRoomManager.shared.forbiddenWordlist = wordlist.map(\.name)
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
             }
@@ -144,18 +143,13 @@ class VoiceRoomInputMessageViewController: UIViewController {
 
 extension VoiceRoomInputMessageViewController {
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(containterView)
         containterView.addSubview(backImageView)
         containterView.addSubview(textView)
         containterView.addSubview(emojiButton)
         containterView.addSubview(sendButton)
         containterView.addSubview(containterLineView)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(containterView.snp.top).offset(-30.resize)
-        }
         
         containterView.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -270,10 +264,10 @@ extension VoiceRoomInputMessageViewController: EmojiViewDelegate {
 
 fileprivate extension String {
     var civilized: String {
-        return VoiceRoomManager.shared.forbiddenWordlist.reduce(self) { $0.replacingOccurrences(of: $1, with: String(repeating: "*", count: $1.count)) }
+        return SceneRoomManager.shared.forbiddenWordlist.reduce(self) { $0.replacingOccurrences(of: $1, with: String(repeating: "*", count: $1.count)) }
     }
     
     var isCivilized: Bool {
-        return VoiceRoomManager.shared.forbiddenWordlist.first(where: { contains($0) }) == nil
+        return SceneRoomManager.shared.forbiddenWordlist.first(where: { contains($0) }) == nil
     }
 }

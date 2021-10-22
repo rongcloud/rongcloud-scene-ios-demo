@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   
   s.resources = 'RCVoiceRoomCallKit/Assets/Resources/*.bundle', 'RCVoiceRoomCallKit/Assets/Resources/*.lproj/*'
 
-  s.dependency 'RongCloudIM/IMKit', '~> 5.1.3'
   s.dependency 'RongCloudRTC/RongCallLib', '~> 5.1.3'
+  s.dependency 'RongCloudIM/IMLib', '~> 5.1.3'
   
 end

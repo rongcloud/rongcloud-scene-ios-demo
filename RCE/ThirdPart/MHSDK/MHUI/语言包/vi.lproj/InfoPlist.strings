@@ -1,0 +1,117 @@
+/* 
+  Info.strings
+  yunbaolive
+
+  Created by IOS1 on 2019/2/26.
+  Copyright © 2019 cat. All rights reserved.
+*/
+
+
+
+//meun
+"贴纸" = "Dính";
+"美颜" = "Đẹp";
+"特效" = "Tác dụng đặc biệt";
+"哈哈镜" = "Ha ha Jing.";
+//贴纸
+"高级贴纸" = "Nhãn hạng";
+"基础贴纸" = "Nhãn cơ bản";
+"基础面具" = "Mặt nạ cơ bản";
+"高级面具" = "Mặt nạ cấp cao";
+"高级" = "nâng cao";
+"基础" = "cơ bản";
+//美颜meun@[@"美颜",@"美型",@"一键美颜",@"滤镜"];
+"美型" = "Đẹp quá";
+"一键美颜" = "Một sắc đẹp.";
+"滤镜" = "Lọc";
+//美颜分类
+"原图" = "Tranh gốc";
+"美白" = "da trắng";
+"磨皮" = "Chảy";
+"红润" = "Thô bạo";
+"亮度" = "độ sáng";
+//美型分类
+"大眼" = "Mắt to";
+"瘦脸" = "Mặt dày";
+"嘴形" = "Hình miệng";
+"瘦鼻" = "Mũi gầy";
+"下巴" = "cằm";
+"额头" = "trán";
+"眉毛" = "vết";
+"眼角" = "Name";
+"眼距" = "Khoảng cách nhãn";
+"开眼角" = "Khoảng cách mở mắt";
+"削脸" = "Cạo";
+"长鼻" = "Mũi dài";
+//一键美颜
+"标准" = "chuẩn";
+"优雅" = "Grace.";
+"精致" = "tế nhị";
+"可爱" = "đáng yêu";
+"自然" = "tự nhiên";
+"脱俗" = "Không phải thô tục";
+"高雅" = "Description";
+//滤镜
+"浪漫" = "lãng mạn";
+"清新" = "tươi";
+"唯美" = "Thuốc lôi";
+"粉嫩" = "Hồng và dịu dàng";
+"怀旧" = "怀旧";
+"蓝调" = "蓝调";
+"清凉" = "mát và mới mẻ";
+"日系" = "Hệ Mặt trời";
+"城市" = "Thành";
+"初恋" = "Yêu trước";
+"初心" = "Mục đích gốc";
+"单色" = "đơn";
+"反差色" = "Màu tương phản";
+"琥珀" = "琥珀";
+"美味" = "Ngon";
+"蜜桃粉" = "Bột đào";
+"奶茶" = "trà sữa";
+"拍立得" = "Polaroid";
+"乌托邦" = "Utopia.";
+"西柚" = "Nho";
+"日杂" = "nhu cầu gia đình khác nhau";
+"黑猫" = "mèo đen";
+"黑白" = "đen và trắng";
+"布鲁克林" = "Brooklyn";
+"平静" = "bình tĩnh";
+"冷酷" = "冷酷";
+"凯文" = "Kevin.";
+"恋爱" = "yêu";
+//特效
+"水印" = "chìm";
+"无" = "không";
+"灵魂出窍" = "Ra khỏi cơ thể";
+"抖动" = "lắc";
+"闪白" = "Trắng mịn";
+"毛刺" = "da cầm";
+"幻觉" = "ảo";
+"马赛克" = "Khảm";
+"圆形马赛克" = "Hình xoắn ốc";
+"三角马赛克" = "Tam giác";
+"六边马赛克" = "Sắc nâu đỏ";
+"马赛克1" = "Khảm 1";
+"马赛克2" = "Khảm 2";
+"马赛克3" = "Khảm 3";
+"马赛克4" = "Khảm 4";
+//哈哈镜
+"外星人" = "Ngoài";
+"梨梨脸" = "Mặt tròn";
+"瘦瘦脸" = "Mặt dày";
+"镜像脸" = "Gương mặt";
+"片段脸" = "Mảnh vỡ mặt";
+"水面倒影" = "Phản xạ nước";
+"螺旋镜面" = "Gương xoắn ốc";
+"鱼眼相机" = "Máy quay mắt cá";
+"左右镜像" = "Ảnh phản chiếu trái và phải";
+
+//动作识别
+"动作" = "hành";
+"抬头" = "lên";
+"张嘴" = "mở miệng";
+"眨眼" = "nháy";
+"请抬头" = "Xin hãy nhìn lên.";
+"请张嘴" = "Làm ơn mở miệng ra.";
+"请眨眼" = "Hãy chớp mắt.";

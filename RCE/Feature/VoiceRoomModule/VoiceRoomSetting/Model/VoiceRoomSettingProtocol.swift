@@ -20,6 +20,11 @@ protocol VoiceRoomSettingProtocol: AnyObject {
     func forbiddenDidClick()
     func suspendDidClick()
     func noticeDidClick()
+    func switchCameraDidClick()
+    func retouchDidClick()
+    func stickerDidClick()
+    func makeupDidClick()
+    func effectDidClick()
 }
 
 extension VoiceRoomSettingProtocol {
@@ -35,4 +40,9 @@ extension VoiceRoomSettingProtocol {
     func forbiddenDidClick() {}
     func suspendDidClick() {}
     func noticeDidClick() {}
+    func switchCameraDidClick() {}
+    func retouchDidClick() {}
+    func stickerDidClick() {}
+    func makeupDidClick() {}
+    func effectDidClick() {}
 }

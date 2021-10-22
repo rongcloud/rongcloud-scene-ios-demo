@@ -37,7 +37,17 @@ class RCRTCGiftBroadcastView: UIView {
         instance.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return instance
     }()
-    private var room: VoiceRoom?
+    private var room: VoiceRoom? {
+        didSet {
+            guard let room = room else {
+                return
+            }
+            if delegate.broadcastViewAccessible(room) {
+                return
+            }
+            roomButton.isHidden = true
+        }
+    }
     private let broadcast: RCGiftBroadcast
     private let delegate: RCRTCBroadcastDelegate
     init(_ broadcast: RCGiftBroadcast, delegate: RCRTCBroadcastDelegate) {
@@ -97,7 +107,7 @@ class RCRTCGiftBroadcastView: UIView {
         let sendAttributeString = NSAttributedString(string: " 送给 ")
         content.append(sendAttributeString)
         
-        let receiverAttributeString = NSAttributedString(string: broadcast.targetName, attributes: attributes)
+        let receiverAttributeString = NSAttributedString(string: broadcast.targetName ?? "全麦用户", attributes: attributes)
         content.append(receiverAttributeString)
         
         let giftAttributeString = NSAttributedString(string: " \(broadcast.giftName)x\(broadcast.giftCount)")

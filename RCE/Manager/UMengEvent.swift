@@ -19,6 +19,7 @@ enum UMengEvent: String {
     case RadioRoom
     case VideoCall
     case AudioCall
+    case LiveVideo
 }
 
 extension UMengEvent {

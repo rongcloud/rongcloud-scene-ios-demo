@@ -73,7 +73,6 @@ class VoiceRoomNoticeViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         textView.text = notice
     }
-    private lazy var tapView = RCTapGestureView(self)
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -96,17 +95,13 @@ class VoiceRoomNoticeViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapView)
+        enableClickingDismiss()
         view.addSubview(containerView)
         containerView.addSubview(effectView)
         containerView.addSubview(noticeTitleLabel)
         containerView.addSubview(textView)
         containerView.addSubview(confirmButton)
         containerView.addSubview(cancelButton)
-        
-        tapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(50.resize)

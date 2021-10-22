@@ -81,7 +81,7 @@ final class VoiceRoomGiftViewController: UIViewController {
             UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { [weak self] user in
                 guard let self = self else { return }
                 let index = self.dependency.seats.firstIndex(where: { $0.userId == userId })
-                var mark = "观众"
+                var mark = self.dependency.room.userId == userId ? "房主" : "观众"
                 if let userIndex = index {
                     mark = userIndex == 0 ? "房主" : "\(userIndex)"
                 }

@@ -12,7 +12,6 @@ import SVProgressHUD
 final class WebViewController: UIViewController {
     
     private lazy var webView = WKWebView()
-    private lazy var tapView = RCTapGestureView(self)
     
     private(set) lazy var backButton: UIButton = {
         let instance = UIButton()
@@ -39,11 +38,8 @@ final class WebViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = titleString
         view.backgroundColor = .white
-        view.addSubview(tapView)
+        enableClickingDismiss()
         view.addSubview(webView)
-        tapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         webView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

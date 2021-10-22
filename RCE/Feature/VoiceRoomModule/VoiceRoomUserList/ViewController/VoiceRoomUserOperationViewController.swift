@@ -34,58 +34,35 @@ extension VoiceRoomUserOperationProtocol {
 }
 
 struct VoiceRoomUserOperationDependency {
-    let roomId: String
-    let roomCreator: String
-    var managelist: [String] {
-        get {
-            return VoiceRoomManager.shared.managerlist
-        }
-    }
+    let room: VoiceRoom
+    var presentUserId: String
+    var managelist: [String] { SceneRoomManager.shared.managerlist }
     var currentUserRoleType: VoiceRoomUserType {
-        get {
-            if roomCreator == Environment.currentUserId {
-                return .creator
-            }
-            if managelist.contains(Environment.currentUserId) {
-                return .manager
-            }
-            return .audience
-        }
+        if room.isOwner { return .creator }
+        if managelist.contains(Environment.currentUserId) { return .manager }
+        return .audience
     }
     var presentUserRoleType: VoiceRoomUserType {
-        get {
-            if roomCreator == presentUserId {
-                return .creator
-            }
-            if managelist.contains(presentUserId) {
-                return .manager
-            }
-            return .audience
-        }
+        if room.userId == presentUserId { return .creator }
+        if managelist.contains(presentUserId) { return .manager }
+        return .audience
     }
-    var presentUserId: String
     var relativeSeatInfo: RCVoiceSeatInfo? {
-        get {
-            return seatInfolist.first { info in
-                info.userId == presentUserId
-            }
+        seatInfolist.first { info in
+            info.userId == presentUserId
         }
     }
     var relativeSeatIndex: Int? {
-        get {
-            return seatInfolist.firstIndex { info in
-                info.userId == presentUserId
-            }
+        seatInfolist.firstIndex { info in
+            info.userId == presentUserId
         }
     }
     var seatInfolist: [RCVoiceSeatInfo] {
-        get {
-            return VoiceRoomManager.shared.seatlist
-        }
+        SceneRoomManager.shared.seatlist
     }
     
     func isPrsenterManager() -> Bool {
-        return managelist.contains(presentUserId)
+        managelist.contains(presentUserId)
     }
     
     func isPresenterOnSeat() -> Bool {
@@ -229,7 +206,6 @@ class VoiceRoomUserOperationViewController: UIViewController {
         instance.addTarget(self, action: #selector(handleKickOut), for: .touchUpInside)
         return instance
     }()
-    private lazy var tapGestureView = RCTapGestureView(self)
     private var isFollow = false
     
     init(dependency: VoiceRoomUserOperationDependency, delegate: VoiceRoomUserOperationProtocol?) {
@@ -274,7 +250,10 @@ class VoiceRoomUserOperationViewController: UIViewController {
     
     @objc private func setManager() {
         let setManager = !self.dependency.isPrsenterManager()
-        networkProvider.rx.request(.setRoomManager(roomId: dependency.roomId, userId: dependency.presentUserId, isManager: setManager))
+        let roomId = dependency.room.roomId
+        let userId = dependency.presentUserId
+        let api = RCNetworkAPI.setRoomManager(roomId: roomId, userId: userId, isManager: setManager)
+        networkProvider.rx.request(api)
             .asObservable()
             .filterSuccessfulStatusCodes()
             .map(AppResponse.self)
@@ -290,7 +269,7 @@ class VoiceRoomUserOperationViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(avatarImageView)
@@ -301,11 +280,6 @@ class VoiceRoomUserOperationViewController: UIViewController {
         container.addSubview(followButton)
         container.addSubview(stackView)
         container.addSubview(manageButton)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(container.snp.top).offset(-20)
-        }
         
         container.snp.makeConstraints {
             $0.left.bottom.right.equalToSuperview()
@@ -384,24 +358,42 @@ class VoiceRoomUserOperationViewController: UIViewController {
     }
     
     private func setupStackView() {
+        guard let scene = HomeItem(rawValue: dependency.room.roomType ?? 1) else { return }
         let buttonlist: [UIButton] = {
             switch dependency.currentUserRoleType {
             case .creator:
-                if currentSceneType == .radioRoom { return [kickoutButton] }
-                if dependency.isPresenterOnSeat() {
-                    return [pickDownButton, lockSeatButton, muteButton, kickoutButton]
-                } else {
-                    return [pickUpButton, kickoutButton]
+                switch scene {
+                case .audioRoom:
+                    if dependency.isPresenterOnSeat() {
+                        return [pickDownButton, lockSeatButton, muteButton, kickoutButton]
+                    } else {
+                        return [pickUpButton, kickoutButton]
+                    }
+                case .videoCall, .audioCall: return []
+                case .radioRoom: return [kickoutButton]
+                case .liveVideo:
+                    if dependency.isPresenterOnSeat() {
+                        return [pickDownButton, kickoutButton]
+                    } else {
+                        return [pickUpButton, kickoutButton]
+                    }
                 }
             case .manager:
-                guard dependency.currentUserRoleType == .manager, dependency.presentUserRoleType == .audience else {
-                    return []
-                }
-                if currentSceneType == .radioRoom { return [kickoutButton] }
-                if dependency.isPresenterOnSeat() {
-                    return [pickDownButton, kickoutButton]
-                } else {
-                    return [pickUpButton, kickoutButton]
+                guard
+                    dependency.currentUserRoleType == .manager,
+                    dependency.presentUserRoleType == .audience
+                else { return [] }
+                switch scene {
+                case .audioRoom:
+                    if dependency.isPresenterOnSeat() {
+                        return [pickDownButton, kickoutButton]
+                    } else {
+                        return [pickUpButton, kickoutButton]
+                    }
+                case .videoCall: return []
+                case .audioCall: return []
+                case .radioRoom: return [kickoutButton]
+                case .liveVideo: return [kickoutButton]
                 }
             case .audience:
                 return []
@@ -444,6 +436,7 @@ class VoiceRoomUserOperationViewController: UIViewController {
             muteButton.setImage(R.image.voiceroom_setting_muteall(), for: .normal)
         }
         seatIndexLabel.text = "\(seatIndex)号麦位"
+        seatIndexLabel.isHidden = seatIndex == 0
     }
     
     @objc private func handleSendGift() {
@@ -516,7 +509,9 @@ class VoiceRoomUserOperationViewController: UIViewController {
     }
     
     @objc func handleKickOut() {
-        delegate?.kickoutRoom(userId: dependency.presentUserId)
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.kickoutRoom(userId: self.dependency.presentUserId)
+        }
     }
 }

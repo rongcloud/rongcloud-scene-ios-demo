@@ -22,6 +22,8 @@ public class RCVRMView: UIView {
         instance.dataSource = self
         instance.backgroundColor = .clear
         instance.separatorColor = .clear
+        instance.showsHorizontalScrollIndicator = false
+        instance.showsVerticalScrollIndicator = false
         instance.translatesAutoresizingMaskIntoConstraints = false
         return instance
     }()

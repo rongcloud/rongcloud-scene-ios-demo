@@ -39,8 +39,7 @@ extension VoiceRoomViewController {
 
 extension VoiceRoomViewController: RoomInfoViewClickProtocol {
     func roomInfoDidClick() {
-        let dependency = VoiceRoomUserOperationDependency(roomId: voiceRoomInfo.roomId,
-                                              roomCreator: voiceRoomInfo.userId,
+        let dependency = VoiceRoomUserOperationDependency(room: voiceRoomInfo,
                                               presentUserId: "")
         navigator(.userlist(dependency: dependency, delegate: self))
     }

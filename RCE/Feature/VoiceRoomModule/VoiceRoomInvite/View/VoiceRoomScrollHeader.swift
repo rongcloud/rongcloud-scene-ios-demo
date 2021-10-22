@@ -117,3 +117,18 @@ extension VoiceRoomScrollHeader: ScrollableHeaderProtocol {
         
     }
 }
+
+extension UIScrollView {
+    var estimateHPage: Int {
+        return Int(contentOffset.x / bounds.width)
+    }
+    
+    func scrollHOffset(_ page: Int) -> CGPoint {
+        return CGPoint(x: bounds.width * CGFloat(page), y: 0)
+    }
+    
+    func scrollHRect(_ page: Int) -> CGRect {
+        let x = bounds.width * CGFloat(page)
+        return CGRect(x: x, y: 0, width: bounds.width, height: bounds.height)
+    }
+}

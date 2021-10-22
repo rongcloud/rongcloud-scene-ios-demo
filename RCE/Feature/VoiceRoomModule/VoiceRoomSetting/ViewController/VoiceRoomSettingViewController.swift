@@ -9,7 +9,6 @@ import UIKit
 
 class VoiceRoomSettingViewController: UIViewController {
     private weak var delegate: VoiceRoomSettingProtocol?
-    private lazy var tapGestureView = RCTapGestureView(self)
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = VoiceRoomSettingCollectionViewCell.autoSize()
@@ -70,15 +69,12 @@ class VoiceRoomSettingViewController: UIViewController {
     
     private func buildLayout() {
        // view.backgroundColor = R.color.hex03062F()?.withAlphaComponent(0.5)
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(collectionView)
         container.addSubview(arrowImageView)
-        tapGestureView.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
-            make.bottom.equalTo(container.snp.top).offset(-20.resize)
-        }
+        
         container.snp.makeConstraints {
             $0.left.bottom.right.equalToSuperview()
             $0.height.equalTo(345.resize)
@@ -111,54 +107,75 @@ extension VoiceRoomSettingViewController: UICollectionViewDataSource {
 extension VoiceRoomSettingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let settingItem = items[indexPath.row]
+        weak var delegate = delegate
         switch settingItem {
         case let .lockRoom(isLock):
             dismiss(animated: true) {
-                self.delegate?.lockRoomDidClick(isLock: !isLock)
+                delegate?.lockRoomDidClick(isLock: !isLock)
             }
         case let .muteAllSeat(isMute):
             dismiss(animated: true) {
-                self.delegate?.muteAllSeatDidClick(isMute: !isMute)
+                delegate?.muteAllSeatDidClick(isMute: !isMute)
             }
         case let .lockAllSeat(isLock):
             dismiss(animated: true) {
-                self.delegate?.lockAllSeatDidClick(isLock: !isLock)
+                delegate?.lockAllSeatDidClick(isLock: !isLock)
             }
         case let .muteSelf(isSilence):
             dismiss(animated: true) {
-                self.delegate?.silenceSelfDidClick(isSilence: !isSilence)
+                delegate?.silenceSelfDidClick(isSilence: !isSilence)
             }
         case .music:
             dismiss(animated: true) {
-                self.delegate?.musicDidClick()
+                delegate?.musicDidClick()
             }
         case let .isFreeEnterSeat(isFree):
             dismiss(animated: true) {
-                self.delegate?.freeMicDidClick(isFree: !isFree)
+                delegate?.freeMicDidClick(isFree: !isFree)
             }
         case .roomTitle:
             dismiss(animated: true) {
-                self.delegate?.modifyRoomTitleDidClick()
+                delegate?.modifyRoomTitleDidClick()
             }
         case .roomBackground:
             dismiss(animated: true) {
-                self.delegate?.modifyRoomBackgroundDidClick()
+                delegate?.modifyRoomBackgroundDidClick()
             }
         case let .lessSeatMode(isLess):
             dismiss(animated: true) {
-                self.delegate?.lessSeatDidClick(isLess: !isLess)
+                delegate?.lessSeatDidClick(isLess: !isLess)
             }
         case .forbidden:
             dismiss(animated: true) {
-                self.delegate?.forbiddenDidClick()
+                delegate?.forbiddenDidClick()
             }
         case .suspend:
             dismiss(animated: true) {
-                self.delegate?.suspendDidClick()
+                delegate?.suspendDidClick()
             }
         case .notice:
             dismiss(animated: true) {
-                self.delegate?.noticeDidClick()
+                delegate?.noticeDidClick()
+            }
+        case .switchCamera:
+            dismiss(animated: true) {
+                delegate?.switchCameraDidClick()
+            }
+        case .retouch:
+            dismiss(animated: true) {
+                delegate?.retouchDidClick()
+            }
+        case .sticker:
+            dismiss(animated: true) {
+                delegate?.stickerDidClick()
+            }
+        case .makeup:
+            dismiss(animated: true) {
+                delegate?.makeupDidClick()
+            }
+        case .effect:
+            dismiss(animated: true) {
+                delegate?.effectDidClick()
             }
         }
         collectionView.reloadData()

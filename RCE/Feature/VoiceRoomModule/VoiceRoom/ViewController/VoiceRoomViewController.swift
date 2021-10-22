@@ -38,11 +38,8 @@ class VoiceRoomViewController: UIViewController {
     dynamic var timer: Timer?
     dynamic var inviterCount: Int = 10
 
-    private(set) lazy var roomNoticeView: RoomNoticeView = {
-        let instance = RoomNoticeView(icon: R.image.room_notice_icon(), title: "公告")
-        return instance
-    }()
-    private(set) lazy var roomInfoView = RoomInfoView(roomId: voiceRoomInfo.roomId)
+    private(set) lazy var roomNoticeView = SceneRoomNoticeView()
+    private(set) lazy var roomInfoView = SceneRoomInfoView(voiceRoomInfo)
     private(set) lazy var moreButton = UIButton()
     private(set) lazy var ownerView = VoiceRoomMasterView()
     private(set) lazy var collectionView: UICollectionView = {
@@ -59,7 +56,13 @@ class VoiceRoomViewController: UIViewController {
     }()
     private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: voiceRoomInfo.roomId)
     private(set) lazy var messageView = RCVRMView()
-    private(set) lazy var toolBarView = VoiceRoomToolBarView(currentUserRole())
+    private(set) lazy var toolBarView: SceneRoomToolBarView = {
+        if currentUserRole() == .creator {
+            return SceneRoomToolBarView(toolist: [.userlist, .pk, .gift, .message, .setting])
+        } else {
+            return SceneRoomToolBarView(toolist: [.requestMic,.gift, .message])
+        }
+    }()
     lazy var pkView = VoiceRoomPKView()
     private let isCreate: Bool
     
@@ -120,7 +123,8 @@ class VoiceRoomViewController: UIViewController {
         view.addSubview(pkView)
         
         messageView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(278.0 / 375)
             $0.bottom.equalTo(toolBarView.snp.top).offset(-8.resize)
             $0.top.equalTo(collectionView.snp.bottom).offset(21.resize)
         }
@@ -190,7 +194,7 @@ extension VoiceRoomViewController {
             roomKVInfo = kvRoom
         }
         moreButton.isEnabled = false
-        VoiceRoomManager.shared
+        SceneRoomManager.shared
             .join(voiceRoomInfo.roomId, roomKVInfo: roomKVInfo) { [weak self] result in
                 RCCall.shared().canIncomingCall = false
                 guard let self = self else { return }
@@ -206,7 +210,7 @@ extension VoiceRoomViewController {
     }
     
     func leaveRoom() {
-        VoiceRoomManager.shared
+        SceneRoomManager.shared
             .leave { [weak self] result in
                 RCRoomFloatingManager.shared.hide()
                 RCCall.shared().canIncomingCall = true
@@ -279,7 +283,7 @@ extension VoiceRoomViewController {
         }
         
         let tipButton = UIButton()
-        tipButton.setTitle("放回房间列表", for: .normal)
+        tipButton.setTitle("返回房间列表", for: .normal)
         tipButton.setTitleColor(.white, for: .normal)
         tipButton.backgroundColor = .lightGray
         tipButton.layer.cornerRadius = 6
@@ -311,11 +315,11 @@ extension VoiceRoomViewController {
 
 extension VoiceRoomViewController: RCRoomCycleProtocol {
     func joinRoom(_ completion: @escaping (Result<Void, ReactorError>) -> Void) {
-        VoiceRoomManager.shared.join(voiceRoomInfo.roomId, complation: completion)
+        SceneRoomManager.shared.join(voiceRoomInfo.roomId, complation: completion)
     }
     
     func leaveRoom(_ completion: @escaping (Result<Void, ReactorError>) -> Void) {
-        VoiceRoomManager.shared.leave(completion)
+        SceneRoomManager.shared.leave(completion)
     }
     
     func descendantViews() -> [UIView] {

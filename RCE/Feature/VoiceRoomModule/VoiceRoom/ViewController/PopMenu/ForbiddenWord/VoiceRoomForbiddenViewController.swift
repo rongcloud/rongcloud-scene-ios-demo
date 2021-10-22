@@ -69,7 +69,6 @@ class VoiceRoomForbiddenViewController: UIViewController {
         instance.text = "包含屏蔽词的发言将不会被其他用户看到"
         return instance
     }()
-    private lazy var tapView = RCTapGestureView(self)
     
     init(roomId: String) {
         self.roomId = roomId
@@ -92,7 +91,7 @@ class VoiceRoomForbiddenViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapView)
+        enableClickingDismiss()
         view.addSubview(containerView)
         containerView.addSubview(effectView)
         containerView.addSubview(titleLabel)
@@ -100,10 +99,6 @@ class VoiceRoomForbiddenViewController: UIViewController {
         containerView.addSubview(forbiddenTitleLabel)
         containerView.addSubview(forbiddenDescLabel)
         containerView.addSubview(collectionView)
-        
-        tapView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         containerView.snp.makeConstraints { make in
             make.left.bottom.right.equalToSuperview()
@@ -214,7 +209,7 @@ extension VoiceRoomForbiddenViewController {
                     ForbiddenCellType.word($0)
                 }
                 self.forbiddenTitleLabel.text = "设置屏蔽词 (\(wordlist.count)/10)"
-                VoiceRoomManager.shared.forbiddenWordlist = wordlist.map(\.name)
+                SceneRoomManager.shared.forbiddenWordlist = wordlist.map(\.name)
                 self.collectionView.reloadData()
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)

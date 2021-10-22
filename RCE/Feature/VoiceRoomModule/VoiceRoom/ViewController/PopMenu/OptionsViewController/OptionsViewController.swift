@@ -47,7 +47,6 @@ class OptionsViewController: UIViewController {
     private var buttonlist = [UIButton]()
     
     private let dependency: PresentOptionDependency
-    private lazy var tapGestureView = RCTapGestureView(self)
     
     init(dependency: PresentOptionDependency) {
         self.dependency = dependency
@@ -65,15 +64,11 @@ class OptionsViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(titleLabel)
         container.addSubview(stackView)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         container.snp.makeConstraints { make in
             make.left.bottom.right.equalToSuperview()

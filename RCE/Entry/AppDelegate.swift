@@ -6,30 +6,31 @@
 //
 
 import UIKit
+import XCoordinator
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-  var window: UIWindow?
-  private let dependency = CompositionRoot.resolve()
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//    UIViewController.swizzIt()
-    dependency.configManagers(launchOptions)
-    dependency.configureSDKs(launchOptions)
-    dependency.configureAppearence()
-    window = dependency.window()
-    window?.makeKeyAndVisible()
-    
-    RCIM.shared().clearUserInfoCache()
-    RCIM.shared().userInfoDataSource = self
-    RCIM.shared().enablePersistentUserInfoCache = true
-
-    window?.overrideUserInterfaceStyle = .light
-    
-    UNUserNotificationCenter.current().delegate = self
-    
-    return true
-  }
+    private let appRouter = HomeCoordinator().strongRouter
+    var window: UIWindow?
+    private let dependency = CompositionRoot.resolve()
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        //    UIViewController.swizzIt()
+        dependency.configManagers(launchOptions)
+        dependency.configureSDKs(launchOptions)
+        dependency.configureAppearence()
+        window = dependency.window()
+        appRouter.setRoot(for: window!)
+        window?.makeKeyAndVisible()
+        
+        RCIM.shared().clearUserInfoCache()
+        RCIM.shared().userInfoDataSource = self
+        RCIM.shared().enablePersistentUserInfoCache = true
+        
+        window?.overrideUserInterfaceStyle = .light
+        UNUserNotificationCenter.current().delegate = self
+        
+        return true
+    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         RCIMClient.shared().setDeviceTokenData(deviceToken)

@@ -13,8 +13,8 @@ struct RCGiftBroadcast: Codable {
     let userId: String
     let userName: String
     
-    let targetId: String
-    let targetName: String
+    let targetId: String?
+    let targetName: String?
     
     let giftId: String
     let giftName: String
@@ -47,7 +47,7 @@ class RCGiftBroadcastMessage: RCMessageContent {
         do {
             content = try JSONDecoder().decode(RCGiftBroadcast.self, from: data)
         } catch {
-            fatalError("RCGiftBroadcastMessage decode failed: \(error.localizedDescription)")
+            debugPrint("RCGiftBroadcastMessage decode failed: \(error.localizedDescription)")
         }
     }
     override class func getObjectName() -> String! { "RC:RCGiftBroadcastMsg" }

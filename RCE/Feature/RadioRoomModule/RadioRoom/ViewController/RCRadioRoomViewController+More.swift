@@ -97,7 +97,7 @@ extension RCRadioRoomViewController: LeaveViewProtocol {
         }
         
         let tipButton = UIButton()
-        tipButton.setTitle("放回房间列表", for: .normal)
+        tipButton.setTitle("返回房间列表", for: .normal)
         tipButton.setTitleColor(.white, for: .normal)
         tipButton.backgroundColor = .lightGray
         tipButton.layer.cornerRadius = 6

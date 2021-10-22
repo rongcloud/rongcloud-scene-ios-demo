@@ -24,14 +24,19 @@ target 'RCE' do
   pod 'SwiftyBeaver'
   pod 'RxGesture'
   pod "ViewAnimator"
+  pod 'SDWebImage'
+  pod 'XCoordinator'
   pod 'SwiftyBeaver'
   
+  # CORE
   pod 'RongCloudIM/IMKit'
   pod 'RongCloudRTC/RongRTCLib'
   pod 'RongCloudRTC/RongRTCPlayer'
   
-  pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
   pod 'RCVoiceRoomLib'
+  pod 'RCLiveVideoLib'
+  
+  pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
   pod 'RCRTCAudio', :path => 'Lib/RCRTCAudio'
   
   target 'RCETests' do

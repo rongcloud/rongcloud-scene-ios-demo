@@ -10,6 +10,8 @@ import UIKit
 final class VoiceRoomChatBageView: UIView {
     
     private lazy var countLabel = UILabel()
+    
+    private(set) var count = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,6 +39,7 @@ final class VoiceRoomChatBageView: UIView {
     }
     
     func update(_ count: Int) {
+        self.count = count
         if count <= 0 {
             isHidden = true
             return

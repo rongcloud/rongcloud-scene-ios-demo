@@ -192,26 +192,25 @@ class VoiceRoomPasswordViewController: UIViewController {
     
     @objc private func handleInputPassword() {
         guard let text = textField.text, text.count == 4 else {
-            SVProgressHUD.showError(withStatus: "请输入4位密码")
-            return
+            return SVProgressHUD.showError(withStatus: "请输入4位密码")
         }
         switch type {
         case .input:
-            delegate?.passwordDidEnter(password: text)
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true) { [weak self] in
+                self?.delegate?.passwordDidEnter(password: text)
+            }
         case let .verify(room):
             guard room.password == text else {
                 textField.text = ""
                 for view in passwordViewList {
                     view.update(text: nil)
                 }
-                SVProgressHUD.showError(withStatus: "密码验证错误，请重试")
-                return
+                return SVProgressHUD.showError(withStatus: "密码验证错误，请重试")
             }
-            delegate?.passwordDidVarify(room)
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true) { [weak self] in
+                self?.delegate?.passwordDidVarify(room)
+            }
         }
-        
     }
     
     @objc func handleCancel() {

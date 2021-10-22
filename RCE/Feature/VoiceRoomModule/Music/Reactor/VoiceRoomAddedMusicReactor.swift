@@ -125,7 +125,7 @@ final class VoiceRoomAddedMusicReactor: Reactor {
                     let nextMusic = currentState.addedItems[index + 1]
                     return MusicDownloader.shared.downloadMusic(nextMusic).flatMap {
                         _ -> Observable<Mutation> in
-                        guard VoiceRoomManager.shared.isSitting() else {
+                        guard SceneRoomManager.shared.isSitting() else {
                             return Observable<Mutation>.just(.setUserNotOnSeatWarning(true)).concat(Observable<Mutation>.just(.setUserNotOnSeatWarning(false)))
                         }
                         let isPlaying = RCRTCAudioMixer.sharedInstance().startMixing(with: nextMusic.fileURL(), playback: true, mixerMode: .mixing, loopCount: 1)
@@ -203,7 +203,7 @@ extension VoiceRoomAddedMusicReactor {
             isSuccess -> Observable<Mutation> in
             if isSuccess {
                 RCRTCAudioMixer.sharedInstance().stop()
-                guard VoiceRoomManager.shared.isSitting() else {
+                guard SceneRoomManager.shared.isSitting() else {
                     return Observable<Mutation>.just(.setUserNotOnSeatWarning(true)).concat(Observable<Mutation>.just(.setUserNotOnSeatWarning(false)))
                 }
                 let isPlaying = RCRTCAudioMixer.sharedInstance().startMixing(with: music.fileURL(), playback: true, mixerMode: .mixing, loopCount: 1)

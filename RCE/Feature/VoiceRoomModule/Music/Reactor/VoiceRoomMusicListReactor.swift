@@ -27,6 +27,7 @@ final class VoiceRoomMusicListReactor: Reactor {
         case setError(ReactorError)
         case setNetState(RCNetworkState)
         case setAppendingState(Bool)
+        case setChannels(items: [MusicChannel])
     }
     
     struct State {
@@ -39,8 +40,9 @@ final class VoiceRoomMusicListReactor: Reactor {
         var error: ReactorError?
         var netState = RCNetworkState.idle
         var isAppendingMusic = false
+        var channelSections = [MusicChannelSection]()
     }
-    
+    private let service = VoiceRoomMusicService()
     var initialState: State
     
     init(roomId: String) {
@@ -50,6 +52,21 @@ final class VoiceRoomMusicListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .refresh:
+            let channelList = service.channelSheetList(groupId: "w06k2pe634")
+                .flatMapLatest { channels -> Observable<Mutation> in
+                    if let channel = channels.first {
+                        let setChannels = Observable<Mutation>.just(.setChannels(items: channels))
+                        let musiclist = self.service.musicList(sheetId: channel.sheetId).flatMap { musicRecords -> Observable<Mutation> in
+                            let musicItems = musicRecords.map {
+                                return VoiceRoomMusic(id: $0.musicId.intValue, name: $0.musicName, author: $0.artist.first?.name ?? "", roomId: "", type: 2, url: nil, size: "")
+                            }
+                            return Observable<Mutation>.just(.setMusicItems(items: musicItems))
+                        }
+                        return setChannels.concat(musiclist)
+                    } else {
+                        return .empty()
+                    }
+                }
             let musiclist = networkProvider.rx
                 .request(.musiclist(roomId: currentState.roomId, type: 0))
                 .asObservable()
@@ -68,7 +85,7 @@ final class VoiceRoomMusicListReactor: Reactor {
                     return Observable<Mutation>.just(.setRoomMusic(items: items))
                 }
                 .catchAndReturn(.setRoomMusic(items: []))
-            return musiclist.concat(roomMusiclist)
+            return musiclist.concat(roomMusiclist).concat(channelList)
         case let .append(item):
             guard !currentState.isAppendingMusic else {
                 return .empty()
@@ -82,11 +99,14 @@ final class VoiceRoomMusicListReactor: Reactor {
                     return Observable<Mutation>.just(.setRoomMusic(items: items))
                 }
                 .catchAndReturn(.setRoomMusic(items: []))
-            let addMusic = networkProvider.rx.request(.addMusic(roomId: currentState.roomId, musicName: item.name, author: item.author, type: 2, url: item.url, size: 0)).asObservable().filterSuccessfulStatusCodes().map(AppResponse.self).flatMap {
-                _ -> Observable<Mutation> in
-                return .just(.setSuccess(ReactorSuccess("添加成功"))).do { _ in
-                    let notification = Notification.Name(rawValue: MusicNotification.appendNewMusic.rawValue)
-                    NotificationCenter.default.post(name: notification, object: nil)
+            let addMusic = service.musicUrl(musicId: "\(item.id)").flatMapLatest { [weak self] musicUrl -> Observable<Mutation> in
+                guard let self = self else { return .empty()}
+                return networkProvider.rx.request(.addMusic(roomId: self.currentState.roomId, musicName: item.name, author: item.author, type: 2, url: musicUrl, size: 0)).asObservable().filterSuccessfulStatusCodes().map(AppResponse.self).flatMap {
+                    _ -> Observable<Mutation> in
+                    return .just(.setSuccess(ReactorSuccess("添加成功"))).do { _ in
+                        let notification = Notification.Name(rawValue: MusicNotification.appendNewMusic.rawValue)
+                        NotificationCenter.default.post(name: notification, object: nil)
+                    }
                 }
             }.catchAndReturn(.setError(ReactorError("添加失败")))
             let beginAppending = Observable<Mutation>.just(.setAppendingState(true))
@@ -130,6 +150,8 @@ final class VoiceRoomMusicListReactor: Reactor {
             state.netState = netState
         case let .setAppendingState(isAppend):
             state.isAppendingMusic = isAppend
+        case .setChannels(items: let items):
+            state.channelSections = [MusicChannelSection(items: items)]
         }
         return state
     }

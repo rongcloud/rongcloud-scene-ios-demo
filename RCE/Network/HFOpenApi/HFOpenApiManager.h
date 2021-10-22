@@ -375,6 +375,72 @@ typedef NS_ENUM(NSUInteger, HFAPISDK_CODE) {
                       success:(void (^_Nullable)(id  _Nullable response))success
                          fail:(void (^_Nullable)(NSError * _Nullable error))fail;
 
+#pragma mark - 会员歌单
+/// 创建会员歌单
+/// @param sheetName 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)createMemberWithSheetName:(NSString *_Nonnull)sheetName
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 删除会员歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)deleteMemberWithSheetId:(NSString *_Nonnull)sheetId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 会员歌单列表
+/// @param memberOutId 会员歌单名称
+/// @param page 当前页
+/// @param pageSize 每页显示条数，默认 10
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)fetchMemberSheetListWithMemberOutId:(NSString *_Nonnull)memberOutId
+                                      page:(NSString *_Nullable)page
+                                  pageSize:(NSString *_Nullable)pageSize
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 获取会员歌单歌曲
+/// @param sheetId 会员歌单名称
+/// @param page 当前页
+/// @param pageSize 每页显示条数，默认 10
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)fetchMemberSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                                      page:(NSString *_Nullable)page
+                                  pageSize:(NSString *_Nullable)pageSize
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 音乐加入歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)addSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                       musicId:(NSString *_Nonnull)musicId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 音乐移除歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)removeSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                       musicId:(NSString *_Nonnull)musicId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
+
+/// 清空会员歌单音乐列表
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)clearSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                         fail:(void (^_Nullable)(NSError * _Nullable error))fail;
 @end
 
 

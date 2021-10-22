@@ -89,7 +89,7 @@ class VoiceRoomUserListViewController: UIViewController {
     
     private func fetchRoomUserlist() {
         networkProvider.rx
-            .request(.roomUsers(roomId: dependency.roomId))
+            .request(.roomUsers(roomId: dependency.room.roomId))
             .asObservable()
             .filterSuccessfulStatusCodes()
             .map([VoiceRoomUser].self, atKeyPath: "data")
@@ -102,7 +102,7 @@ class VoiceRoomUserListViewController: UIViewController {
     }
     
     private func fetchManagerList() {
-        networkProvider.rx.request(.roomManagers(roomId: dependency.roomId)).asObservable().filterSuccessfulStatusCodes().map([VoiceRoomUser].self, atKeyPath: "data").subscribe(onNext: {
+        networkProvider.rx.request(.roomManagers(roomId: dependency.room.roomId)).asObservable().filterSuccessfulStatusCodes().map([VoiceRoomUser].self, atKeyPath: "data").subscribe(onNext: {
             [weak self] value in
             guard let self = self else { return }
             self.managerlist = value.map(\.userId)

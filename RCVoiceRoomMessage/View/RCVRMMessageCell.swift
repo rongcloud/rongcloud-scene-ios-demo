@@ -60,16 +60,17 @@ class RCVRMMessageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         backgroundColor = .clear
+        
         containerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(containerView)
+        containerView.layer.addSublayer(shapeLayer)
+        containerView.addSubview(messageLabel)
+        
         containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
         containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3).isActive = true
         containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3).isActive = true
-        containerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 278.0 / 375).isActive = true
+        containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -12).isActive = true
         
-        containerView.layer.addSublayer(shapeLayer)
-        
-        containerView.addSubview(messageLabel)
         messageLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 12).isActive = true
         messageLableRightConstraint = messageLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -12)
         messageLableRightConstraint.isActive = true

@@ -7,14 +7,15 @@
 
 import Foundation
 
-enum HomeItem: Int, CaseIterable {
+public enum HomeItem: Int, CaseIterable {
     case audioRoom = 1
-    case videoCall = 2
-    case audioCall = 3
-    case radioRoom = 4
+    case videoCall = 10
+    case audioCall = 11
+    case radioRoom = 2
+    case liveVideo = 3
 }
 
-extension HomeItem {
+public extension HomeItem {
     var name: String {
         switch self {
         case .audioRoom:
@@ -22,9 +23,11 @@ extension HomeItem {
         case .radioRoom:
             return "电台"
         case .videoCall:
-            return "视频聊天"
+            return "视频通话"
         case .audioCall:
-            return "语音聊天"
+            return "语音通话"
+        case .liveVideo:
+            return "视频直播"
         }
     }
     
@@ -38,6 +41,8 @@ extension HomeItem {
             return "低延迟、高清晰度视频通话"
         case .audioCall:
             return "拥有智能降噪的无差别 电话体验"
+        case .liveVideo:
+            return "低延迟、高清晰度视频通话"
         }
     }
     
@@ -51,6 +56,8 @@ extension HomeItem {
             return R.image.voice_call_room_background()
         case .radioRoom:
             return R.image.home_radio_room()
+        case .liveVideo:
+            return R.image.live_video_home_bg()
         }
     }
     
@@ -66,6 +73,7 @@ extension HomeItem {
         case .radioRoom: return .RadioRoom
         case .audioCall: return .AudioCall
         case .videoCall: return .VideoCall
+        case .liveVideo: return .LiveVideo
         }
     }
 }

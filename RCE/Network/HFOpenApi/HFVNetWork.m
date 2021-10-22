@@ -9,10 +9,14 @@
 #import "HFVLibInfo.h"
 #import <CommonCrypto/CommonHMAC.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
-#import "NSDictionary+SafeAccess.h"
 
 
 
+#ifdef DEBUG
+#define HFAPILog(...) NSLog(__VA_ARGS__)
+#else
+#define HFAPILog(...)
+#endif
 @implementation HFVNetWork
 
 - (instancetype)init {
@@ -27,7 +31,7 @@
     return [HFVLibInfo shared].domain;
 }
 
-- (int)updateHeaderForRequest:(NSMutableURLRequest *)request action:(NSString *)action params:(NSDictionary *)params neeNSLogin:(BOOL)neeNSLogin error:(NSError **)error {
+- (int)updateHeaderForRequest:(NSMutableURLRequest *)request action:(NSString *)action params:(NSDictionary *)params neeHFAPILogin:(BOOL)neeHFAPILogin error:(NSError **)error {
     if ([HFVLibUtils isBlankString:[HFVLibInfo shared].appId]) {
         *error = HFVMusicError(HFVSDK_CODE_NoRegister, @"未注册");
         [self configErrorNotificationCode:HFVSDK_CODE_NoRegister msg:@"未注册"];
@@ -38,7 +42,7 @@
         [self configErrorNotificationCode:HFVSDK_CODE_NoRegister msg:@"未注册"];
         return -1;
     }
-    if (neeNSLogin && [HFVLibUtils isBlankString:[HFVLibInfo shared].accessToken]) {
+    if (neeHFAPILogin && [HFVLibUtils isBlankString:[HFVLibInfo shared].accessToken]) {
         *error = HFVMusicError(HFVSDK_CODE_NoLogin, @"未登录");
         [self configErrorNotificationCode:HFVSDK_CODE_NoLogin msg:@"未登录"];
         return -1;
@@ -64,7 +68,7 @@
     [request setValue:random forHTTPHeaderField:@"X-HF-Nonce"];
     [request setValue:[HFVLibInfo shared].clientId forHTTPHeaderField:@"X-HF-ClientId"];
     [request setValue:authorization forHTTPHeaderField:@"Authorization"];
-    if (neeNSLogin) {
+    if (neeHFAPILogin) {
         [request setValue:[HFVLibInfo shared].accessToken forHTTPHeaderField:@"X-HF-Token"];
     }
     return 0;
@@ -108,7 +112,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:full]];
     request.HTTPMethod = @"GET";
     NSError *header_error;
-    int state = [self updateHeaderForRequest:request action:action params:queryParams neeNSLogin:needToken error:&header_error];
+    int state = [self updateHeaderForRequest:request action:action params:queryParams neeHFAPILogin:needToken error:&header_error];
     if (header_error) {
         fail(header_error);
         return;
@@ -129,7 +133,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:full]];
     request.HTTPMethod = @"POST";
     NSError *header_error;
-    int state = [self updateHeaderForRequest:request action:action params:bodyParams neeNSLogin:needToken error:&header_error];
+    int state = [self updateHeaderForRequest:request action:action params:bodyParams neeHFAPILogin:needToken error:&header_error];
     if (header_error) {
         fail(header_error);
         return;
@@ -152,10 +156,10 @@
         [self configErrorNotificationCode:HFVSDK_CODE_NoNetwork msg:@"当前网络不可用，请检查网络连接"];
         return nil;
     }
-    NSLog(@"\n⬇️⬇️⬇️⬇️\nurl = %@\n⬆️⬆️⬆️⬆️",request.URL);
-    NSLog(@"\n⬇️⬇️⬇️⬇️\nmethod = %@\n⬆️⬆️⬆️⬆️",request.HTTPMethod);
-    NSLog(@"\n⬇️⬇️⬇️⬇️\nheader = %@\n⬆️⬆️⬆️⬆️",request.allHTTPHeaderFields);
-    NSLog(@"\n⬇️⬇️⬇️⬇️\nbody = %@\n⬆️⬆️⬆️⬆️",request.HTTPBody);
+    HFAPILog(@"\n⬇️⬇️⬇️⬇️\nurl = %@\n⬆️⬆️⬆️⬆️",request.URL);
+    HFAPILog(@"\n⬇️⬇️⬇️⬇️\nmethod = %@\n⬆️⬆️⬆️⬆️",request.HTTPMethod);
+    HFAPILog(@"\n⬇️⬇️⬇️⬇️\nheader = %@\n⬆️⬆️⬆️⬆️",request.allHTTPHeaderFields);
+    HFAPILog(@"\n⬇️⬇️⬇️⬇️\nbody = %@\n⬆️⬆️⬆️⬆️",request.HTTPBody);
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
@@ -174,9 +178,9 @@
                     int code = [[dic hfv_objectForKey_Safe:@"code"] intValue];
                     id data = [dic hfv_objectForKey_Safe:@"data"];
 #ifdef DEBUG
-                    NSLog(@"\n⬇️⬇️⬇️⬇️\n%@\n⬆️⬆️⬆️⬆️\n",[dic description]);
+                    HFAPILog(@"\n⬇️⬇️⬇️⬇️\n%@\n⬆️⬆️⬆️⬆️\n",[dic description]);
 #endif
-                    if (code == 10200) {
+                    if (code == 10200 || code == 200) {
                         if (success) {
                             success(data);
                         }
@@ -245,15 +249,15 @@
     if (params.count != 0) {
         paramsStr = [self getParamsStringWithParams: params];
     }
-    NSLog(@"签名one：%@",paramsStr);
+    HFAPILog(@"签名one：%@",paramsStr);
     //2. 把请求方式(get or post) 和 公共参数的值，按照公共参数的顺序排列，中间以空格隔开
     //NSString *publicParamsStr = @"GET TrafficTagSheet V4.0.1 170ae316b9b14c1b9c185988771bde16 CgA1cq9jpI3Ku5JiwMwuPuqzWY30trM5 hf2y7jk19a56qetq05 HF3-HMAC-SHA1 1594696782451";
     //Method X-HF-Action、X-HF-Version、X-HF-AppId、X-HF-Nonce、X-HF-ClientId、'HF3-HMAC-SHA1'、X-HF-Timestamp
     NSString *publicParamsStr = [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@ %@ %@",method,action,[HFVLibInfo shared].version,[HFVLibInfo shared].appId,random,[HFVLibInfo shared].clientId,@"HF3-HMAC-SHA1",timestamp];
-    NSLog(@"签名two：---%@",publicParamsStr);
+    HFAPILog(@"签名two：---%@",publicParamsStr);
     //3. 把步骤2的结果做base64编码
     NSString *base64Str = [HFVLibUtils base64EncodeString:publicParamsStr];
-    NSLog(@"签名three:%@",base64Str);
+    HFAPILog(@"签名three:%@",base64Str);
     //4. 合并步骤1和3的结果，得到待签名的字符串
     NSString *beforSign;
     if (paramsStr.length>0) {
@@ -261,16 +265,16 @@
     } else {
         beforSign = base64Str;
     }
-    NSLog(@"签名four:%@",beforSign);
+    HFAPILog(@"签名four:%@",beforSign);
     
     //5. 签名
     NSString *a = [HFVLibUtils base64EncodeString:beforSign];
-    NSLog(@"签名five：%@",a);
+    HFAPILog(@"签名five：%@",a);
     NSString *b = [HFVLibUtils hmacSHA1String:a Key:[HFVLibInfo shared].secret error:error];
     if (!b) {
-        NSLog(@"签名失败");
+        HFAPILog(@"签名失败");
     }
-    NSLog(@"最终结果:%@",b);
+    HFAPILog(@"最终结果:%@",b);
     return b;
 }
 

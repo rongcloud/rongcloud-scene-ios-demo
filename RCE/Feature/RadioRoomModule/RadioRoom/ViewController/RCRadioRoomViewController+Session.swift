@@ -297,7 +297,7 @@ extension RCRadioRoomViewController: RCRadioRoomKVDelegate {
         seat.userId = roomInfo.userId
         seat.isMuted = roomKVState.mute
         seat.status = .using
-        VoiceRoomManager.shared.seatlist = [seat]
+        SceneRoomManager.shared.seatlist = [seat]
         roomOwnerView.update(seat: seating ? roomInfo.userId : nil)
     }
     

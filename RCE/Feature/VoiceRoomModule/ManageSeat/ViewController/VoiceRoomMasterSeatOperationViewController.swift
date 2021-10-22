@@ -27,7 +27,6 @@ class VoiceRoomMasterSeatOperationViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
     }()
-    private lazy var tapGestureView = RCTapGestureView(self)
     
     init(userId: String, isMute: Bool, delegate: VoiceRoomMasterSeatOperationProtocol) {
         self.delegate = delegate
@@ -42,12 +41,9 @@ class VoiceRoomMasterSeatOperationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(popView)
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(popView.snp.top).offset(-20)
-        }
+        
         popView.snp.makeConstraints {
             $0.left.bottom.right.equalToSuperview()
         }

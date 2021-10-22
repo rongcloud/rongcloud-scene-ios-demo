@@ -22,8 +22,19 @@
 #import <UMCommon/MobClick.h>
 
 #import "UIViewController+Swizzled.h"
-#import <RCVoiceRoomLib/RCVoiceRoomLib.h>
 #import "NSString+LogOutput.h"
-
-#import "RCRefreshStateHeader.h"
 #import "HFOpenApiManager.h"
+
+#import "MHMeiyanMenusView.h"
+#import "MHStickersView.h"
+#import "MHBeautyAssembleView.h"
+#import "MHMakeUpView.h"
+#import "MHSpecificAssembleView.h"
+
+#import <MHBeautySDK/MHBeautyManager.h>
+#import "MHBeautyParams.h"
+#import "ChatGPUImageHandler.h"
+#import "RCRefreshStateHeader.h"
+
+#import <RCVoiceRoomLib/RCVoiceRoomLib.h>
+#import <RCLiveVideoLib/RCLiveVideoLib.h>

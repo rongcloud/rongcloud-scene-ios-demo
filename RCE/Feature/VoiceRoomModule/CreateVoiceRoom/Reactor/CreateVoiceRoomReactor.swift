@@ -126,7 +126,7 @@ final class CreateVoiceRoomReacotor: Reactor {
     }
     
     private func createRoom(password: String?) -> Observable<Mutation> {
-        let roomType: Int = currentSceneType == .audioRoom ? 1 : 2
+        let roomType: Int = SceneRoomManager.scene.rawValue
         let seatInfolist = (0..<9).map { _ in RCVoiceSeatInfo() }
         let voiceRoom = RCVoiceRoomInfo()
         voiceRoom.roomName = currentState.roomName

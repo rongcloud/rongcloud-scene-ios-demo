@@ -1,0 +1,125 @@
+//menu
+"贴纸" = "Sticker";
+"美颜" = "Làm đẹp";
+"特效" = "Hiệu ứng";
+"哈哈镜" = "Gương cười";
+//贴纸
+//Sticker
+"高级贴纸" = "Sticker nâng cao";
+"基础贴纸" = "Sticker cơ bản";
+"基础面具" = "Mặt nạ cơ bản";
+"高级面具" = "Mặt nạ nâng cao";
+"高级" = "nâng cao";
+"基础" = "cơ bản";
+//美颜meun@[@"美颜",@"美型",@"一键美颜",@"滤镜"];
+"美型" = "Chỉnh sửa";
+"一键美颜" = "Tự động";
+"滤镜" = "Filter";
+//美颜分类
+//Làm đẹp
+"原图" = "Ảnh gốc";
+"美白" = "Trắng da";
+"磨皮" = "Làm mịn";
+"红润" = "Hồng hào";
+"亮度" = "Độ sáng";
+//美型分类
+//Chỉnh sửa
+"大眼" = "Mắt to";
+"瘦脸" = "Thon mặt";
+"嘴型" = "Khẩu hình";
+"瘦鼻" = "Thon mũi";
+"下巴" = "Cằm";
+"额头" = "Trán";
+"眉毛" = "Lông mi";
+"眼角" = "Khóe mắt";
+"眼距" = "Xa gần";
+"开眼角" = "Đuôi mắt";
+"削脸" = "V line";
+"长鼻" = "Nâng mũi";
+//一键美颜
+//Tự động
+"标准" = "Tiêu chuẩn";
+"优雅" = "Duyên dáng";
+"精致" = "Tế nhị";
+"可爱" = "Đáng yêu";
+"自然" = "Tự nhiên";
+"脱俗" = "Thoát tục";
+"高雅" = "Thanh lịch";
+"网红" = "Internet nổi tiếng";
+//滤镜
+//Filter
+"浪漫" = "Lãng mạn";
+"清新" = "Thanh tân";
+"唯美" = "Duy mĩ";
+"粉嫩" = "Hồng tươi";
+"怀旧" = "Hoài cổ";
+"蓝调" = "Xanh lam";
+"清凉" = "Mát mẻ";
+"日系" = "Japanese";
+"城市" = "Thành phố";
+"初恋" = "Tình đầu";
+"初心" = "Sơ khai";
+"单色" = "Đơn sắc";
+"反差色" = "Màu tương phản";
+"琥珀" = "Hổ phách";
+"美味" = "Mĩ vị";
+"蜜桃粉" = "Mật đào";
+"奶茶" = "Trà sữa";
+"拍立得" = "Polaroid";
+"乌托邦" = "Utopia.";
+"西柚" = "Cam đỏ";
+"日杂" = "Japanese Magazine";
+"黑猫" = "Mèo đen";
+"黑白" = "Đen trắng";
+"布鲁克林" = "Brooklyn";
+"平静" = "Bình tĩnh";
+"冷酷" = "Lạnh lẽo";
+"凯文" = "Kevin";
+"恋爱" = "Tình yêu";
+//特效
+//Hiệu ứng
+"水印" = "Watermark";
+"无" = "None";
+"灵魂出窍" = "Xuất hồn";
+"抖动" = "Dao động";
+"闪白" = "Trắng mịn";
+"毛刺" = "Lông gai";
+"幻觉" = "Ảo giác";
+"马赛克" = "Khảm";
+"圆形马赛克" = "Khảm tròn";
+"三角马赛克" = "Khảm tam giác";
+"六边马赛克" = "Khảm lục giác";
+
+"马赛克1" = "Khảm1";
+"马赛克2" = "Khảm2";
+"马赛克3" = "Khảm3";
+"马赛克4" = "Khảm4";
+
+//哈哈镜
+//Gương cười
+"外星人" = "UFO";
+"梨梨脸" = "Trái lê";
+"瘦瘦脸" = "Cằm nhọn";
+"镜像脸" = "Ảnh gương";
+"片段脸" = "Mảnh vỡ";
+"水面倒影" = "Phản xạ nước";
+"螺旋镜面" = "Xoắn ốc";
+"鱼眼相机" = "Mắt cá";
+"左右镜像" = "Đối xứng";
+
+//动作识别
+"动作" = "hành";
+"抬头" = "lên";
+"张嘴" = "mở miệng";
+"眨眼" = "nháy";
+"请抬头" = "Xin hãy nhìn lên.";
+"请张嘴" = "Làm ơn mở miệng ra.";
+"请眨眼" = "Hãy chớp mắt.";
+"开启直播" = "Mở trực tiếp";
+"结束直播" = "Quan Tam";
+
+//美妆
+"美妆" = "meizhuang";
+"睫毛" = "jiemao";
+"唇彩" = "chuncai";
+"腮红" = "saihong";

@@ -8,8 +8,6 @@
 import MJRefresh
 import SVProgressHUD
 
-var currentSceneType: HomeItem?
-
 final class RCRoomListViewController: UIViewController {
     
     private lazy var refreshHeader = UIRefreshControl()
@@ -37,19 +35,13 @@ final class RCRoomListViewController: UIViewController {
         return instance
     }()
     
-    private var currentPage: Int = 1
-    private var type: Int {
-        return currentSceneType == .audioRoom ? 1 : 2
+    var type: Int {
+        return SceneRoomManager.scene.rawValue
     }
-    private var items = [VoiceRoom]() {
+    var items = [VoiceRoom]() {
         didSet {
             tableView.reloadData()
             emptyView.isHidden = items.count > 0
-        }
-    }
-    private var images = [String]() {
-        didSet {
-            VoiceRoomManager.shared.backgroundlist = images
         }
     }
     
@@ -57,44 +49,6 @@ final class RCRoomListViewController: UIViewController {
         super.viewDidLoad()
         buildLayout()
         checkRoomInfo()
-    }
-    
-    @objc private func refresh() {
-        currentPage = 1
-        let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
-        networkProvider.request(api) { [weak self] result in
-            guard let self = self else { return }
-            self.refreshHeader.endRefreshing()
-            switch result.map(VoiceRoomListWrapper.self) {
-            case let .success(wrapper):
-                self.currentPage += 1
-                self.items = wrapper.data?.rooms ?? []
-                self.images = wrapper.data?.images ?? []
-                if wrapper.data?.totalCount == self.items.count {
-                    self.refreshFooter.state = .noMoreData
-                }
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    @objc private func more() {
-        let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
-        networkProvider.request(api) { [weak self] result in
-            guard let self = self else { return }
-            self.refreshFooter.endRefreshing()
-            switch result.map(VoiceRoomListWrapper.self) {
-            case let .success(wrapper):
-                self.currentPage += 1
-                self.items.append(contentsOf: wrapper.data?.rooms ?? [])
-                if wrapper.data?.totalCount == self.items.count {
-                    self.refreshFooter.state = .noMoreData
-                }
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,25 +61,94 @@ final class RCRoomListViewController: UIViewController {
         showFeedbackIfNeeded()
     }
     
-    @objc private func plusButtonClicked() {
-        if let room = RCRoomFloatingManager.shared.controller?.currentRoom, room.isOwner {
-            return userDidCreateRoom(room) { RCRoomFloatingManager.shared.floatingViewDidClick() }
+    @objc private func refresh() {
+        refreshData { [weak self] result in
+            guard let self = self else { return }
+            self.refreshHeader.endRefreshing()
+            switch result {
+            case let .success(list):
+                self.items = list.rooms
+                if list.totalCount == self.items.count {
+                    self.refreshFooter.state = .noMoreData
+                }
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: error.localizedDescription)
+            }
         }
-        let controller = navigator(.createRoom(imagelist: images)) as! CreateVoiceRoomViewController
-        controller.onRoomCreated = { [unowned self] roomWrapper in
-            guard let room = roomWrapper.data else { return }
-            if roomWrapper.isCreated() {
-                return showCreatedAlert(voiceRoom: room)
+    }
+    
+    @objc private func more() {
+        moreData { [weak self] result in
+            guard let self = self else { return }
+            self.refreshFooter.endRefreshing()
+            switch result {
+            case let .success(list):
+                self.items.append(contentsOf: list.rooms)
+                if list.totalCount == self.items.count {
+                    self.refreshFooter.state = .noMoreData
+                }
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: error.localizedDescription)
             }
-            if RCRoomFloatingManager.shared.currentRoomId == nil {
-                return didCreatedRoom(room)
+        }
+    }
+    
+    @objc private func plusButtonClicked() {
+        /// 检测房间是否已经创建
+        let api = RCNetworkAPI.checkCreatedRoom
+        SVProgressHUD.show()
+        networkProvider.request(api) { [weak self] result in
+            switch result.map(RCNetworkWapper<VoiceRoom>.self) {
+            case let .success(wrapper):
+                SVProgressHUD.dismiss()
+                if let room = wrapper.data {
+                    self?.userDidCreateRoom(room) {
+                        self?.didCreatedRoom(room)
+                    }
+                } else {
+                    self?.createRoom()
+                }
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: error.localizedDescription)
             }
-            SVProgressHUD.show(withStatus: "正在退出房间")
-            RCRoomFloatingManager.shared.controller?.controller.leaveRoom { [unowned self] _ in
-                SVProgressHUD.dismiss(withDelay: 0.3)
-                RCRoomFloatingManager.shared.hide()
-                didCreatedRoom(room)
+        }
+    }
+    
+    private func createRoom() {
+        
+        switch SceneRoomManager.scene {
+        case .liveVideo:
+            if RCRoomFloatingManager.shared.showing {
+                SVProgressHUD.show()
+                RCRoomFloatingManager.shared.controller?.controller.leaveRoom { [unowned self] _ in
+                    SVProgressHUD.dismiss(withDelay: 0.3)
+                    RCRoomFloatingManager.shared.hide()
+                    let controller = LiveVideoRoomHostController()
+                    navigationController?.pushViewController(controller, animated: true)
+                }
+            } else {
+                let controller = LiveVideoRoomHostController()
+                navigationController?.pushViewController(controller, animated: true)
             }
+            
+        case .audioRoom, .radioRoom:
+            let controller = navigator(.createRoom(imagelist: SceneRoomManager.shared.backgroundlist)) as! CreateVoiceRoomViewController
+            controller.onRoomCreated = { [unowned self] roomWrapper in
+                guard let room = roomWrapper.data else { return }
+                if roomWrapper.isCreated() {
+                    return showCreatedAlert(voiceRoom: room)
+                }
+                if RCRoomFloatingManager.shared.currentRoomId == nil {
+                    return didCreatedRoom(room)
+                }
+                SVProgressHUD.show(withStatus: "正在退出房间")
+                RCRoomFloatingManager.shared.controller?.controller.leaveRoom { [unowned self] _ in
+                    SVProgressHUD.dismiss(withDelay: 0.3)
+                    RCRoomFloatingManager.shared.hide()
+                    didCreatedRoom(room)
+                }
+            }
+        default: ()
         }
     }
     
@@ -220,124 +243,23 @@ extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordP
     
     private func enterRoomIfNeeded(_ rooms: [VoiceRoom], index: Int) {
         let room = rooms[index]
-        if room.userId == Environment.currentUserId {
-            let controller = RCRoomContainerViewController([room], index: 0, dataSource: self)
-            navigationController?.pushViewController(controller, animated: true)
-            return
-        }
+        if room.isOwner { return enter(room) }
         if isAppStoreAccount {
             let filter: (VoiceRoom) -> Bool = { !$0.isOwner }
             let rooms = items.filter(filter)
             let index = rooms.firstIndex(of: room) ?? 0
-            let controller = RCRoomContainerViewController(rooms, index: index, dataSource: self)
-            navigationController?.pushViewController(controller, animated: true)
-            return
+            return enter(rooms, index: index)
         }
         if room.isPrivate == 0 {
             let filter: (VoiceRoom) -> Bool = { $0.switchable }
             let rooms = items.filter(filter)
             let index = rooms.firstIndex(of: room) ?? 0
-            let controller = RCRoomContainerViewController(rooms, index: index, dataSource: self)
-            navigationController?.pushViewController(controller, animated: true)
-        } else {
-            navigator(.inputPassword(type: .verify(room), delegate: self))
+            return enter(rooms, index: index)
         }
+        navigator(.inputPassword(type: .verify(room), delegate: self))
     }
     
     func passwordDidVarify(_ room: VoiceRoom) {
-        let controller = RCRoomContainerViewController([room], index: 0, dataSource: self)
-        navigationController?.pushViewController(controller, animated: true)
-    }
-}
-
-extension RCRoomListViewController {
-    private func showFeedbackIfNeeded() {
-        guard UserDefaults.standard.shouldShowFeedback() else { return }
-        navigator(.feedback)
-    }
-}
-
-extension RCRoomListViewController {
-    private func checkRoomInfo() {
-        guard RCRoomFloatingManager.shared.controller == nil else { return }
-        let api = RCNetworkAPI.checkCurrentRoom
-        networkProvider.request(api) { [weak self] result in
-            switch result.map(RCNetworkWapper<VoiceRoom>.self) {
-            case let .success(wrapper):
-                self?.onUserComeBack(wrapper.data)
-            case let .failure(error):
-                debugPrint(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func onUserComeBack(_ room: VoiceRoom?) {
-        guard let room = room else { return }
-        var isRoomType: Bool {
-            if room.roomType == 1 && currentSceneType == .audioRoom { return true }
-            if room.roomType == 2 && currentSceneType == .radioRoom { return true }
-            return false
-        }
-        guard isRoomType else  { return }
-        let controller = UIAlertController(title: "提示", message: "您有正在直播的房间，是否进入？", preferredStyle: .alert)
-        let sureAction = UIAlertAction(title: "进入", style: .default) { [unowned self] _ in userEnter(room) }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel)
-        controller.addAction(sureAction)
-        controller.addAction(cancelAction)
-        present(controller, animated: true)
-    }
-    
-    private func userEnter(_ room: VoiceRoom) {
-        let controller = RCRoomContainerViewController([room], index: 0, dataSource: self)
-        navigationController?.pushViewController(controller, animated: true)
-    }
-}
-
-extension RCRoomListViewController: RCRoomContainerDataSource {
-    func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([VoiceRoom], Bool) -> Void) {
-        currentPage = 1
-        let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
-        networkProvider.request(api) { [weak self] result in
-            guard let self = self else { return }
-            switch result.map(VoiceRoomListWrapper.self) {
-            case let .success(wrapper):
-                self.currentPage += 1
-                self.items = wrapper.data?.rooms ?? []
-                self.images = wrapper.data?.images ?? []
-                if wrapper.data?.totalCount == self.items.count {
-                    self.refreshFooter.state = .noMoreData
-                    completion(self.items, true)
-                } else {
-                    completion(self.items, false)
-                }
-            case let .failure(error):
-                print(error.localizedDescription)
-                completion([], false)
-            }
-        }
-    }
-    
-    func container(_ controller: RCRoomContainerViewController, more completion: @escaping ([VoiceRoom], Bool) -> Void) {
-        if refreshFooter.state == .noMoreData {
-            return completion(items, true)
-        }
-        let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
-        networkProvider.request(api) { [weak self] result in
-            guard let self = self else { return }
-            switch result.map(VoiceRoomListWrapper.self) {
-            case let .success(wrapper):
-                self.currentPage += 1
-                self.items.append(contentsOf: wrapper.data?.rooms ?? [])
-                if wrapper.data?.totalCount == self.items.count {
-                    self.refreshFooter.state = .noMoreData
-                    completion(self.items, true)
-                } else {
-                    completion(self.items, false)
-                }
-            case let .failure(error):
-                print(error.localizedDescription)
-                completion([], false)
-            }
-        }
+        enter(room)
     }
 }

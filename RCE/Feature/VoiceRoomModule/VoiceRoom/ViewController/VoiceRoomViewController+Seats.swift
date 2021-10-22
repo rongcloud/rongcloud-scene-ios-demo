@@ -13,7 +13,7 @@ extension VoiceRoomViewController {
         get { seatlist }
         set {
             seatlist = newValue
-            VoiceRoomManager.shared.seatlist = seatlist
+            SceneRoomManager.shared.seatlist = seatlist
             collectionView.reloadData()
             DispatchQueue.main.async {
                 self.updateCollectionViewHeight()
@@ -37,7 +37,7 @@ extension VoiceRoomViewController {
         get { managerlist }
         set {
             managerlist = newValue
-            VoiceRoomManager.shared.managerlist = managerlist.map(\.userId)
+            SceneRoomManager.shared.managerlist = managerlist.map(\.userId)
             collectionView.reloadData()
         }
     }
@@ -207,7 +207,7 @@ extension VoiceRoomViewController: UICollectionViewDelegate {
                 let seatInfo = self.seatlist[seatIndex]
                 navigator(.userSeatPop(seatIndex: UInt(seatIndex), isUserMute: roomState.isCloseSelfMic, isSeatMute: seatInfo.isMuted, delegate: self))
             } else {
-                navigator(.manageUser(dependency: VoiceRoomUserOperationDependency(roomId: voiceRoomInfo.roomId, roomCreator: voiceRoomInfo.userId, presentUserId: userId), delegate: self))
+                navigator(.manageUser(dependency: VoiceRoomUserOperationDependency(room: voiceRoomInfo,presentUserId: userId), delegate: self))
             }
         case .locking:
             if currentUserRole() == .creator {

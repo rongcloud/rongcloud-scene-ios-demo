@@ -14,95 +14,55 @@ extension UIView {
     }
 }
 
-extension UIButton {
-    func alignImageAndTitleVertically(padding: CGFloat = 4.0) {
-        let imageSize = imageView!.frame.size
-        let titleSize = titleLabel!.frame.size
-        let totalHeight = imageSize.height + titleSize.height + padding
-        
-        imageEdgeInsets = UIEdgeInsets(
-            top: -(totalHeight - imageSize.height),
-            left: 0,
-            bottom: 0,
-            right: -titleSize.width
-        )
-        
-        titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: -imageSize.width,
-            bottom: -(totalHeight - titleSize.height),
-            right: 0
-        )
-    }
-    
-    func setInsets(forContentPadding contentPadding: UIEdgeInsets, imageTitlePadding: CGFloat) {
-        self.contentEdgeInsets = UIEdgeInsets(
-            top: contentPadding.top,
-            left: contentPadding.left,
-            bottom: contentPadding.bottom,
-            right: contentPadding.right + imageTitlePadding
-        )
-        self.titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: imageTitlePadding,
-            bottom: 0,
-            right: -imageTitlePadding
-        )
+extension UIView {
+    var controller: UIViewController? {
+        var tmp = next
+        while let responder = tmp {
+            if responder.isKind(of: UIViewController.self) {
+                return responder as? UIViewController
+            }
+            tmp = tmp?.next
+        }
+        return UIApplication.shared.keyWindow()?.rootViewController
     }
 }
 
-extension UIImage {
-    func resizeImage(targetSize: CGSize) -> UIImage {
-        let size = self.size
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        // Figure out what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        self.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
+/// MUST: UIViewController.UIView
+extension UIView {
+    func enableTapEndEditing(_ index: Int = 0) {
+        let tapView = UIView(frame: bounds)
+        tapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        insertSubview(tapView, at: index)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onEndEditingTap))
+        tapView.addGestureRecognizer(gesture)
     }
     
-    func resizeAspectFillImage(to targetSize: CGSize) -> UIImage {
-        let size = self.size
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        // Figure out what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if(widthRatio < heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(x: (targetSize.width - newSize.width) * 0.5,
-                          y: (targetSize.height - newSize.height) * 0.5,
-                          width: newSize.width,
-                          height: newSize.height)
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(targetSize, false, UIScreen.main.scale)
-        draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
+    func enableTapEndEditing(above view: UIView) {
+        let tapView = UIView(frame: bounds)
+        tapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        insertSubview(tapView, aboveSubview: view)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onEndEditingTap))
+        tapView.addGestureRecognizer(gesture)
+    }
+    
+    func enableTapEndEditing(below view: UIView) {
+        let tapView = UIView(frame: bounds)
+        tapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        insertSubview(tapView, belowSubview: view)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onEndEditingTap))
+        tapView.addGestureRecognizer(gesture)
+    }
+    
+    @objc private func onEndEditingTap() {
+        endEditing(true)
     }
 }
 
 extension UIView {
-    func setDebugColor() {
-        subviews.forEach { $0.setDebugColor() }
-        backgroundColor = UIColor(byteRed: (0...255).randomElement() ?? 0,
-                                  green: (0...255).randomElement() ?? 0,
-                                  blue: (0...255).randomElement() ?? 0)
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        layer.mask = mask
     }
 }

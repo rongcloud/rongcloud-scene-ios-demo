@@ -100,7 +100,7 @@ final class UserInfoEditViewController: UIViewController, View {
             }
             .map { info in
                 let image = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage
-                return image?.resizeAspectFillImage(to: CGSize(width: 200, height: 200))
+                return image?.kf.resize(to: CGSize(width: 200, height: 200), for: .aspectFill)
             }
             .map { Reactor.Action.header($0) }
             .bind(to: reactor.action)

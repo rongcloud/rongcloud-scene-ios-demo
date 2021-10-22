@@ -57,14 +57,22 @@ public final class RCRTCAudioPlayer: NSObject {
                                                      withIntermediateDirectories: true,
                                                      attributes: nil)
         }
-        let filePath = folderPath + "/" + path
-        let fileURL = URL(fileURLWithPath: filePath)
+        let fileName = path.replacingOccurrences(of: "/", with: "_")
+        let filePath = folderPath + "/" + fileName
+        let localURL = URL(fileURLWithPath: filePath)
         if FileManager.default.fileExists(atPath: filePath) {
-            return completion(fileURL)
+            return completion(localURL)
         }
         URLSession.shared.downloadTask(with: url) { fileURL, response, error in
             if let fileURL = fileURL {
-                completion(fileURL)
+                do {
+                    try FileManager.default.moveItem(at: fileURL, to: localURL)
+                    DispatchQueue.main.async {
+                        completion(localURL)
+                    }
+                } catch {
+                    debugPrint("move file failed:\(error.localizedDescription)")
+                }
             } else {
                 print("download audio file failed: \(error?.localizedDescription ?? "???")")
             }

@@ -25,7 +25,7 @@ public final class RCRTCAudioRecorder: NSObject {
         guard permission() else { return permissionNeedOpenSetting() }
         
         let session = AVAudioSession.sharedInstance()
-        lastCategory = AVAudioSession.sharedInstance().category
+        lastCategory = session.category
         do {
             try session.setCategory(.record)
             try session.setActive(true, options: [])
@@ -71,14 +71,14 @@ public final class RCRTCAudioRecorder: NSObject {
         let time = recorder.currentTime
         print("audio length: \(time)")
         recorder.stop()
-        try? AVAudioSession.sharedInstance().setCategory(lastCategory)
+        resetCategory()
         return (recorder.url, time)
     }
     
     public func cancel() {
         recorder?.stop()
         recorder?.deleteRecording()
-        try? AVAudioSession.sharedInstance().setCategory(lastCategory)
+        resetCategory()
     }
     
     public func clear() {
@@ -122,5 +122,14 @@ extension RCRTCAudioRecorder {
             .first(where: {$0.isKeyWindow})?
             .rootViewController?
             .present(alertController, animated: true, completion: nil)
+    }
+    
+    private func resetCategory() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(lastCategory)
+            try AVAudioSession.sharedInstance().setActive(true, options: [])
+        } catch {
+            debugPrint(error.localizedDescription)
+        }
     }
 }

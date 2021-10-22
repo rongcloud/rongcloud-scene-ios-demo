@@ -8,6 +8,8 @@
 import UIKit
 import SVProgressHUD
 
+fileprivate let SceneRoomNameMaxLength: Int = 10
+
 protocol VoiceRoomInputTextProtocol: AnyObject {
     func textDidInput(text: String)
 }
@@ -84,8 +86,6 @@ class VoiceRoomTextInputViewController: UIViewController {
         return instance
     }()
     
-    private lazy var tapGestureView = RCTapGestureView(self)
-    
     init(name: String, delegate: VoiceRoomInputTextProtocol) {
         roomName = name
         self.delegate = delegate
@@ -104,7 +104,7 @@ class VoiceRoomTextInputViewController: UIViewController {
     
     private func buildLayout() {
         view.backgroundColor = UIColor(hexInt: 0x14102c)
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(titleLabel)
         container.addSubview(textField)
@@ -112,10 +112,6 @@ class VoiceRoomTextInputViewController: UIViewController {
         container.addSubview(uploadButton)
         container.addSubview(sepratorline1)
         container.addSubview(sepratorline2)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         container.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(200.resize)
@@ -166,12 +162,12 @@ class VoiceRoomTextInputViewController: UIViewController {
             SVProgressHUD.showError(withStatus: "请输入新的房间标题")
             return
         }
-        delegate?.textDidInput(text: text)
+        delegate?.textDidInput(text: String(text.prefix(SceneRoomNameMaxLength)))
         dismiss(animated: true, completion: nil)
     }
     
     @objc func handleCancel() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
     
     @objc private func handleTextFieldEditing(textField: UITextField) {
@@ -181,10 +177,6 @@ class VoiceRoomTextInputViewController: UIViewController {
         guard textField.markedTextRange == nil else {
             return
         }
-        if text.count > 10 {
-            let startIndex = text.startIndex
-            let endIndex = text.index(startIndex, offsetBy: 10)
-            textField.text = String(text[startIndex..<endIndex])
-        }
+        textField.text = String(text.prefix(SceneRoomNameMaxLength))
     }
 }

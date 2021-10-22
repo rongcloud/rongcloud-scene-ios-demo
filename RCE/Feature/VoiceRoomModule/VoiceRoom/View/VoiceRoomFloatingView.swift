@@ -37,29 +37,35 @@ class VoiceRoomFloatingView: UIView {
         instance.repeatCount = 2
         return instance
     }()
-    private lazy var roomAvatarImageView: UIImageView = {
+    private(set) lazy var roomAvatarImageView: UIImageView = {
         let instance = UIImageView()
         instance.contentMode = .scaleAspectFill
         instance.image = R.image.floating_room_icon()
         instance.clipsToBounds = true
         return instance
     }()
+    private(set) lazy var controlView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.addSublayer(gradientLayer)
         layer.addSublayer(radarView)
         addSubview(roomAvatarImageView)
+        addSubview(controlView)
         
         roomAvatarImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
         }
         
+        controlView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         isUserInteractionEnabled = true
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(gesture:)))
-        addGestureRecognizer(pan)
+        controlView.addGestureRecognizer(pan)
         let tap = UITapGestureRecognizer(target: self, action: #selector(hanldeTap))
-        addGestureRecognizer(tap)
+        controlView.addGestureRecognizer(tap)
     }
     
     override func layoutSubviews() {

@@ -413,6 +413,7 @@ class VoiceRoomPKView: UIView {
                     giftView.updateColor(.clear)
                     giftView.updateUser(user: nil, rank: i + 1, isLeft: isLeft)
                 }
+//                stackView.addArrangedSubview(instance)
             }
         }
         UIView.animate(withDuration: 0.3) {

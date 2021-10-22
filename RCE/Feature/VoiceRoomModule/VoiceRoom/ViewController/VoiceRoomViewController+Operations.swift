@@ -48,7 +48,7 @@ extension VoiceRoomViewController: VoiceRoomMasterSeatOperationProtocol {
     }
     
     func didMasterLeaveButtonClicked() {
-        if VoiceRoomManager.shared.currentPlayingStatus == .mixingStatePlaying {
+        if SceneRoomManager.shared.currentPlayingStatus == .mixingStatePlaying {
             showMusicAlert()
         } else {
             leaveSeat()

@@ -172,7 +172,7 @@ extension VoiceRoomViewController {
         case .inviter:
             RCVoiceRoomEngine.sharedInstance().lockOtherSeats(true)
             sendAttendPKMessage(userId: info.inviteeId)
-            VoiceRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .begin) { isSuccess in
+            SceneRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .begin) { isSuccess in
                 if !isSuccess {
                     SVProgressHUD.showError(withStatus: "开始PK失败，请重试")
                     self.closePK(reason: .beginFailed)
@@ -190,7 +190,7 @@ extension VoiceRoomViewController {
             guard let self = self else { return }
             switch state {
             case .punishOngoing where (role == .inviter || role == .invitee):
-                VoiceRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .pause)
+                SceneRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .pause)
                 self.sendTextMessage(text: result.desc)
             case .end:
                 self.closePK(reason: .timeEnd)
@@ -230,7 +230,7 @@ extension VoiceRoomViewController {
             } error: { errorCode, msg in
                 SVProgressHUD.showError(withStatus: "挂断失败，请重新尝试")
             }
-            VoiceRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .close)
+            SceneRoomManager.shared.setPKStatus(roomId: info.inviterRoomId, toRoomId: info.inviteeRoomId, status: .close)
         }
         self.roomState.pkConnectState = .request
         self.transitionViewState(isPK: false)
@@ -254,7 +254,8 @@ extension VoiceRoomViewController {
         if isPK {
             messageView.snp.remakeConstraints { make in
                 make.bottom.equalTo(toolBarView.snp.top).offset(-8.resize)
-                make.left.right.equalToSuperview()
+                make.left.equalToSuperview()
+                make.width.equalToSuperview().multipliedBy(278.0 / 375)
                 make.top.equalTo(pkView.snp.bottom).offset(20)
             }
             UIView.animate(withDuration: 0.3) {
@@ -265,7 +266,8 @@ extension VoiceRoomViewController {
             }
         } else {
             messageView.snp.remakeConstraints {
-                $0.left.right.equalToSuperview()
+                $0.left.equalToSuperview()
+                $0.width.equalToSuperview().multipliedBy(278.0 / 375)
                 $0.bottom.equalTo(toolBarView.snp.top).offset(-8.resize)
                 $0.top.equalTo(collectionView.snp.bottom).offset(21.resize)
             }

@@ -123,7 +123,9 @@ static HFOpenApiManager *manager = nil;
     [params hfv_setObject_Safe:reserve forKey:@"Reserve"];
     [params hfv_setObject_Safe:favoriteSinger forKey:@"FavoriteSinger"];
     [params hfv_setObject_Safe:favoriteGenre forKey:@"FavoriteGenre"];
-    
+    [params hfv_setObject_Safe:[HFVLibInfo shared].appId forKey:@"AppId"];
+    NSString *timestamp = [NSString stringWithFormat:@"%0.f",[[NSDate date] timeIntervalSince1970] * 1000];
+    [params hfv_setObject_Safe:timestamp forKey:@"Timestamp"];
     [self.netWork postRequestWithAction:Action_BaseLogin queryParams:nil bodyParams:params needToken:NO success:^(id  _Nullable response) {
         //存储token
         NSDictionary *dic = response;
@@ -836,9 +838,212 @@ static HFOpenApiManager *manager = nil;
 }
 
 
+#pragma mark - 会员歌单
 
+/// 创建会员歌单
+/// @param sheetName 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)createMemberWithSheetName:(NSString *_Nonnull)sheetName
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                            fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:sheetName]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetName forKey:@"SheetName"];
+  
 
+    [self.netWork postRequestWithAction:Action_CreateMemberSheet queryParams:nil bodyParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
 
+/// 删除会员歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)deleteMemberWithSheetId:(NSString *_Nonnull)sheetId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                          fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:sheetId]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetId forKey:@"SheetId"];
+  
+
+    [self.netWork postRequestWithAction:Action_DeleteMemberSheet queryParams:nil bodyParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
+
+/// 会员歌单列表
+/// @param memberOutId 会员歌单名称
+/// @param page 当前页
+/// @param pageSize 每页显示条数，默认 10
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)fetchMemberSheetListWithMemberOutId:(NSString *_Nonnull)memberOutId
+                                      page:(NSString *_Nullable)page
+                                  pageSize:(NSString *_Nullable)pageSize
+                      success:(void (^_Nullable)(id   _Nullable response))success
+                                      fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:memberOutId]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:memberOutId forKey:@"MemberOutId"];
+    [params hfv_setObject_Safe:page forKey:@"Page"];
+    [params hfv_setObject_Safe:pageSize forKey:@"PageSize"];
+    [self.netWork getRequestWithAction:Action_MemberSheet queryParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
+
+/// 获取会员歌单歌曲
+/// @param sheetId 会员歌单名称
+/// @param page 当前页
+/// @param pageSize 每页显示条数，默认 10
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)fetchMemberSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                                      page:(NSString *_Nullable)page
+                                  pageSize:(NSString *_Nullable)pageSize
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                                   fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:sheetId]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetId forKey:@"SheetId"];
+    [params hfv_setObject_Safe:page forKey:@"Page"];
+    [params hfv_setObject_Safe:pageSize forKey:@"PageSize"];
+    [self.netWork getRequestWithAction:Action_MemberSheetMusic queryParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
+
+/// 音乐加入歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)addSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                       musicId:(NSString *_Nonnull)musicId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                           fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:sheetId] || [HFVLibUtils isBlankString:musicId]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetId forKey:@"SheetId"];
+    [params hfv_setObject_Safe:musicId forKey:@"MusicId"];
+    [self.netWork postRequestWithAction:Action_AddMemberSheetMusic queryParams:nil bodyParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
+
+/// 音乐移除歌单
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)removeSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                       musicId:(NSString *_Nonnull)musicId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                              fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    
+    if ([HFVLibUtils isBlankString:sheetId] || [HFVLibUtils isBlankString:musicId]) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetId forKey:@"SheetId"];
+    [params hfv_setObject_Safe:musicId forKey:@"MusicId"];
+    [self.netWork postRequestWithAction:Action_RemoveMemberSheetMusic queryParams:nil bodyParams:params needToken:true success:^(id  _Nullable response) {
+        
+        
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
+
+/// 清空会员歌单音乐列表
+/// @param sheetId 会员歌单名称
+/// @param success 成功回调
+/// @param fail 失败回调
+-(void)clearSheetMusicWithSheetId:(NSString *_Nonnull)sheetId
+                      success:(void (^_Nullable)(id  _Nullable response))success
+                             fail:(void (^_Nullable)(NSError * _Nullable error))fail{
+    if ([HFVLibUtils isBlankString:sheetId] ) {
+        if (fail) {
+            fail(HFVMusicError(HFVSDK_CODE_NoParameter, @"参数不完整"));
+        }
+        return;
+    }
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params hfv_setObject_Safe:sheetId forKey:@"SheetId"];
+    [self.netWork postRequestWithAction:Action_ClearMemberSheetMusic queryParams:nil bodyParams:params needToken:true success:^(id  _Nullable response) {
+        if (success) {
+            success(response);
+        }
+    } fail:^(NSError * _Nullable error) {
+        if (fail) {
+            fail(error);
+        }
+    }];
+}
 
 
 

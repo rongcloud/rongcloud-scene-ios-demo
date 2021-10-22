@@ -37,6 +37,7 @@ class VoiceRoomMusicListViewController: UIViewController, View {
             return cell
         }
     }()
+    private let musicSheetView = MusicSheetListView()
     
     private lazy var localMusicFileView: UIView = {
         let footerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: view.bounds.width, height: 64)))
@@ -87,9 +88,16 @@ class VoiceRoomMusicListViewController: UIViewController, View {
     }
     
     private func buildLayout() {
+        view.addSubview(musicSheetView)
+        musicSheetView.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(30)
+        }
+        
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(musicSheetView.snp.bottom)
+            make.left.bottom.right.equalToSuperview()
         }
         tableView.tableFooterView = localMusicFileView
     }
@@ -142,6 +150,12 @@ class VoiceRoomMusicListViewController: UIViewController, View {
                     SVProgressHUD.showError(withStatus: error.localizedDescription)
                 }
             })
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map(\.channelSections)
+            .distinctUntilChanged()
+            .bind(to: musicSheetView.subject)
             .disposed(by: disposeBag)
     }
     

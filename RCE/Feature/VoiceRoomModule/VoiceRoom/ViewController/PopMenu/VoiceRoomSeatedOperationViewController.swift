@@ -61,7 +61,6 @@ class VoiceRoomSeatedOperationViewController: UIViewController {
         instance.backgroundColor = .clear
         return instance
     }()
-    private lazy var tapGestureView = RCTapGestureView(self)
     
     init(seatIndex: UInt, isMute: Bool, delegate: VoiceRoomSeatedOperationProtocol?, isSeatMute: Bool) {
         self.seatIndex = seatIndex
@@ -93,18 +92,13 @@ class VoiceRoomSeatedOperationViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(avatarImageView)
         container.addSubview(nameLabel)
         container.addSubview(leaveSeatButton)
         container.addSubview(muteButton)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(container.snp.top).offset(-20)
-        }
         
         container.snp.makeConstraints {
             $0.left.bottom.right.equalToSuperview()

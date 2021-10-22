@@ -126,7 +126,6 @@ class CreateVoiceRoomViewController: UIViewController, View {
         instance.clipsToBounds = true
         return instance
     }()
-    private lazy var tapGestureView = RCTapGestureView(self)
     private lazy var dataSource: RxCollectionViewSectionedReloadDataSource<SelectRoomBackgroundSection> = {
         return RxCollectionViewSectionedReloadDataSource<SelectRoomBackgroundSection> { (dataSource, collectionView, indexPath, item) -> UICollectionViewCell in
             let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: SelectVoiceRoomBgImageCollectionViewCell.self)
@@ -163,7 +162,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
     
     private func buildLayout() {
         view.addSubview(backgroundImageView)
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(thumbButton)
         container.addSubview(selectThumbLabel)
@@ -176,11 +175,6 @@ class CreateVoiceRoomViewController: UIViewController, View {
         container.addSubview(createButton)
         container.addSubview(dismissButton)
         thumbButton.addSubview(createVoiceRoomImageView)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(container.snp.top).offset(-20)
-        }
         
         container.snp.makeConstraints {
             $0.bottom.left.right.equalToSuperview()
@@ -305,6 +299,10 @@ class CreateVoiceRoomViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         rx.viewDidAppear
+            .withLatestFrom(reactor.state)
+            .filter({ state in
+                state.section.count > 0
+            })
             .subscribe(onNext: {
                 [weak self] value in
                 guard let self = self else { return }
@@ -388,7 +386,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
             }
             .map { info -> UIImage? in
                 let image = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage
-                return image?.resizeAspectFillImage(to: CGSize(width: 200, height: 200))
+                return image?.kf.resize(to: CGSize(width: 200, height: 200), for: .aspectFill)
             }
             .map { Reactor.Action.selectThumbImage($0) }
             .bind(to: reactor.action)
@@ -421,7 +419,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
         }
         navigationController?.popToRootViewController(animated: true)
         navigator(.login)
-        VoiceRoomManager.shared.leave { _ in }
+        SceneRoomManager.shared.leave { _ in }
     }
     
     @objc private func handleTextFieldEditing(textField: UITextField) {

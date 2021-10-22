@@ -36,7 +36,6 @@ enum RCNavigation: Navigation {
     case feedback
     case notice(modify: Bool = false, notice: String, delegate: VoiceRoomNoticeDelegate)
     case forbiddenList(roomId: String)
-    case voiceRoomEntrance
     case onlineRooms(selectingUserId: String?, delegate: OnlineRoomCreatorDelegate)
 }
 
@@ -209,8 +208,6 @@ struct RCAppNavigation: AppNavigation {
             vc.modalTransitionStyle = .coverVertical
             vc.modalPresentationStyle = .popover
             return vc
-        case .voiceRoomEntrance:
-            return RCRoomEntraceViewController()
         case let .onlineRooms(userId, delegate):
             let vc = OnlineRoomCreatorViewController(selectingUserId: userId, delegate: delegate)
             vc.modalTransitionStyle = .coverVertical

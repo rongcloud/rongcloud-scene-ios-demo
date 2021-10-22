@@ -8,14 +8,11 @@
 import SVProgressHUD
 import RCRTCAudio
 
-fileprivate var RCVRecordAlertRef = 1
-
 extension VoiceRoomViewController {
     @_dynamicReplacement(for: setupModules)
     private func setupChatModule() {
         setupModules()
         toolBarView.add(message: self, action: #selector(handleMessageButtonClick))
-        toolBarView.recordButton.recordStateChanged = recordStateChanged(_:)
         toolBarView.recordButton.recordDidSuccess = recordDidSuccess(_:)
     }
     
@@ -30,38 +27,8 @@ extension VoiceRoomViewController {
         }
     }
     
-    private var recordAlertController: RCVRVoiceAlertViewController {
-        get {
-            var controller = objc_getAssociatedObject(self, &RCVRecordAlertRef)
-            if controller == nil {
-                controller = RCVRVoiceAlertViewController()
-                self.recordAlertController = controller as! RCVRVoiceAlertViewController
-            }
-             return controller as! RCVRVoiceAlertViewController
-        }
-        set {
-            objc_setAssociatedObject(self, &RCVRecordAlertRef, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
     @objc private func handleMessageButtonClick() {
         navigator(.messagelist)
-    }
-    
-    private func recordStateChanged(_ state: RCVRVoiceButtonState) {
-        recordAlertController.update(state)
-        switch state {
-        case .none: ()
-        case .begin, .lack:
-            if presentedViewController == recordAlertController { break }
-            recordAlertController.modalTransitionStyle = .crossDissolve
-            recordAlertController.modalPresentationStyle = .overFullScreen
-            present(recordAlertController, animated: true, completion: nil)
-        case .recording: ()
-        case .outArea: ()
-        case .cancel, .end:
-            recordAlertController.dismiss(animated: true, completion: nil)
-        }
     }
     
     private func recordDidSuccess(_ result: (url: URL, time: TimeInterval)?) {
@@ -81,8 +48,7 @@ extension VoiceRoomViewController {
                 guard
                     let model = try? JSONDecoder().decode(UploadfileResponse.self, from: response.data)
                 else { return }
-                let urlString = Environment.current.url.absoluteString + "/file/show?path=" + model.data
-                self?.sendMessage(urlString, time: time, url: url)
+                self?.sendMessage(model.imageURL(), time: time, url: url)
             case let .failure(error):
                 print(error)
             }

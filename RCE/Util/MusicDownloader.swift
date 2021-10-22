@@ -17,7 +17,7 @@ final class MusicDownloader {
             completion?(true)
             return
         }
-        guard let url = URL(string: music.url.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
+        guard let urlString = music.url, let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
             completion?(false)
             fatalError("music url is nil")
         }

@@ -162,7 +162,7 @@ extension VoiceRoomUserAddedMusicViewController: RCRTCAudioMixerAudioPlayDelegat
     }
     
     func didAudioMixingStateChanged(_ mixingState: RCRTCAudioMixingState, reason mixingReason: RCRTCAudioMixingReason) {
-        VoiceRoomManager.shared.currentPlayingStatus = mixingState
+        SceneRoomManager.shared.currentPlayingStatus = mixingState
         if mixingState == .mixingStateStop, mixingReason == .mixingReasonAllLoopsCompleted {
             playEndSubject.onNext(.musicDidPlayEnd)
         }

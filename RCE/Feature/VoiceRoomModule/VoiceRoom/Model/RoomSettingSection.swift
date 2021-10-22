@@ -146,8 +146,14 @@ enum RoomSettingItem {
     case roomBackground
     case lessSeatMode(Bool)
     case forbidden
-    case suspend(Bool)
+    case suspend
     case notice
+    
+    case switchCamera
+    case retouch
+    case sticker
+    case makeup
+    case effect
 }
 
 extension RoomSettingItem {
@@ -173,10 +179,15 @@ extension RoomSettingItem {
             return "音乐"
         case .forbidden:
             return "屏蔽词"
-        case let .suspend(value):
-            return value ? "继续直播" : "暂停直播"
+        case .suspend:
+            return "暂停直播"
         case .notice:
             return "房间公告"
+        case .switchCamera: return "翻转"
+        case .retouch: return "美颜"
+        case .sticker: return "贴纸"
+        case .makeup: return "美妆"
+        case .effect: return "特效"
         }
     }
     
@@ -202,10 +213,15 @@ extension RoomSettingItem {
             return isLess ? R.image.voiceroom_setting_addseat() : R.image.voiceroom_setting_minusseat()
         case .forbidden:
             return R.image.forbidden_text_icon()
-        case let .suspend(value):
-            return value ? R.image.voiceroom_setting_suspend() : R.image.voiceroom_setting_suspend()
+        case .suspend:
+            return R.image.voiceroom_setting_suspend()
         case .notice:
             return R.image.voiceroom_setting_notice()
+        case .switchCamera: return R.image.scene_room_setting_switch_camera()
+        case .retouch: return R.image.scene_room_setting_retouch()
+        case .makeup: return R.image.scene_room_setting_makeup()
+        case .sticker: return R.image.scene_room_setting_sticker()
+        case .effect: return R.image.scene_room_setting_effect()
         }
     }
 }

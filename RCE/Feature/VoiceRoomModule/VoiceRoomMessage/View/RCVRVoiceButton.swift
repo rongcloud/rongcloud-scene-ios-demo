@@ -29,7 +29,6 @@ enum RCVRVoiceButtonState {
 
 final class RCVRVoiceButton: UIView {
     
-    var recordStateChanged: ((RCVRVoiceButtonState) -> Void)?
     var recordDidSuccess: (((URL, TimeInterval)?)->Void)?
     
     private lazy var imageView = UIImageView()
@@ -54,11 +53,14 @@ final class RCVRVoiceButton: UIView {
             imageView.image = state.isRecording ?
                 R.image.record_voice_highlighted() :
                 R.image.record_voice_normal()
-            recordStateChanged?(state)
+            recordStateChanged(state)
         }
     }
     
     private var beginTime: TimeInterval = 0
+    private var workItem: DispatchWorkItem?
+    
+    private lazy var recordAlertController = RCVRVoiceAlertViewController()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -112,16 +114,41 @@ final class RCVRVoiceButton: UIView {
     @objc private func onLongPressTriggle(_ gesture: UILongPressGestureRecognizer) {
         print("state: \(gesture.state.rawValue) position: \(gesture.location(in: self))")
         switch gesture.state {
-        case .began: state = .begin
-        case .changed: state = bounds.contains(gesture.location(in: self)) ? .recording : .outArea
-        case .cancelled: state = .cancel
+        case .began:
+            state = .begin
+            workItem = DispatchWorkItem {
+                gesture.isEnabled = false
+                gesture.isEnabled = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: workItem!)
+        case .changed:
+            state = bounds.contains(gesture.location(in: self)) ? .recording : .outArea
+        case .cancelled:
+            state = .end
         case .ended:
             if state == .outArea {
                 state = .cancel
             } else {
                 state = .end
             }
+            workItem?.cancel()
+            workItem = nil
         default: ()
+        }
+    }
+    
+    private func recordStateChanged(_ state: RCVRVoiceButtonState) {
+        recordAlertController.update(state)
+        switch state {
+        case .none: ()
+        case .begin, .lack:
+            recordAlertController.modalTransitionStyle = .crossDissolve
+            recordAlertController.modalPresentationStyle = .overFullScreen
+            controller?.present(recordAlertController, animated: true, completion: nil)
+        case .recording: ()
+        case .outArea: ()
+        case .cancel, .end:
+            recordAlertController.dismiss(animated: true, completion: nil)
         }
     }
     

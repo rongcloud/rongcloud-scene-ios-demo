@@ -38,6 +38,7 @@ extension VoiceRoomViewController {
     @_dynamicReplacement(for: handleReceivedMessage(_:))
     private func chat_handleReceivedMessage(_ message :RCMessage) {
         handleReceivedMessage(message)
+        guard message.conversationType == .ConversationType_CHATROOM else { return }
         messageView.add(message.content)
     }
     
@@ -79,13 +80,13 @@ extension VoiceRoomViewController: RCVRMViewDelegate {
     func voiceRoomView(_ view: RCVRMView, didClick userId: String) {
         let currentUserId = Environment.currentUserId
         if userId == currentUserId { return }
-        let dependency = VoiceRoomUserOperationDependency(roomId: voiceRoomInfo.roomId, roomCreator: voiceRoomInfo.userId, presentUserId: userId)
+        let dependency = VoiceRoomUserOperationDependency(room: voiceRoomInfo, presentUserId: userId)
         navigator(.manageUser(dependency: dependency, delegate: self))
     }
 }
 
 extension VoiceRoomViewController: RCVRMViewDataSource {
     func voiceRoomViewManagerIds(_ view: RCVRMView) -> [String] {
-        return VoiceRoomManager.shared.managerlist
+        return SceneRoomManager.shared.managerlist
     }
 }

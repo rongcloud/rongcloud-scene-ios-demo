@@ -78,8 +78,6 @@ class VoiceRoomEmptySeatOperationViewController: UIViewController {
         return instance
     }()
     
-    private lazy var tapGestureView = RCTapGestureView(self)
-    
     init(seatInfo: RCVoiceSeatInfo, seatIndex: UInt, delegate: VoiceRoomEmptySeatOperationProtocol?) {
         self.seatInfo = seatInfo
         self.seatIndex = seatIndex
@@ -105,18 +103,13 @@ class VoiceRoomEmptySeatOperationViewController: UIViewController {
     }
     
     private func buildLayout() {
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(avatarImageView)
         container.addSubview(seatIndexLabel)
         container.addSubview(inviteButton)
         container.addSubview(stackView)
-        
-        tapGestureView.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalTo(container.snp.top).offset(-20)
-        }
         
         container.snp.makeConstraints {
             $0.left.bottom.right.equalToSuperview()

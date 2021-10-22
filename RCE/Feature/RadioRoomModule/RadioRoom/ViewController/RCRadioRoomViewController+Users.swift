@@ -35,7 +35,7 @@ extension RCRadioRoomViewController {
             case let .success(wrapper):
                 guard let self = self else { return }
                 self.managerlist = wrapper.data ?? []
-                VoiceRoomManager.shared.managerlist = self.managerlist.map { $0.userId }
+                SceneRoomManager.shared.managerlist = self.managerlist.map { $0.userId }
                 if wrapper.code == 30001 {
                     self.didCloseRoom()
                 }

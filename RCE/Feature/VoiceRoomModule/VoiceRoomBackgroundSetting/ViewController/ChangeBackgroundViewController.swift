@@ -56,8 +56,6 @@ class ChangeBackgroundViewController: UIViewController {
     private let imagelist: [String]
     private var selectedRow: Int?
     
-    private lazy var tapGestureView = RCTapGestureView(self)
-    
     init(imagelist: [String], delegate: ChangeBackgroundImageProtocol) {
         self.imagelist = imagelist
         self.delegate = delegate
@@ -70,15 +68,13 @@ class ChangeBackgroundViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tapGestureView)
+        enableClickingDismiss()
         view.addSubview(container)
         container.addSubview(blurView)
         container.addSubview(titleLabel)
         container.addSubview(collectionView)
         container.addSubview(confirmButton)
-        tapGestureView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
         container.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(314.resize)

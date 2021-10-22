@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict><key>type</key><string>0</string><key>value</key><string>0</string><key>imageName</key><string>haha_cancel</string><key>name</key><string>无</string></dict>
+    <dict><key>type</key><string>1</string><key>value</key><string>1</string><key>imageName</key><string>waixingren</string><key>name</key><string>外星人</string></dict>
+    <dict><key>type</key><string>2</string><key>value</key><string>2</string><key>imageName</key><string>lilian</string><key>name</key><string>梨梨脸</string></dict>
+    <dict><key>type</key><string>3</string><key>value</key><string>3</string><key>imageName</key><string>shoushou</string><key>name</key><string>瘦瘦脸</string></dict>
+    <dict><key>type</key><string>4</string><key>value</key><string>4</string><key>imageName</key><string>shangxia</string><key>name</key><string>镜像脸</string></dict>
+    <dict><key>type</key><string>5</string><key>value</key><string>5</string><key>imageName</key><string>pianduanlian</string><key>name</key><string>片段脸</string></dict>
+    <dict><key>type</key><string>6</string><key>value</key><string>6</string><key>imageName</key><string>daoying</string><key>name</key><string>水面倒影</string></dict>
+    <dict><key>type</key><string>7</string><key>value</key><string>7</string><key>imageName</key><string>luoxuan</string><key>name</key><string>螺旋镜面</string></dict>
+    <dict><key>type</key><string>8</string><key>value</key><string>8</string><key>imageName</key><string>yuyan</string><key>name</key><string>鱼眼相机</string></dict>
+    <dict><key>type</key><string>9</string><key>value</key><string>9</string><key>imageName</key><string>zuoyou</string><key>name</key><string>左右镜像</string></dict>
+
+</array>
+</plist>

@@ -34,6 +34,7 @@ class DialViewController: UIViewController, View {
             return cell
         }
     }()
+    private lazy var emptyView = DialHistoryEmptyView()
     private let dialView = DialKeyboardView()
     private let type: CallType
     
@@ -69,6 +70,13 @@ class DialViewController: UIViewController, View {
     func bind(reactor: DialReactor) {
         reactor.state
             .map(\.sections)
+            .do(onNext: { [weak self] sections in
+                guard let self = self else { return }
+                let count = sections.reduce(0) { partialResult, section in
+                    return partialResult + section.items.count
+                }
+                self.emptyView.isHidden = count > 0
+            })
             .bind(to: tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
@@ -166,7 +174,7 @@ class DialViewController: UIViewController, View {
         【融云全球通信云】安全·可靠的全球互联网通信云
         为您的应用提供高效快捷的音视频服务
         您的伙伴邀请您加入体验
-        点击链接下载：https://downloads.rongcloud.cn/rcrtc
+        点击链接下载：https://www.rongcloud.cn/demo/proxy/RC_RTC
         """
         present(composeVC, animated: true, completion: nil)
     }
@@ -175,12 +183,18 @@ class DialViewController: UIViewController, View {
         view.backgroundColor = UIColor(hexString: "#F5F6F9")
         view.addSubview(serviceView)
         view.addSubview(tableView)
+        view.addSubview(emptyView)
         view.addSubview(keyboardButton)
         view.addSubview(dialView)
         
         serviceView.snp.makeConstraints { make in
             make.left.right.top.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(72.resize)
+        }
+        
+        emptyView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(132.resize)
         }
         
         tableView.snp.makeConstraints { make in

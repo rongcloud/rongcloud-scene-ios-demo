@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict><key>type</key><string>0</string><key>value</key><string>0</string><key>imageName</key><string>beautyOrigin</string><key>name</key><string>原图</string></dict>
+    <dict><key>type</key><string>1</string><key>value</key><string>5</string><key>imageName</key><string>beautyWhite</string><key>name</key><string>美白</string></dict>
+    <dict><key>type</key><string>2</string><key>value</key><string>5</string><key>imageName</key><string>beautyMopi</string><key>name</key><string>磨皮</string></dict>
+    <dict><key>type</key><string>3</string><key>value</key><string>7</string><key>imageName</key><string>beautyRuddise</string><key>name</key><string>红润</string></dict>
+    <dict><key>type</key><string>4</string><key>value</key><string>5.7</string><key>imageName</key><string>brightness</string><key>name</key><string>亮度</string></dict>
+
+</array>
+</plist>

@@ -49,31 +49,28 @@ final class RCRoomContainerViewController: UIViewController {
     var currentRoomId: String { roomList[currentIndex].roomId }
     var currentRoom: VoiceRoom { roomList[currentIndex] }
     var currentScene: HomeItem {
-        roomList[currentIndex].roomType == 2 ? .radioRoom : .audioRoom
+        switch roomList[currentIndex].roomType {
+        case 1: return .audioRoom
+        case 2: return .radioRoom
+        case 3: return .liveVideo
+        default: return .audioRoom
+        }
     }
     
     private var roomList: [VoiceRoom]
     private weak var dataSource: RCRoomContainerDataSource?
-    init(create room: VoiceRoom, dataSource: RCRoomContainerDataSource) {
+    init(create room: VoiceRoom, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = [room]
         self.currentIndex = 0
-        if room.roomType == 2 {
-            controller = RCRadioRoomViewController(room, isCreate: true)
-        } else {
-            controller = VoiceRoomViewController(roomInfo: room, isCreate: true)
-        }
+        self.controller = room.controller(true)
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
     }
     
-    init(_ roomList: [VoiceRoom], index: Int, dataSource: RCRoomContainerDataSource) {
+    init(_ roomList: [VoiceRoom], index: Int, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = roomList
         self.currentIndex = index
-        if roomList[index].roomType == 2 {
-            controller = RCRadioRoomViewController(roomList[index])
-        } else {
-            controller = VoiceRoomViewController(roomInfo: roomList[index])
-        }
+        self.controller = roomList[index].controller()
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
     }
@@ -88,17 +85,20 @@ final class RCRoomContainerViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.white
         
+        addChild(controller)
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        controller.didMove(toParent: self)
         
-        addChild(controller)
         collectionView.descendantViews = controller.descendantViews()
         
         DispatchQueue.main.async { [unowned self] in
             setupCollectionViewPosition()
         }
+        
+        navigationController?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -135,7 +135,6 @@ final class RCRoomContainerViewController: UIViewController {
         controller.leaveRoom { [weak self] result in
             switch result {
             case .success:
-                print("leave room")
                 self?.joinRoom()
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
@@ -144,28 +143,13 @@ final class RCRoomContainerViewController: UIViewController {
     }
     
     private func joinRoom() {
-        if currentScene == .radioRoom {
-            controller = RCRadioRoomViewController(roomList[currentIndex])
-        } else {
-            controller = VoiceRoomViewController(roomInfo: roomList[currentIndex])
-        }
+        controller = roomList[currentIndex].controller()
         let indexPath = IndexPath(row: currentIndex, section: 0)
         collectionView
             .cellForItem(indexPath, cellType: VoiceRoomContainerCell.self)?
             .setup(controller.view)
         addChild(controller)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard let point = touches.first?.location(in: view) else {
-            return
-        }
-        let area = CGRect(x: view.bounds.width * 0.75,
-                          y: 0,
-                          width: view.bounds.width * 0.25,
-                          height: view.bounds.height)
-        collectionView.isScrollEnabled = area.contains(point)
+        controller.didMove(toParent: self)
     }
 }
 
@@ -223,7 +207,7 @@ extension RCRoomContainerViewController: UICollectionViewDelegate {
 
 extension RCRoomContainerViewController {
     private func refresh() {
-        guard currentScene == currentSceneType else { return header.endRefreshing() }
+        guard currentScene == SceneRoomManager.scene else { return header.endRefreshing() }
         guard let dataSource = dataSource else { return header.endRefreshing() }
         dataSource.container(self, refresh: { [weak self] items, end in
             self?.roomListDidRefresh(items)
@@ -260,7 +244,7 @@ extension RCRoomContainerViewController {
     }
     
     private func more() {
-        guard currentScene == currentSceneType else { return header.endRefreshing() }
+        guard currentScene == SceneRoomManager.scene else { return header.endRefreshing() }
         guard let dataSource = dataSource else { return }
         dataSource.container(self, more: { [weak self] items, end in
             self?.roomListDidMore(items)
@@ -325,6 +309,22 @@ fileprivate extension RCErrorCode {
         case .RC_SUCCESS: return ""
         case .RC_CHATROOM_NOT_EXIST: return "该房间直播已结束"
         default: return "获取房间信息失败"
+        }
+    }
+}
+
+extension RCRoomContainerViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        guard let _ = navigationController.visibleViewController as? RCRoomEntraceViewController else {
+            return
+        }
+        guard let coordinator = navigationController.topViewController?.transitionCoordinator else {
+            return
+        }
+        coordinator.notifyWhenInteractionChanges { context in
+            if !context.isCancelled {
+                RCRoomFloatingManager.shared.show(self, animated: false)
+            }
         }
     }
 }
