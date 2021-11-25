@@ -114,5 +114,5 @@ private var roomInfo_kvRoomInfo: RCVoiceRoomInfo? {
 
 1. 为了方便您快速运行quickdemo，我们为您预置了融云 appkey 和对应的测试服务器url，您不需要自己部署测试服务器即可运行。
 2. 申请 BusinessToken
-    * BusinessToken 主要是防止滥用 quickdemo 里的测试appKey，我们为接口做了限制，一个 BusinessToken 最多可以支持10个用户注册，20天使用时长。点击此处 [获取BusinessToken](https://rcrtc-api.rongcloud.net/from)
+    * BusinessToken 主要是防止滥用 quickdemo 里的测试appKey，我们为接口做了限制，一个 BusinessToken 最多可以支持10个用户注册，20天使用时长。点击此处 [获取BusinessToken](https://rcrtc-api.rongcloud.net/code)
 3. 申请完 BusinessToken 后,请在 Environment.swift 文件中替换即可.

@@ -70,7 +70,7 @@ extension Environment {
     }
     
     static var businessToken: String {
-        // 请通过https://rcrtc-api.rongcloud.net/from 申请获取
+        // 请通过 https://rcrtc-api.rongcloud.net/code 申请获取
         return ""
     }
 }
