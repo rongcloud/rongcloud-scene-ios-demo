@@ -364,12 +364,11 @@ extension RCNetworkAPI: TargetType {
     }
     
     var headers: [String : String]? {
+        var header = [String: String]()
         if let auth = UserDefaults.standard.authorizationKey() {
-            return ["Authorization": auth]
+            header["Authorization"] = auth
         }
-        if case let .refreshToken(auth) = self {
-            return ["Authorization": auth]
-        }
-        return nil
+        header["BusinessToken"] = Environment.businessToken
+        return header
     }
 }

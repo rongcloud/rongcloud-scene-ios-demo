@@ -19,9 +19,9 @@ extension Environment {
     var url: URL {
         switch self {
         case .debug:
-            return URL(string: "您的测试服务器地址")!
+            return URL(string: "https://rcrtc-api.rongcloud.net/")!
         default:
-            return URL(string: "您的正式服务器地址")!
+            return URL(string: "")!
         }
     }
     
@@ -42,21 +42,35 @@ extension Environment {
     var rcKey: String {
         switch self {
         case .debug:
-            return "测试环境appKey"
+            return "pvxdm17jpw7ar"
         default:
-            return "正式环境appKey"
+            return ""
         }
     }
     
     var umengKey: String {
-        return "友盟key"
+        return ""
     }
     
     var buglyKey: String {
-        return "bugly key"
+        return ""
+    }
+    
+    static var MHBeautyKey: String {
+        let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String
+        switch bundleID {
+        case "cn.rongcloud.rcrtc": return "29531f6d8b934a6e65ab7d86cad79fe9"
+        case "cn.rongcloud.rcrtc.appstore": return ""
+        default: return ""
+        }
     }
     
     static var currentUser: User? {
         return UserDefaults.standard.loginUser()
+    }
+    
+    static var businessToken: String {
+        // 请通过https://rcrtc-api.rongcloud.net/from 申请获取
+        return ""
     }
 }
