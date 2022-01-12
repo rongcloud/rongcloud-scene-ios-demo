@@ -8,7 +8,6 @@
 import Foundation
 
 enum VoiceRoomNotification: String {
-    case roomClosed = "VoiceRoomClosed"
     case backgroundChanged = "VoiceRoomBackgroundChanged"
     case mangerlistNeedRefresh = "VoiceRoomNeedRefreshManagerList"
     case rejectManagePick = "VoiceRoomRejectManagePick"

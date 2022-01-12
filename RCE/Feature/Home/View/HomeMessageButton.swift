@@ -21,7 +21,7 @@ final class HomeMessageButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setImage(R.image.message_button_icon(), for: .normal)
-        RCVoiceRoomEngine.sharedInstance().addMessageReceive(self)
+        RCCoreClient.shared().add(self)
     }
     
     required init?(coder: NSCoder) {

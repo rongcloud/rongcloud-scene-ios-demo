@@ -148,8 +148,19 @@ class VoiceRoomMusicControlViewController: UIViewController {
     }
     
     private func didSoundEffectClicked(_ item: AudioEffect) {
-        RCRTCEngine.sharedInstance().audioEffectManager.stopAllEffects()
-        RCRTCEngine.sharedInstance().audioEffectManager.playEffect(item.id, filePath: item.filePath, loopCount: 1, publish: true)
+        guard let path = item.filePath else {
+            log.debug("音效资源地址无效")
+            return
+        }
+        player().playEffect(item.id, filePath: path)
+    }
+    
+    private func player() -> RCMusicPlayer {
+        let player = RCMusicEngine.shareInstance().player
+        if (player == nil) {
+            assert(false, "player 没有初始化，需要设置RCMusicEngine.player")
+        }
+        return player!
     }
 }
 

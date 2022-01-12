@@ -66,15 +66,16 @@ class VoiceRoomMusicMixerViewController: UIViewController {
             return cell
         }
     }()
+    
     private let sectionSubject = BehaviorSubject<[MusicControlSection]>(value: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buildLayout()
         bind()
-        let localValue = RCRTCAudioMixer.sharedInstance().playingVolume
-        let remoteValue = RCRTCAudioMixer.sharedInstance().mixingVolume
-        let recordingValue = RCRTCEngine.sharedInstance().defaultAudioStream.recordingVolume
+        let localValue = player().localVolume()
+        let remoteValue = player().remoteVolume()
+        let recordingValue = player().micVolume()
         let sections = [MusicControlSection(items: [.local(Float(localValue)), .remote(Float(remoteValue)), .micphone(Float(recordingValue)), .ear(false)])]
         sectionSubject.onNext(sections)
     }
@@ -95,17 +96,25 @@ class VoiceRoomMusicMixerViewController: UIViewController {
     private func handleValueChagned(value: Float, type: MusicControlCellType) {
         switch type {
         case .local:
-            RCRTCAudioMixer.sharedInstance().playingVolume = UInt(value)
+            player().setLocalVolume(Int(value))
         case .remote:
-            RCRTCAudioMixer.sharedInstance().mixingVolume = UInt(value)
+            player().setRemoteVolume(Int(value))
         case .micphone:
-            RCRTCEngine.sharedInstance().defaultAudioStream.recordingVolume = UInt(value)
+            player().setMicVolume(Int(value))
         case .ear:
             ()
         }
     }
     
     private func handleEarOpening(isOn: Bool) {
-        RCRTCEngine.sharedInstance().audioEffectManager.enable(inEarMonitoring: isOn)
+        player().setEarOpenMonitoring(isOn)
+    }
+    
+    private func player() -> RCMusicPlayer {
+        let player = RCMusicEngine.shareInstance().player
+        if (player == nil) {
+            assert(false, "player 没有初始化，需要设置RCMusicEngine.player")
+        }
+        return player!
     }
 }

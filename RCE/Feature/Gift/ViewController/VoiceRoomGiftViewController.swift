@@ -83,7 +83,7 @@ final class VoiceRoomGiftViewController: UIViewController {
                 let index = self.dependency.seats.firstIndex(where: { $0.userId == userId })
                 var mark = self.dependency.room.userId == userId ? "房主" : "观众"
                 if let userIndex = index {
-                    mark = userIndex == 0 ? "房主" : "\(userIndex)"
+                    mark = self.dependency.room.userId == userId ? "房主" : "\(userIndex)"
                 }
                 let seatUser = VoiceRoomGiftSeat(userId: user.userId,
                                                  userAvatar: user.portraitUrl,

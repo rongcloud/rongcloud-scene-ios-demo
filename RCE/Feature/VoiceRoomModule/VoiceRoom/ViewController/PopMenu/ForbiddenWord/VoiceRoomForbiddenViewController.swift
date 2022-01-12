@@ -138,8 +138,10 @@ class VoiceRoomForbiddenViewController: UIViewController {
     
     private func showAppendAlert() {
         let alert = UIAlertController(title: "添加屏蔽词", message: nil, preferredStyle: .alert)
-        alert.addTextField { _ in
-            
+        alert.addTextField { textField in
+            textField.addTarget(self,
+                                action: #selector(self.handleTextFieldEditing(_:)),
+                                for: .editingChanged)
         }
         alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { [weak alert] _ in
             guard let text = alert?.textFields?.first?.text, !text.isEmpty else {
@@ -159,6 +161,16 @@ class VoiceRoomForbiddenViewController: UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func handleTextFieldEditing(_ textField: UITextField) {
+        guard let text = textField.text else {
+            return
+        }
+        guard textField.markedTextRange == nil else {
+            return
+        }
+        textField.text = String(text.prefix(10))
     }
 }
 

@@ -6,8 +6,10 @@
 //
 
 import SVProgressHUD
+import UIKit
 
 extension LiveVideoRoomHostController {
+ 
     @_dynamicReplacement(for: m_viewDidLoad)
     private func settings_viewDidLoad() {
         m_viewDidLoad()
@@ -33,6 +35,8 @@ extension LiveVideoRoomHostController {
                 .makeup,
                 .effect,
                 .music,
+                .videoSetting,
+                .isFreeEnterSeat(isSeatFreeEnter)
             ]
         }
         navigator(.roomSetting(settinglist, self))
@@ -88,7 +92,9 @@ extension LiveVideoRoomHostController: VoiceRoomSettingProtocol {
     
     /// 屏蔽词
     func forbiddenDidClick() {
-        navigator(.forbiddenList(roomId: room.roomId))
+        let items = SceneRoomManager.shared.forbiddenWordlist
+        let controller = LiveVideoRoomForbiddenViewController(items, delegate: self)
+        present(controller, animated: true)
     }
     
     func switchCameraDidClick() {
@@ -96,6 +102,7 @@ extension LiveVideoRoomHostController: VoiceRoomSettingProtocol {
         let postion = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
         let needMirror = postion == .captureDeviceFront
         RCRTCEngine.sharedInstance().defaultVideoStream.isEncoderMirror = needMirror
+        RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror = needMirror
     }
     
     func stickerDidClick() {
@@ -116,7 +123,60 @@ extension LiveVideoRoomHostController: VoiceRoomSettingProtocol {
     
     /// 音乐
     func musicDidClick() {
-        present(musicControlVC, animated: true)
+        presentMusicController()
+    }
+    
+    /// 视频设置
+    func videoSetItemClick() {
+        present(videoPropsSetVc, animated: true)
+    }
+    func freeMicDidClick(isFree: Bool) {
+        isSeatFreeEnter = isFree
+        let value: String = isFree ? "1" : "0"
+        RCLiveVideoEngine.shared().setRoomInfo(["FreeEnterSeat": value]) { code in
+            debugPrint("setRoomInfo \(code.rawValue)")
+        }
+        if isSeatFreeEnter {
+            SVProgressHUD.showSuccess(withStatus: "当前可自由上麦")
+        } else {
+            SVProgressHUD.showSuccess(withStatus: "当前需申请上麦")
+        }
+    }
+}
+
+extension LiveVideoRoomHostController: VideoPropertiesDelegate {
+    func videoPropertiesDidChanged(_ resolutionRatio: ResolutionRatio, fps: Int, bitRate: Int) {
+        let config = RCRTCVideoStreamConfig()
+        config.videoSizePreset = {
+            switch resolutionRatio {
+            case .video640X480P:
+                return .preset640x480
+            case .video720X480P:
+                return .preset720x480
+            case .video1280X720P:
+                return .preset1280x720
+            case .video1920X1080P:
+                return .preset1920x1080
+            }
+        }()
+        config.videoFps = {
+            switch fps {
+            case 10: return .FPS10
+            case 15: return .FPS15
+            case 24: return .FPS24
+            case 30: return .FPS30
+            default: return .FPS15
+            }
+        }()
+        config.minBitrate = UInt(bitRate / 10 * 7)
+        config.maxBitrate = UInt(bitRate)
+        RCRTCEngine.sharedInstance().defaultVideoStream.videoConfig = config
+        
+        let roomInfo: [String: String] = [
+            "RCRTCVideoResolution": resolutionRatio.rawValue,
+            "RCRTCVideoFps": "\(fps)"
+        ]
+        RCLiveVideoEngine.shared().setRoomInfo(roomInfo) { _ in }
     }
 }
 
@@ -148,8 +208,7 @@ extension LiveVideoRoomHostController: VoiceRoomInputTextProtocol {
     
     private func didUpdateRoomName(_ name: String) {
         room.roomName = name
-        roomInfoView.updateRoom(info: room)
-        RCLiveVideoEngine.shared().setRoomInfo(["name": name])
+        RCLiveVideoEngine.shared().setRoomInfo(["name": name]) { _ in }
     }
 }
 
@@ -157,9 +216,27 @@ extension LiveVideoRoomHostController: VoiceRoomNoticeDelegate {
     func noticeDidModfied(notice: String) {
         /// 本地更新
         room.notice = notice
-        /// 本地公屏消息
-        messageView.add(RCTextMessage(content: "房间公告已更新")!)
         /// 远端更新
-        RCLiveVideoEngine.shared().setRoomInfo(["notice": notice])
+        RCLiveVideoEngine.shared().setRoomInfo(["notice": notice]) { _ in }
+        
+        /// 本地公屏消息
+        let message = RCTextMessage(content: "房间公告已更新")!
+        messageView.addMessage(message)
+        RCChatroomMessageCenter.sendChatMessage(room.roomId, content: message) { _ in } error: { _, _ in }
+    }
+}
+
+extension LiveVideoRoomHostController: LiveVideoRoomForbiddenDelegate {
+    func forbiddenListDidChange(_ items: [String]) {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: items, options: .fragmentsAllowed)
+            if let json = String(data: jsonData, encoding: .utf8) {
+                RCLiveVideoEngine.shared().setRoomInfo(["shields": json]) { code in
+                    debugPrint("setRoomInfo \(code.rawValue)")
+                }
+            }
+        } catch {
+            debugPrint("setRoomInfo \(error.localizedDescription)")
+        }
     }
 }

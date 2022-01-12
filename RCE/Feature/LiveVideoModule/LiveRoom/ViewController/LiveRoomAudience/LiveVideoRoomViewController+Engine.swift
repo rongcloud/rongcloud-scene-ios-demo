@@ -7,21 +7,25 @@
 
 import SVProgressHUD
 import CoreGraphics
-import UIKit
 import RCLiveVideoLib
+import Foundation
+import SwiftUI
 
 extension LiveVideoRoomViewController {
     @_dynamicReplacement(for: m_viewDidLoad)
     private func gift_viewDidLoad() {
         m_viewDidLoad()
         RCLiveVideoEngine.shared().delegate = self
+        RCLiveVideoEngine.shared().mixDelegate = self
+        RCLiveVideoEngine.shared().mixDataSource = self
     }
 }
 
 extension LiveVideoRoomViewController: RCLiveVideoDelegate {
     
     func roomInfoDidSync() {
-        roomInfoView.updateRoom(info: room)
+        roomUserView.setRoom(room)
+        SceneRoomManager.updateLiveSeatList()
     }
     
     func roomDidClosed() {
@@ -34,6 +38,8 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
             RCLiveVideoEngine.shared().leaveRoom { [weak self] _ in
                 guard let self = self, isFloating == false else { return }
                 self.navigationController?.popViewController(animated: true)
+                DataSourceImpl.instance.clear()
+                PlayerImpl.instance.clear()
             }
         }
         controller.addAction(sureAction)
@@ -42,23 +48,38 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
             .present(controller, animated: true)
     }
     
-    func liveVideoDidUpdate(_ userIds: [String]) {
+    func liveVideoUserDidUpdate(_ userIds: [String]) {
         if userIds.contains(Environment.currentUserId) {
-            toolBarView.micState = .connecting
+            role = .broadcaster
+        } else {
+            role = .audience
+        }
+        SceneRoomManager.updateLiveSeatList()
+    }
+    
+    func liveVideoRequestDidChange() {
+        /// 当前为连麦状态时，不会触发上麦申请
+        /// 如果支持管理员处理上麦申请，在此添加逻辑
+        if micButton.micState == .connecting {
+            return
+        }
+        RCLiveVideoEngine.shared().getRequests { code, userIds in
+            let request = userIds.contains(Environment.currentUserId)
+            self.micButton.micState = request ? .waiting : .request
         }
     }
     
     func liveVideoRequestDidAccept() {
-        toolBarView.micState = .connecting
+        micButton.micState = .connecting
     }
     
     func liveVideoRequestDidReject() {
         SVProgressHUD.showInfo(withStatus: "房主拒绝了您的上麦申请")
-        toolBarView.micState = .request
+        micButton.micState = .request
     }
 
-    func liveVideoInvitationDidReceive() {
-        let controller = RCLVRInvitationAlertViewController()
+    func liveVideoInvitationDidReceive(_ inviter: String, at index: Int) {
+        let controller = RCLVRInvitationAlertViewController(inviter, index:index)
         view.addSubview(controller.view)
         addChild(controller)
         controller.didMove(toParent: self)
@@ -70,36 +91,49 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
         alertController.invitationDidCancel()
         SVProgressHUD.showInfo(withStatus: "已取消邀请")
     }
+    
+    func liveVideoInvitationDidReject(_ invitee: String) {
+        UserInfoDownloaded.shared.fetchUserInfo(userId: invitee) { user in
+            SVProgressHUD.showInfo(withStatus: "\(user.userName)拒绝上麦")
+        }
+    }
 
-    func userDidEnter(_ userId: String) {
+    func userDidEnter(_ userId: String, withUserCount count: Int) {
         handleUserEnter(userId)
-        roomInfoView.updateRoomUserNumber()
+        roomCountingView.update(count)
     }
     
-    func userDidExit(_ userId: String) {
-        handleUserExit(userId)
-        roomInfoView.updateRoomUserNumber()
+    func userDidExit(_ userId: String, withUserCount count: Int) {
+        roomCountingView.update(count)
     }
     
-    func liveVideoDidBegin(_ code: RCLiveVideoErrorCode) {
+    func liveVideoDidBegin(_ code: RCLiveVideoCode) {
         switch code {
         case .success:
             SVProgressHUD.showSuccess(withStatus: "连麦成功")
             role = .broadcaster
-            toolBarView.micState = .connecting
             setupCapture()
         default:
             SVProgressHUD.showSuccess(withStatus: "连麦失败")
             role = .audience
-            toolBarView.micState = .request
         }
-        
+        SceneRoomManager.updateLiveSeatList()
+        roomUserView.updateNetworkDelay(false)
     }
     
-    func liveVideoDidFinish() {
-        SVProgressHUD.showSuccess(withStatus: "连麦结束")
+    func liveVideoDidFinish(_ reason: RCLivevideoFinishReason) {
+        switch reason {
+        case .leave:
+            SVProgressHUD.showSuccess(withStatus: "连麦结束")
+        case .kick:
+            SVProgressHUD.showSuccess(withStatus: "您被抱下麦")
+        case .mix:
+            SVProgressHUD.showSuccess(withStatus: "麦位切换模式，请重新上麦")
+        default:
+            SVProgressHUD.showSuccess(withStatus: "连麦结束")
+        }
         role = .audience
-        toolBarView.micState = .request
+        roomUserView.updateNetworkDelay(true)
     }
 
     func userDidKickOut(_ userId: String, byOperator operatorId: String) {
@@ -119,12 +153,13 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
         switch key {
         case "name":
             room.roomName = value
-            roomInfoView.updateRoom(info: room)
+            roomUserView.setRoom(room)
         case "notice":
             room.notice = value
-            messageView.add(RCTextMessage(content: "房间公告已更新")!)
-        case "gift":
-            roomGiftView.update(value)
+        case "shields":
+            SceneRoomManager.shared.forbiddenWordlist = value.decode([])
+        case "FreeEnterSeat":
+            isSeatFreeEnter = value == "1"
         default: ()
         }
     }
@@ -134,21 +169,48 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
     }
     
     func network(_ delay: Int) {
-        roomInfoView.updateNetworking(rtt: delay)
+        roomUserView.updateNetworking(rtt: delay)
     }
     
-    func liveVideoUserDidClick(_ userId: String) {
-        if userId == Environment.currentUserId {
-            let controller = RCLVRCancelMicViewController(.connection, delegate: self)
-            present(controller, animated: true)
-        } else {
-            let dependency = VoiceRoomUserOperationDependency(room: room,
-                                                              presentUserId: userId)
-            navigator(.manageUser(dependency: dependency, delegate: self))
+    func roomMixTypeDidChange(_ mixType: RCLiveVideoMixType) {
+        layoutLiveVideoView(mixType)
+        if mixType == .gridTwo || mixType == .gridThree {
+            RCLiveVideoEngine.shared().currentSeats.forEach {
+                $0.enableTiny = false
+            }
         }
+        seatView.subviews.forEach { $0.removeFromSuperview() }
     }
     
-    func liveVideoUserDidLayout(_ frameInfo: [String : NSValue]) {
-        layoutLiveVideoView(frameInfo)
+    func seatDidLock(_ isLock: Bool, at index: Int) {
+        debugPrint("seat did lock \(index)")
+    }
+}
+
+extension LiveVideoRoomViewController: RCLiveVideoMixDataSource {
+    func liveVideoPreviewSize() -> CGSize {
+        return CGSize(width: 720, height: 720)
+    }
+    
+    func liveVideoFrames() -> [NSValue] {
+        return [
+            NSValue(cgRect: CGRect(x: 0.2500, y: 0.0000, width: 0.5000, height: 0.5000)),
+            NSValue(cgRect: CGRect(x: 0.0000, y: 0.5000, width: 0.5000, height: 0.5000)),
+            NSValue(cgRect: CGRect(x: 0.5000, y: 0.5000, width: 0.5000, height: 0.5000)),
+        ]
+    }
+}
+
+extension LiveVideoRoomViewController: RCLiveVideoMixDelegate {
+    func liveVideoDidLayout(_ seat: RCLiveVideoSeat, withFrame frame: CGRect) {
+        let tag = seat.index + 10000
+        seatView.viewWithTag(tag)?.removeFromSuperview()
+        if RCLiveVideoEngine.shared().currentMixType == .oneToOne {
+            if seat.userId.count == 0 { return }
+        }
+        let view = RCLiveVideoSeatItemView(room, seatInfo: seat)
+        seatView.addSubview(view)
+        view.frame = frame
+        view.tag = tag
     }
 }

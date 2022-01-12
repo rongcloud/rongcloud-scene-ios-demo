@@ -7,8 +7,10 @@
 
 import UIKit
 import SVProgressHUD
+import RCChatroomSceneKit
 
 final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
+  
     /// 视频流相关
     let gpuHandler = ChatGPUImageHandler()
     private(set) lazy var beautyManager: MHBeautyManager = {
@@ -17,26 +19,54 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         return instance
     }()
     
-    var room: VoiceRoom!
+    var room: VoiceRoom! {
+        didSet {
+            SceneRoomManager.shared.currentRoom = room
+            if (room != nil) {
+                DataSourceImpl.instance.roomId = room.roomId
+                DelegateImpl.instance.roomId = room.roomId
+            }
+        }
+    }
     
     var managers = [VoiceRoomUser]() {
         didSet {
             SceneRoomManager.shared.managerlist = managers.map { $0.userId }
-            messageView.reloadMessages()
+            messageView.tableView.reloadData()
         }
     }
+    
+    var giftInfo: [String: Int] = [:]
+    
+    var isSeatFreeEnter: Bool = false
+    
+    private lazy var gradientLayer: CAGradientLayer = {
+        let instance = CAGradientLayer()
+        instance.colors = [
+            UIColor(byteRed: 70, green: 42, blue: 79).cgColor,
+            UIColor(byteRed: 26, green: 29, blue: 61).cgColor
+        ]
+        instance.locations = [0, 0.89]
+        instance.startPoint = CGPoint(x: 0.25, y: 0.5)
+        instance.endPoint = CGPoint(x: 0.75, y: 0.5)
+        return instance
+    }()
     
     private(set) lazy var creationView = LiveVideoRoomCreationView(beautyManager)
     
     private(set) lazy var containerView = UIView()
-    private(set) lazy var likeView = UIView()
-    private(set) lazy var roomInfoView = SceneRoomInfoView(room)
+    private(set) lazy var seatView = UIView()
+    private(set) lazy var roomUserView = LiveVideoRoomUserView()
+    private(set) lazy var roomCountingView = LiveVideoRoomCountingView()
     private(set) lazy var roomNoticeView = SceneRoomNoticeView()
     private(set) lazy var roomGiftView = SceneRoomMarkView()
     private(set) lazy var roomMoreView = RCLiveVideoRoomMoreView()
-    private(set) lazy var messageView = RCVRMView()
-    private(set) lazy var toolBarView = SceneRoomToolBarView(room)
-    private(set) lazy var roomUserView = LiveVideoRoomUserView()
+    
+    private(set) lazy var chatroomView = RCChatroomSceneView()
+    private(set) lazy var micButton = RCChatroomSceneButton(.mic)
+    private(set) lazy var giftButton = RCChatroomSceneButton(.gift)
+    private(set) lazy var messageButton = RCChatroomSceneButton(.message)
+    private(set) lazy var settingButton = RCChatroomSceneButton(.setting)
     
     private(set) lazy var sticker = RCMHStickerViewController(beautyManager)
     private(set) lazy var retouch = RCMHRetouchViewController(beautyManager)
@@ -44,10 +74,14 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
     private(set) lazy var effect = RCMHEffectViewController(beautyManager)
     
     private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: room!.roomId)
+    private(set) lazy var videoPropsSetVc = VideoPropertiesSetViewController()
+    
+    private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
     
     init(_ room: VoiceRoom? = nil) {
         self.room = room
         super.init(nibName: nil, bundle: nil)
+        SceneRoomManager.shared.forbiddenWordlist = []
     }
     
     required init?(coder: NSCoder) {
@@ -57,9 +91,12 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
     override func viewDidLoad() {
         super.viewDidLoad()
         buildLayout()
-        if let room = room { restore(room) }
+        if let room = room { didCreate(room) }
         RCCall.shared().canIncomingCall = false
         UIApplication.shared.isIdleTimerDisabled = true
+        videoPropsSetVc.delegate = self
+        PlayerImpl.instance.type = .live
+        bubbleViewAddGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,9 +119,16 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = view.bounds
+    }
+    
     private func buildLayout() {
         view.backgroundColor = .black
+        view.layer.addSublayer(gradientLayer)
         
+        containerView.clipsToBounds = true
         view.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -94,6 +138,11 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         containerView.addSubview(preview)
         preview.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        containerView.addSubview(seatView)
+        seatView.snp.makeConstraints { make in
+            make.edges.equalTo(preview)
         }
         
         containerView.addSubview(creationView)
@@ -108,33 +157,34 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         /// 移除创建UI
         creationView.removeFromSuperview()
         
-        view.addSubview(likeView)
-        view.addSubview(roomInfoView)
+        view.addSubview(roomUserView)
+        view.addSubview(roomCountingView)
         view.addSubview(roomMoreView)
         view.addSubview(roomNoticeView)
         view.addSubview(roomGiftView)
-        view.addSubview(messageView)
-        view.addSubview(toolBarView)
+        view.addSubview(chatroomView.messageView)
+        view.addSubview(chatroomView.toolBar)
         
-        likeView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        roomUserView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(10)
         }
         
-        roomInfoView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+        roomCountingView.snp.makeConstraints { make in
+            make.centerY.equalTo(roomUserView)
+            make.right.equalTo(roomMoreView.snp.left).offset(-10)
         }
         
         roomMoreView.update(.broadcaster)
         roomMoreView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.centerY.equalTo(roomUserView)
             make.right.equalToSuperview().inset(12)
-            make.width.height.equalTo(44)
+            make.width.height.equalTo(36)
         }
         
         roomNoticeView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(12)
-            make.top.equalTo(roomInfoView.snp.bottom).offset(8)
+            make.top.equalTo(roomUserView.snp.bottom).offset(8)
         }
         
         roomGiftView.iconImageView.image = R.image.gift_value()
@@ -144,26 +194,41 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
             make.left.equalTo(roomNoticeView.snp.right).offset(6)
         }
         
-        messageView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.bottom.equalTo(toolBarView.snp.top)
-            make.width.lessThanOrEqualToSuperview().multipliedBy(278.0 / 375)
-            make.height.equalTo(320.resize)
-        }
-        
-        toolBarView.snp.makeConstraints { make in
+        chatroomView.toolBar.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(44)
         }
+        
+        chatroomView.messageView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview().offset(-140.resize)
+            make.bottom.equalTo(chatroomView.toolBar.snp.top)
+            make.height.equalTo(320.resize)
+        }
+        
+        guard let bubble = musicInfoBubbleView, let _ = self.room else {
+            return
+        }
+        view.addSubview(bubble)
+        bubble.snp.makeConstraints { make in
+            make.top.equalTo(roomUserView.snp.bottom).offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.size.equalTo(CGSize(width: 150, height: 50))
+        }
     }
     
-    func setupToolBarView() {
-        if room == nil { return }
-        toolBarView.add(users: self, action: #selector(liveVideoRequestDidClick))
-        toolBarView.add(gift: self, action: #selector(handleGiftButtonClick))
-        toolBarView.add(setting: self, action: #selector(handleSettingClick))
-        toolBarView.refreshUnreadMessageCount()
+    private func bubbleViewAddGesture() {
+        guard let bubble = musicInfoBubbleView else {
+            return
+        }
+        bubble.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action:#selector(presentMusicController))
+        bubble.addGestureRecognizer(tap)
+    }
+    
+    @objc func presentMusicController() {
+        RCMusicEngine.shareInstance().show(in: self, completion: nil)
     }
     
     deinit {
@@ -175,6 +240,7 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
 }
 
 extension LiveVideoRoomHostController {
+    dynamic func roomDidCreated() {}
     dynamic func handleReceivedMessage(_ message: RCMessage) {}
 }
 

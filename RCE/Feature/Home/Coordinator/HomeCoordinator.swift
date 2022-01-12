@@ -15,6 +15,7 @@ enum HomeRouter: Route {
     case audioCall
     case radioRoom
     case liveVideo
+    case promotionDetail
 }
 
 class HomeCoordinator: NavigationCoordinator<HomeRouter> {
@@ -42,6 +43,11 @@ class HomeCoordinator: NavigationCoordinator<HomeRouter> {
         case .liveVideo:
             let vc = RCRoomEntraceViewController()
             return .push(vc)
+        case .promotionDetail:
+            let vc = UINavigationController(rootViewController: PromotionDetailViewController())
+            vc.modalTransitionStyle = .coverVertical
+            vc.modalPresentationStyle = .overFullScreen
+            return .present(vc, animation: nil)
         }
     }
 }

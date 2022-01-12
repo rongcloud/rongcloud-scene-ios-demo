@@ -12,6 +12,6 @@ struct UploadfileResponse: Codable {
     let data: String
     
     func imageURL() -> String {
-        return Environment.current.url.absoluteString + "/file/show?" + "path=\(data)"
+        return Environment.current.url.absoluteString + "file/show?" + "path=\(data)"
     }
 }

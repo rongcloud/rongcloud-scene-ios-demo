@@ -20,8 +20,8 @@ extension LiveVideoRoomViewController {
         let config = RCRTCVideoStreamConfig()
         config.videoSizePreset = .preset480x480
         config.videoFps = .FPS15
-        config.minBitrate = 500
-        config.maxBitrate = 1000
+        config.minBitrate = 180
+        config.maxBitrate = 800
         RCRTCEngine.sharedInstance().defaultVideoStream.videoConfig = config
         
         /// 设置美颜

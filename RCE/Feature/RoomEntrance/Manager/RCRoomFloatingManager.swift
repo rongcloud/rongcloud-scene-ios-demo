@@ -5,7 +5,6 @@
 //  Created by shaoshuai on 2021/8/24.
 //
 
-import Foundation
 import UIKit
 
 class RCRoomFloatingManager {
@@ -38,17 +37,20 @@ class RCRoomFloatingManager {
     func show(_ controller: RCRoomContainerViewController, animated: Bool = true) {
         self.controller = controller
         if controller.currentRoom.roomType == 3 {
-            let width: CGFloat = 108
-            let height: CGFloat = width / 720 * 1280
+            let width: CGFloat = UIScreen.main.bounds.width * 0.3
+            let height: CGFloat = UIScreen.main.bounds.height * 0.3
             floatingView.frame = CGRect(x: UIScreen.main.bounds.width - 17 - width,
                                         y: UIScreen.main.bounds.height - 128 - height,
                                         width: width,
                                         height: height)
-            let videoView = RCLiveVideoEngine.shared().previewView()
+            guard let videoView = RCLiveVideoEngine.shared().previewView().superview else { return }
             floatingView.insertSubview(videoView, belowSubview: floatingView.controlView)
+            videoView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
             videoView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.center.equalToSuperview()
+                make.size.equalTo(UIScreen.main.bounds.size)
             }
+            videoView.backgroundColor = UIColor(byteRed: 3, green: 6, blue: 47)
             floatingView.addSubview(closeButton)
         } else {
             floatingView.frame = CGRect(x: UIScreen.main.bounds.width - 17 - 66,
@@ -62,15 +64,6 @@ class RCRoomFloatingManager {
     }
     
     func hide() {
-        if controller?.currentRoom.roomType == 3 {
-            if let liveController = controller?.controller as? LiveVideoRoomViewController {
-                let videoView = RCLiveVideoEngine.shared().previewView()
-                liveController.view.insertSubview(videoView, at: 0)
-                videoView.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
-            }
-        }
         floatingView.removeFromSuperview()
         controller = nil
     }
@@ -150,6 +143,11 @@ extension RCRoomFloatingManager: VoiceRoomFloatingViewDelegate {
             let nav = vc as? UINavigationController,
             let controller = controller
         else { return }
+        if controller.currentRoom.roomType == 3 {
+            if let liveController = controller.controller as? LiveVideoRoomViewController {
+                liveController.floatingBack()
+            }
+        }
         nav.pushViewController(controller, animated: true)
     }
 }

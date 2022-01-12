@@ -12,11 +12,11 @@ protocol LiveVideoRoomCreationDelegate {
 }
 
 class LiveVideoRoomCreationView: UIView {
-    private lazy var headerView = CreateLiveVideoHeader(self)
+    private lazy var headerView = LiveVideoCreationView(self)
     private lazy var startLiveButton: UIButton = {
         let instance = UIButton()
         instance.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        instance.setTitle("创建直播", for: .normal)
+        instance.setTitle("开始视频直播", for: .normal)
         instance.setTitleColor(.white, for: .normal)
         instance.setBackgroundImage(R.image.begin_live_video_button_bg(), for: .normal)
         instance.addTarget(self, action: #selector(start), for: .touchUpInside)
@@ -138,6 +138,10 @@ extension LiveVideoRoomCreationView: RCMHBeautyViewDelegate {
         switch action {
         case .switchCamera:
             RCRTCEngine.sharedInstance().defaultVideoStream.switchCamera()
+            let postion = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
+            let needMirror = postion == .captureDeviceFront
+            RCRTCEngine.sharedInstance().defaultVideoStream.isEncoderMirror = needMirror
+            RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror = needMirror
         case .sticker:
             controller.present(controller.sticker, animated: true)
         case .retouch:

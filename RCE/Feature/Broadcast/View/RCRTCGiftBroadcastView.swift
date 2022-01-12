@@ -104,11 +104,13 @@ class RCRTCGiftBroadcastView: UIView {
         let senderAttributeString = NSAttributedString(string: broadcast.userName, attributes: attributes)
         content.append(senderAttributeString)
         
-        let sendAttributeString = NSAttributedString(string: " 送给 ")
-        content.append(sendAttributeString)
-        
-        let receiverAttributeString = NSAttributedString(string: broadcast.targetName ?? "全麦用户", attributes: attributes)
-        content.append(receiverAttributeString)
+        if let targetName = broadcast.targetName, targetName.count > 0 {
+            content.append(NSAttributedString(string: " 送给 "))
+            let receiverAttributeString = NSAttributedString(string: targetName, attributes: attributes)
+            content.append(receiverAttributeString)
+        } else {
+            content.append(NSAttributedString(string: " 全麦打赏"))
+        }
         
         let giftAttributeString = NSAttributedString(string: " \(broadcast.giftName)x\(broadcast.giftCount)")
         content.append(giftAttributeString)

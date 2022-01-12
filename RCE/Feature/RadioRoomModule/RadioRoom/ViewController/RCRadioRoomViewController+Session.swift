@@ -58,9 +58,13 @@ extension RCRadioRoomViewController: RCRoomCycleProtocol {
     }
     
     func leaveRoom() {
+        clearMusicData()
         leaveRoom { [unowned self] result in
             navigationController?.safe_popToViewController(animated: true)
             RCRoomFloatingManager.shared.hide()
+            DataSourceImpl.instance.clear()
+            PlayerImpl.instance.clear()
+            RCCall.shared().canIncomingCall = true
         }
     }
     

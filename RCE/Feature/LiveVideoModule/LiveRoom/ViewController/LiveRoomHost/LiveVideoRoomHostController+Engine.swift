@@ -18,12 +18,14 @@ extension LiveVideoRoomHostController {
         let config = RCRTCVideoStreamConfig()
         config.videoSizePreset = .preset1280x720
         config.videoFps = .FPS15
-        config.minBitrate = 2000;
-        config.maxBitrate = 2500;
+        config.minBitrate = 1540
+        config.maxBitrate = 2200
         RCRTCEngine.sharedInstance().defaultVideoStream.videoConfig = config
         
         RCLiveVideoEngine.shared().prepare()
         RCLiveVideoEngine.shared().delegate = self
+        RCLiveVideoEngine.shared().mixDelegate = self
+        RCLiveVideoEngine.shared().mixDataSource = self
     }
     
     private func fetchManagerList() {
@@ -43,6 +45,8 @@ extension LiveVideoRoomHostController {
 extension LiveVideoRoomHostController: LiveVideoRoomCreationDelegate {
     func didCreate(_ room: VoiceRoom) {
         self.room = room
+        roomDidCreated()
+        
         self.rebuildLayout()
         self.setupMessageView()
         self.setupToolBarView()
@@ -50,32 +54,10 @@ extension LiveVideoRoomHostController: LiveVideoRoomCreationDelegate {
         
         let roomId = room.roomId
         /// 开启直播
+        SVProgressHUD.show()
         RCLiveVideoEngine.shared().begin(room.roomId) { code in
             if code == .success {
-                RCRTCEngine.sharedInstance().defaultVideoStream.startCapture()
-                
-                let seat = RCVoiceSeatInfo()
-                seat.userId = Environment.currentUserId
-                SceneRoomManager.shared.seatlist = [seat]
-                
-                networkProvider.request(.userUpdateCurrentRoom(roomId: roomId)) { _ in }
-            } else {
-                SVProgressHUD.showError(withStatus: "开始直播失败：\(code.rawValue)")
-            }
-        }
-    }
-    
-    func restore(_ room: VoiceRoom) {
-        self.room = room
-        self.rebuildLayout()
-        self.setupMessageView()
-        self.setupToolBarView()
-        self.fetchManagerList()
-        
-        let roomId = room.roomId
-        /// 开启直播
-        RCLiveVideoEngine.shared().begin(room.roomId) { code in
-            if code == .success {
+                SVProgressHUD.dismiss()
                 RCRTCEngine.sharedInstance().defaultVideoStream.startCapture()
                 networkProvider.request(.userUpdateCurrentRoom(roomId: roomId)) { _ in }
             } else {
@@ -87,7 +69,7 @@ extension LiveVideoRoomHostController: LiveVideoRoomCreationDelegate {
 
 extension LiveVideoRoomHostController: RCLiveVideoDelegate {
     func roomInfoDidSync() {
-        roomInfoView.updateRoom(info: room)
+        roomUserView.setRoom(room)
     }
     
     func userDidKickOut(_ userId: String, byOperator operatorId: String) {
@@ -106,26 +88,33 @@ extension LiveVideoRoomHostController: RCLiveVideoDelegate {
         return processedSampleBuffer
     }
     
-    func liveVideoDidUpdate(_ userIds: [String]) {
-        var liveUsers: [String] = userIds.filter { $0.count > 1 }
-        toolBarView.micState = liveUsers.count == 0 ? .request : .connecting
-        liveUsers.append(Environment.currentUserId)
-        SceneRoomManager.shared.seatlist = liveUsers.map { userId in
-            let seat = RCVoiceSeatInfo()
-            seat.userId = userId
-            return seat
+    func liveVideoUserDidUpdate(_ userIds: [String]) {
+        let liveUsers: [String] = userIds.filter { $0.count > 0 }
+        
+        switch RCLiveVideoEngine.shared().currentMixType {
+        case .oneToOne:
+            micButton.micState = liveUsers.count == 2 ? .connecting : .user
+            setupMessageLayout(.oneToOne)
+        default: micButton.micState = .user
         }
+        
+        SceneRoomManager.updateLiveSeatList()
         debugPrint("live video users: \(liveUsers)")
     }
     
     func liveVideoRequestDidChange() {
         RCLiveVideoEngine.shared().getRequests { [weak self] code, userIds in
-            self?.toolBarView.update(users: userIds.count)
+            self?.micButton.setBadgeCount(userIds.count)
         }
     }
     
     func liveVideoInvitationDidAccept(_ userId: String) {
-        toolBarView.micState = .connecting
+        switch RCLiveVideoEngine.shared().currentMixType {
+        case .oneToOne:
+            micButton.micState = .connecting
+        default:
+            micButton.micState = .user
+        }
     }
     
     func liveVideoInvitationDidReject(_ userId: String) {
@@ -133,17 +122,17 @@ extension LiveVideoRoomHostController: RCLiveVideoDelegate {
             guard let user = users.first else { return }
             SVProgressHUD.showInfo(withStatus: "\(user.userName)拒绝上麦")
         }
-        toolBarView.micState = .request
+        micButton.micState = .user
     }
     
-    func userDidEnter(_ userId: String) {
+    func userDidEnter(_ userId: String, withUserCount count: Int) {
         handleUserEnter(userId)
-        roomInfoView.updateRoomUserNumber()
+        roomCountingView.update(count)
     }
     
-    func userDidExit(_ userId: String) {
+    func userDidExit(_ userId: String, withUserCount count: Int) {
         handleUserExit(userId)
-        roomInfoView.updateRoomUserNumber()
+        roomCountingView.update(count)
     }
     
     func messageDidReceive(_ message: RCMessage) {
@@ -151,21 +140,79 @@ extension LiveVideoRoomHostController: RCLiveVideoDelegate {
     }
     
     func network(_ delay: Int) {
-        if room == nil { return }
-        roomInfoView.updateNetworking(rtt: delay)
-    }
-    
-    func liveVideoUserDidClick(_ userId: String) {
-        let dependency = VoiceRoomUserOperationDependency(room: room,
-                                                          presentUserId: userId)
-        navigator(.manageUser(dependency: dependency, delegate: self))
-    }
-    
-    func liveVideoUserDidLayout(_ frameInfo: [String : NSValue]) {
-        layoutLiveVideoView(frameInfo)
+        roomUserView.updateNetworking(rtt: delay)
     }
     
     func roomInfoDidUpdate(_ key: String, value: String) {
-        if key == "gift" { roomGiftView.update(value) }
+        switch key {
+        case "shields":
+            SceneRoomManager.shared.forbiddenWordlist = value.decode([])
+        case "FreeEnterSeat":
+            isSeatFreeEnter = value == "1"
+        case "RCRTCVideoResolution":
+            videoPropsSetVc.setupPreset(value)
+        case "RCRTCVideoFps":
+            videoPropsSetVc.setupFPS(value)
+        default: ()
+        }
+    }
+    
+    func roomMixTypeDidChange(_ mixType: RCLiveVideoMixType) {
+        layoutLiveVideoView(mixType)
+        if mixType == .gridTwo || mixType == .gridThree {
+            RCLiveVideoEngine.shared().currentSeats.forEach {
+                $0.enableTiny = false
+            }
+        }
+        seatView.subviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    func seatDidLock(_ isLock: Bool, at index: Int) {
+        debugPrint("seat did lock \(index)")
+    }
+}
+
+extension LiveVideoRoomHostController: RCLiveVideoMixDataSource {
+    func liveVideoPreviewSize() -> CGSize {
+        return CGSize(width: 720, height: 720)
+    }
+    
+    func liveVideoFrames() -> [NSValue] {
+        return [
+            NSValue(cgRect: CGRect(x: 0.2500, y: 0.0000, width: 0.5000, height: 0.5000)),
+            NSValue(cgRect: CGRect(x: 0.0000, y: 0.5000, width: 0.5000, height: 0.5000)),
+            NSValue(cgRect: CGRect(x: 0.5000, y: 0.5000, width: 0.5000, height: 0.5000)),
+        ]
+    }
+}
+
+extension LiveVideoRoomHostController: RCLiveVideoMixDelegate {
+    func liveVideoDidLayout(_ seat: RCLiveVideoSeat, withFrame frame: CGRect) {
+        guard let room = room else { return }
+        let tag = seat.index + 10000
+        seatView.viewWithTag(tag)?.removeFromSuperview()
+        if RCLiveVideoEngine.shared().currentMixType == .oneToOne {
+            if seat.userId.count == 0 { return }
+        }
+        let view = RCLiveVideoSeatItemView(room, seatInfo: seat)
+        seatView.addSubview(view)
+        view.frame = frame
+        view.tag = tag
+    }
+}
+
+extension VideoPropertiesSetViewController {
+    func setupPreset(_ value: String) {
+        let items: [String] = ["480X480", "640X480", "720X480", "1280X720"]
+        if let index = items.firstIndex(of: value) {
+            selectSectionIndexPath[0] = IndexPath(item: index, section: 0)
+        }
+    }
+    
+    func setupFPS(_ value: String) {
+        let items: [String] = ["10", "15", "24", "30"]
+        if let index = items.firstIndex(of: value) {
+            selectSectionIndexPath[1] = IndexPath(item: index, section: 1)
+        }
     }
 }

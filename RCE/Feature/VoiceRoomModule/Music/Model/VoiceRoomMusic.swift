@@ -6,14 +6,17 @@
 //
 
 import Foundation
+
 struct VoiceRoomMusic: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
     let author: String
     let roomId: String
     let type: Int
-    let url: String?
+    let url: String
     let size: String
+    let backgroundUrl: String?
+    let thirdMusicId: String?
     
     static func == (lhs: VoiceRoomMusic, rhs: VoiceRoomMusic) -> Bool {
         return lhs.url == rhs.url
@@ -27,6 +30,18 @@ struct VoiceRoomMusic: Codable, Identifiable, Equatable {
     
     func isFileExist() -> Bool {
         return FileManager.default.fileExists(atPath: fileURL().path)
+    }
+    
+    func rcMusicInfo() -> RCMusicInfo {
+        let info = MusicInfo()
+        info.musicName = name
+        info.fileUrl = url
+        info.musicId = String(id)
+        info.author = author
+        info.size = size
+        info.musicId = thirdMusicId
+        info.coverUrl = backgroundUrl
+        return info
     }
 }
 

@@ -384,7 +384,7 @@ class VoiceRoomUserOperationViewController: UIViewController {
                     dependency.presentUserRoleType == .audience
                 else { return [] }
                 switch scene {
-                case .audioRoom:
+                case .audioRoom, .liveVideo:
                     if dependency.isPresenterOnSeat() {
                         return [pickDownButton, kickoutButton]
                     } else {
@@ -393,7 +393,6 @@ class VoiceRoomUserOperationViewController: UIViewController {
                 case .videoCall: return []
                 case .audioCall: return []
                 case .radioRoom: return [kickoutButton]
-                case .liveVideo: return [kickoutButton]
                 }
             case .audience:
                 return []

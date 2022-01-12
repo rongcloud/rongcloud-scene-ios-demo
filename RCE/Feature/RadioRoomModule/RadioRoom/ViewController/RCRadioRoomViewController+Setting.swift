@@ -68,7 +68,7 @@ extension RCRadioRoomViewController: VoiceRoomSettingProtocol {
     }
     /// 音乐
     func musicDidClick() {
-        present(musicControlVC, animated: true, completion: nil)
+        RCMusicEngine.shareInstance().show(in: self, completion: nil)
     }
     /// 房间标题
     func modifyRoomTitleDidClick() {

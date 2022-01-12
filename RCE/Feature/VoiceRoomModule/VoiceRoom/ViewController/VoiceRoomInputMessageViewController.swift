@@ -262,7 +262,7 @@ extension VoiceRoomInputMessageViewController: EmojiViewDelegate {
     }
 }
 
-fileprivate extension String {
+extension String {
     var civilized: String {
         return SceneRoomManager.shared.forbiddenWordlist.reduce(self) { $0.replacingOccurrences(of: $1, with: String(repeating: "*", count: $1.count)) }
     }

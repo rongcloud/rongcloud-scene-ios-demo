@@ -94,6 +94,7 @@ extension RCRTCAudioPlayer {
                 try AVAudioSession.sharedInstance().setActive(true, options: [])
                 let player = try AVAudioPlayer(contentsOf: localURL)
                 player.delegate = self
+                player.volume = 1
                 let ret = player.play()
                 if ret == false { self.playDidError("播放失败") }
                 self.player = player

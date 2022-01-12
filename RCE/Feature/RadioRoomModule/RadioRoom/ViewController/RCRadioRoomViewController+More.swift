@@ -52,6 +52,7 @@ extension RCRadioRoomViewController: LeaveViewProtocol {
     
     /// 关闭房间
     func closeRoom() {
+        clearMusicData()
         RCCoreClient.shared()
             .sendMessage(.ConversationType_CHATROOM,
                          targetId: roomInfo.roomId,
@@ -114,6 +115,14 @@ extension RCRadioRoomViewController: LeaveViewProtocol {
     
     @objc private func backToRoomList() {
         leaveRoom()
+    }
+    
+    func clearMusicData() {
+        if (self.roomInfo.isOwner) {
+            DataSourceImpl.instance.clear()
+            PlayerImpl.instance.clear()
+            DelegateImpl.instance.clear()
+        }
     }
 }
 

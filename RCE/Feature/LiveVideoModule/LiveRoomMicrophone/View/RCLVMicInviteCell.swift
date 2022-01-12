@@ -15,8 +15,7 @@ protocol RCLVMicInviteDelegate {
 class RCLVMicInviteCell: UITableViewCell, Reusable {
     private lazy var avatarImageView: UIImageView = {
         let instance = UIImageView()
-        instance.contentMode = .scaleToFill
-        instance.image = nil
+        instance.contentMode = .scaleAspectFill
         instance.layer.cornerRadius = (48.resize)/2
         instance.clipsToBounds = true
         instance.image = R.image.default_avatar()
@@ -33,7 +32,6 @@ class RCLVMicInviteCell: UITableViewCell, Reusable {
         instance.backgroundColor = R.color.hexCDCDCD()?.withAlphaComponent(0.2)
         instance.titleLabel?.font = .systemFont(ofSize: 14.resize)
         instance.setTitle("邀请", for: .normal)
-        instance.setTitle("已邀请", for: .disabled)
         instance.layer.cornerRadius = 20.resize
         instance.addTarget(self, action: #selector(handleInviteButtonClick), for: .touchUpInside)
         return instance
@@ -87,12 +85,11 @@ class RCLVMicInviteCell: UITableViewCell, Reusable {
         }
     }
     
-    public func updateCell(_ user: VoiceRoomUser, isInvited: Bool) -> RCLVMicInviteCell {
+    public func updateCell(_ user: VoiceRoomUser) -> RCLVMicInviteCell {
         self.user = user
         nameLabel.text = user.userName
         let avatarURL = URL(string: user.portraitUrl)
         avatarImageView.kf.setImage(with: avatarURL, placeholder: R.image.default_avatar())
-        acceptButton.isEnabled = !isInvited
         return self
     }
     

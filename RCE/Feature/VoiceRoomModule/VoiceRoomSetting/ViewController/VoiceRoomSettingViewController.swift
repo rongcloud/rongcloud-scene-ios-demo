@@ -129,6 +129,10 @@ extension VoiceRoomSettingViewController: UICollectionViewDelegate {
             dismiss(animated: true) {
                 delegate?.musicDidClick()
             }
+        case .videoSetting:
+            dismiss(animated: true) {
+                delegate?.videoSetItemClick()
+            }
         case let .isFreeEnterSeat(isFree):
             dismiss(animated: true) {
                 delegate?.freeMicDidClick(isFree: !isFree)

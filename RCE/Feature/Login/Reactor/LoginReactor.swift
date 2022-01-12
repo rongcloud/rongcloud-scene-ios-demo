@@ -18,12 +18,14 @@ final class LoginReactor: Reactor {
     enum Action {
         case login
         case inputPhoneNumber(String)
+        case selectPhoneCode(String)
         case inputVerifyCode(String)
         case clickSendVerifyCode
     }
     
     enum Mutation {
         case setPhoneNumber(String)
+        case setPhoneCode(String)
         case setVerifyCode(String)
         case setError(ReactorError)
         case setSuccess(ReactorSuccess)
@@ -32,11 +34,13 @@ final class LoginReactor: Reactor {
         case setRequestTitle(String)
         case resetCountdown
         case saveCurrentUser(User)
+        case setSendCodeNetworkState(RCNetworkState)
         case setLoginNetworkState(RCNetworkState)
     }
     
     struct State {
         var phoneNumber: String = ""
+        var phoneCode: String = "+86"
         var verifyCode: String = ""
         var error: ReactorError?
         var success: ReactorSuccess?
@@ -44,6 +48,7 @@ final class LoginReactor: Reactor {
         var countdown = 60
         var requestTitle = "发送验证码"
         var currentUser: User?
+        var sendCodeNetworkState: RCNetworkState = .idle
         var loginNetworkState: RCNetworkState = .idle
     }
     
@@ -63,6 +68,8 @@ final class LoginReactor: Reactor {
             return .concat([begin, login, end])
         case let .inputPhoneNumber(number):
             return Observable<Mutation>.just(.setPhoneNumber(number))
+        case let .selectPhoneCode(phoneCode):
+            return Observable<Mutation>.just(.setPhoneCode(phoneCode))
         case let .inputVerifyCode(code):
             return Observable<Mutation>.just(.setVerifyCode(code))
         case .clickSendVerifyCode:
@@ -72,20 +79,10 @@ final class LoginReactor: Reactor {
             guard currentState.phoneNumber.count > 0 else {
                 return .just(.setError(ReactorError("请先输入手机号")))
             }
-            let codeSend = codeSendSuccess()
-            return networkProvider.rx
-                .request(.sendCode(mobile: currentState.phoneNumber))
-                .map(SendCodeResponse.self)
-                .asObservable()
-                .flatMap({ (response) -> Observable<Mutation> in
-                    if response.validate() {
-                        let success = Observable<Mutation>.just(.setSuccess(ReactorSuccess("发送验证码成功")))
-                        return .concat([success, codeSend])
-                    } else {
-                        return .just(.setError(ReactorError("发送验证码失败")))
-                    }
-                })
-                .catchAndReturn(networkError())
+            let begin = Observable<Mutation>.just(.setSendCodeNetworkState(.begin))
+            let sendCode = sendCode()
+            let end = Observable<Mutation>.just(.setSendCodeNetworkState(.idle))
+            return .concat([begin, sendCode, end])
         }
     }
     
@@ -94,6 +91,8 @@ final class LoginReactor: Reactor {
         switch mutation {
         case let .setPhoneNumber(number):
             state.phoneNumber = number
+        case let .setPhoneCode(phoneCode):
+            state.phoneCode = phoneCode
         case let .setVerifyCode(code):
             state.verifyCode = code
         case let .setError(error):
@@ -113,6 +112,8 @@ final class LoginReactor: Reactor {
             UserDefaults.standard.set(user: user)
             UserDefaults.standard.set(authorization: user.authorization)
             UserDefaults.standard.set(rongCloudToken: user.imToken)
+        case let .setSendCodeNetworkState(next):
+            state.sendCodeNetworkState = next
         case let .setLoginNetworkState(next):
             state.loginNetworkState = next
         }
@@ -137,12 +138,33 @@ extension LoginReactor {
         return .concat([setCountdownBegin, timer, setCountdownClose, setTitle, reset])
     }
     
+    private func sendCode() -> Observable<Mutation> {
+        let codeSend = codeSendSuccess()
+        return networkProvider.rx
+            .request(.sendCode(mobile: currentState.phoneNumber, region: currentState.phoneCode))
+            .map(SendCodeResponse.self)
+            .asObservable()
+            .flatMap({ (response) -> Observable<Mutation> in
+                if response.validate() {
+                    let networkSuccess = Observable<Mutation>.just(.setSendCodeNetworkState(.success))
+                    let reactorSuccess = Observable<Mutation>.just(.setSuccess(ReactorSuccess("发送验证码成功")))
+                    return .concat([networkSuccess, reactorSuccess, codeSend])
+                } else {
+                    let error = ReactorError(response.msg ?? "sendCode fail")
+                    let networkFailure = Observable<Mutation>.just(.setSendCodeNetworkState(.failure(error)))
+                    return .concat([networkFailure])
+                }
+            })
+            .catchAndReturn(networkError())
+    }
+   
     private func login() -> Observable<Mutation> {
         let api: RCNetworkAPI = .login(mobile: currentState.phoneNumber,
                                        code: currentState.verifyCode,
                                        userName: nil,
                                        portrait: nil,
-                                       deviceId: UIDevice.current.identifierForVendor!.uuidString)
+                                       deviceId: UIDevice.current.identifierForVendor!.uuidString,
+                                       region: currentState.phoneCode)
         return networkProvider.rx
             .request(api)
             .map(User.self, atKeyPath: "data", using: JSONDecoder(), failsOnEmptyData: true)
@@ -150,19 +172,35 @@ extension LoginReactor {
             .flatMapFirst({ user -> Observable<Result<User, ReactorError>> in
                 return Observable<Result<User, ReactorError>>
                     .create { observer -> Disposable in
-                        RCVoiceRoomEngine.sharedInstance().connect(withToken: user.imToken) {
-                            debugPrint("connect token success")
+                        /*
+                         connect(withToken: user.imToken) {
+                             debugPrint("connect token success")
+                             DispatchQueue.main.async {
+                                 observer.onNext(.success(user))
+                                 observer.onCompleted()
+                             }
+                         } error: { code, msg in
+                             debugPrint("connect token failed \(code) \(msg)")
+                             DispatchQueue.main.async {
+                                 observer.onNext(.failure(ReactorError(msg)))
+                                 observer.onCompleted()
+                             }
+                         }*/
+                        RCCoreClient.shared().connect(withToken: user.imToken) { dbErrorCode in
+                            debugPrint("db error code \(dbErrorCode)")
+                        } success: { userId in
                             DispatchQueue.main.async {
                                 observer.onNext(.success(user))
                                 observer.onCompleted()
                             }
-                        } error: { code, msg in
-                            debugPrint("connect token failed \(code) \(msg)")
+                        } error: { errorCode in
+                            debugPrint("connect token failed \(errorCode.rawValue)")
                             DispatchQueue.main.async {
-                                observer.onNext(.failure(ReactorError(msg)))
+                                observer.onNext(.failure(ReactorError("connect im failed")))
                                 observer.onCompleted()
                             }
                         }
+
                         
                         return Disposables.create()
                     }

@@ -32,9 +32,6 @@ extension LiveVideoRoomViewController {
                 guard let self = self else { return }
                 self.managers = wrapper.data ?? []
                 SceneRoomManager.shared.managerlist = self.managers.map { $0.userId }
-                if wrapper.code == 30001 {
-                    self.didCloseRoom()
-                }
             case let.failure(error):
                 print(error.localizedDescription)
             }
@@ -48,40 +45,19 @@ extension LiveVideoRoomViewController: VoiceRoomUserOperationProtocol {
     func kickoutRoom(userId: String) {
         RCLiveVideoEngine.shared().kickOutRoom(userId) { [weak self] _ in
             self?.handleKickOutRoom(userId, by: Environment.currentUserId)
-            self?.roomInfoView.updateRoomUserNumber()
+            self?.roomCountingView.updateRoomUserNumber()
         }
     }
     
     /// 抱下麦
     func kickUserOffSeat(seatIndex: UInt) {
         let userId = SceneRoomManager.shared.seatlist[Int(seatIndex)].userId!
-        RCLiveVideoEngine.shared().finishLiveVideo(userId) { code in
+        RCLiveVideoEngine.shared().kickUser(fromSeat:userId) { code in
             if code == .success {
-                SVProgressHUD.showSuccess(withStatus: "发送下麦通知成功")
+                SVProgressHUD.showSuccess(withStatus: "抱下麦成功")
             } else {
-                SVProgressHUD.showError(withStatus: "发送下麦通知失败")
+                SVProgressHUD.showError(withStatus: "抱下麦失败")
             }
-        }
-    }
-    
-    func didSetManager(userId: String, isManager: Bool) {
-        fetchManagerList()
-        let roomId = room.roomId
-        UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { user in
-            let event = RCChatroomAdmin()
-            event.userId = user.userId
-            event.userName = user.userName
-            event.isAdmin = isManager
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                guard let self = self else { return }
-                self.messageView.add(event)
-            } error: { errorCode, mId in }
-        }
-        VoiceRoomNotification.mangerlistNeedRefresh.send(content: "")
-        if isManager {
-            SVProgressHUD.showSuccess(withStatus: "已设为管理员")
-        } else {
-            SVProgressHUD.showSuccess(withStatus: "已撤回管理员")
         }
     }
     
@@ -104,8 +80,9 @@ extension LiveVideoRoomViewController: VoiceRoomUserOperationProtocol {
             }
             return
         }
+        SceneRoomManager.updateLiveSeatList()
         let dependency = VoiceRoomGiftDependency(room: room,
-                                                 seats: [],
+                                                 seats: SceneRoomManager.shared.seatlist,
                                                  userIds: [userId])
         navigator(.gift(dependency: dependency, delegate: self))
     }
@@ -123,7 +100,18 @@ extension LiveVideoRoomViewController: VoiceRoomUserOperationProtocol {
                 } error: { eCode, mId in
                     print("send message fail: \(mId), code: \(eCode.rawValue)")
                 }
-                self?.messageView.add(message)
+                self?.messageView.addMessage(message)
+            }
+        }
+        NotificationNameDidFollowUser.post()
+    }
+    
+    func didClickedInvite(userId: String) {
+        RCLiveVideoEngine.shared().inviteLiveVideo(userId, at: -1) { code in
+            if code == .success {
+                SVProgressHUD.showSuccess(withStatus: "已邀请上麦")
+            } else {
+                SVProgressHUD.showError(withStatus: "邀请上麦失败")
             }
         }
     }
@@ -134,15 +122,14 @@ extension LiveVideoRoomViewController: RCLiveVideoCancelDelegate {
         switch action {
         case .request:
             RCLiveVideoEngine.shared().cancelRequest { _ in }
-            toolBarView.micState = .request
+            micButton.micState = .request
         case .invite: ()
         case .connection:
             RCLiveVideoEngine.shared()
-                .finishLiveVideo(Environment.currentUserId, completion: { [weak self] _ in
-                    self?.layoutLiveVideoView([:])
-                    self?.liveVideoDidFinish()
+                .leaveLiveVideo({ [weak self] _ in
+                    self?.liveVideoDidFinish(.leave)
                 })
-            toolBarView.micState = .request
+            micButton.micState = .request
         }
     }
 }

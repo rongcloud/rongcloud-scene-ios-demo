@@ -47,9 +47,9 @@ class DialHistoryEmptyView: UIView {
         }
         
         if SceneRoomManager.scene == .audioCall {
-            tipLabel.text = "拨号给已注册用户，发起 RTC 语音通话"
+            tipLabel.text = "拨号给已注册用户，发起RTC语音通话"
         } else {
-            tipLabel.text = "拨号给已注册用户，发起 RTC 视频通话"
+            tipLabel.text = "拨号给已注册用户，发起RTC视频通话"
         }
     }
 }

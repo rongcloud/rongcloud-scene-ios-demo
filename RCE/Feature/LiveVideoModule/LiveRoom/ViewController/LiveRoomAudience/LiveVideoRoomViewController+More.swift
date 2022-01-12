@@ -13,8 +13,6 @@ extension LiveVideoRoomViewController {
         get { role }
         set {
             role = newValue
-            roomMoreView.update(role)
-            
             switch role {
             case .broadcaster:
                 navigationController?.interactivePopGestureRecognizer?.isEnabled = false
@@ -30,7 +28,6 @@ extension LiveVideoRoomViewController {
     @_dynamicReplacement(for: m_viewDidLoad)
     private func more_viewDidLoad() {
         m_viewDidLoad()
-        roomMoreView.update(role)
     }
 }
 
@@ -43,7 +40,9 @@ extension LiveVideoRoomViewController: LiveVideoRoomMoreDelegate {
         case .quit:
             closeRoomDidClick()
         case .minimize:
-            if room.isOwner { return }
+            if role == .broadcaster {
+                return SVProgressHUD.showInfo(withStatus: "连麦中禁止此操作")
+            }
             scaleRoomDidClick()
         }
     }
@@ -54,9 +53,8 @@ extension LiveVideoRoomViewController: LiveVideoRoomMoreDelegate {
         controller.addAction(cancelAction)
         let sureAction = UIAlertAction(title: "确认", style: .default) { _ in
             RCLiveVideoEngine.shared()
-                .finishLiveVideo(Environment.currentUserId, completion: { [weak self] _ in
-                    self?.layoutLiveVideoView([:])
-                    self?.liveVideoDidFinish()
+                .leaveLiveVideo({ [weak self] _ in
+                    self?.liveVideoDidFinish(.leave)
                 })
         }
         controller.addAction(sureAction)

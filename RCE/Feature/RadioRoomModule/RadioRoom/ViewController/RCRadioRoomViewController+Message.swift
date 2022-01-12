@@ -148,14 +148,24 @@ extension RCRadioRoomViewController: RCVRMViewDelegate {
 
 extension RCRadioRoomViewController: RCIMReceiveMessageDelegate {
     func onRCIMReceive(_ message: RCMessage!, left: Int32) {
-        guard let content = message.content else { return }
-        DispatchQueue.main.async { self.handleReceivedMessage(message) }
-        guard message.conversationType == .ConversationType_CHATROOM else { return }
-        guard message.targetId == roomInfo.roomId else { return }
-        messageView.add(content)
+        guard let _ = message.content else { return }
+        DispatchQueue.main.async {
+            self.handleReceivedMessage(message)
+            self.handleMessage(message)
+        }
     }
     
     func onRCIMCustomAlertSound(_ message: RCMessage!) -> Bool {
         return true
+    }
+    
+    private func handleMessage(_ message: RCMessage) {
+        switch message.conversationType {
+        case .ConversationType_CHATROOM:
+            messageView.add(message.content)
+        case .ConversationType_PRIVATE:
+            roomToolBarView.refreshUnreadMessageCount()
+        default: ()
+        }
     }
 }

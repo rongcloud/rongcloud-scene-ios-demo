@@ -5,6 +5,9 @@
 //  Created by shaoshuai on 2021/10/8.
 //
 
+import RCChatroomSceneKit
+import UIKit
+
 fileprivate final class RCLikeTapGesture: UITapGestureRecognizer, UIGestureRecognizerDelegate {
     private let descendantViews: [UIView]
     private var lastTapTime: TimeInterval = 0
@@ -41,10 +44,11 @@ extension LiveVideoRoomHostController {
         let likeGesture = RCLikeTapGesture(target: self,
                                            action: #selector(onLikeClicked(_:)),
                                            descendant: [])
-        likeView.addGestureRecognizer(likeGesture)
+        view.addGestureRecognizer(likeGesture)
     }
     
     @objc func onLikeClicked(_ gesture: UITapGestureRecognizer) {
+        guard let room = room else { return }
         let point = gesture.location(in: view)
         let like = RCChatroomLike()
         showTapIcon(point)
@@ -84,7 +88,7 @@ extension LiveVideoRoomHostController {
         let layer = VoiceRoomLikeIconLayer("like")
         view.layer.addSublayer(layer)
         
-        let tempFrame = view.convert(toolBarView.rightMostViewFrame, from: toolBarView)
+        let tempFrame = view.convert(settingButton.frame, from: settingButton.superview)
         let width = tempFrame.width
         let height = tempFrame.height
         let x = tempFrame.midX - width * 0.5

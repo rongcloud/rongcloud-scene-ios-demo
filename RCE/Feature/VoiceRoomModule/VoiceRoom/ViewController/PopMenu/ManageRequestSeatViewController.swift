@@ -8,7 +8,7 @@
 import UIKit
 
 protocol RequestSeatPopProtocol: AnyObject {
-    func cancelReqeustSeatDidClick()
+    func cancelRequestSeatDidClick()
 }
 
 class ManageRequestSeatViewController: UIViewController {
@@ -103,7 +103,7 @@ class ManageRequestSeatViewController: UIViewController {
     }
     
     @objc func handleCancelRequest() {
-        delegate?.cancelReqeustSeatDidClick()
+        delegate?.cancelRequestSeatDidClick()
         dismiss(animated: true, completion: nil)
     }
     

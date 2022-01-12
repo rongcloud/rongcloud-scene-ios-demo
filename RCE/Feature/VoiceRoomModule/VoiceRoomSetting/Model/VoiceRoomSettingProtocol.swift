@@ -17,6 +17,7 @@ protocol VoiceRoomSettingProtocol: AnyObject {
     func modifyRoomTitleDidClick()
     func modifyRoomBackgroundDidClick()
     func musicDidClick()
+    func videoSetItemClick()
     func forbiddenDidClick()
     func suspendDidClick()
     func noticeDidClick()
@@ -37,6 +38,7 @@ extension VoiceRoomSettingProtocol {
     func modifyRoomTitleDidClick() {}
     func modifyRoomBackgroundDidClick() {}
     func musicDidClick() {}
+    func videoSetItemClick() {}
     func forbiddenDidClick() {}
     func suspendDidClick() {}
     func noticeDidClick() {}

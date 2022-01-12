@@ -23,7 +23,10 @@ extension VoiceRoomViewController {
                 ownerView.updateOwner(seatInfo: seatInfo)
                 ownerView.updateGiftVales(giftValues: userGiftInfo)
             }
-            roomState.connectState = isSitting() ? .connecting : .request
+            /// 当麦位数量变化时，触发连麦用户下麦，需要更新状态
+            if roomState.connectState == .connecting {
+                roomState.connectState = isSitting() ? .connecting : .request
+            }
             if seatlist.contains(where: { $0.userId == Environment.currentUserId }) {
                 (self.parent as? RCRoomContainerViewController)?.disableSwitchRoom()
             } else if voiceRoomInfo.isOwner == false {
@@ -38,6 +41,7 @@ extension VoiceRoomViewController {
         set {
             managerlist = newValue
             SceneRoomManager.shared.managerlist = managerlist.map(\.userId)
+            messageView.reloadMessages()
             collectionView.reloadData()
         }
     }
@@ -104,7 +108,8 @@ extension VoiceRoomViewController {
         }
     }
     
-    func enterSeat(index: Int, _ isPicked: Bool = false) {
+    typealias EnterSeatCompletion = () -> Void
+    func enterSeat(index: Int, _ isPicked: Bool = false, completion: EnterSeatCompletion? = nil) {
         if roomState.isEnterSeatWaiting { return }
         roomState.isEnterSeatWaiting.toggle()
         roomState.isCloseSelfMic = false
@@ -117,10 +122,12 @@ extension VoiceRoomViewController {
                     }
                     self?.roomState.connectState = .connecting
                     (self?.parent as? RCRoomContainerViewController)?.disableSwitchRoom()
+                    completion?()
                 }
             } error: { [weak self] code, msg in
                 self?.roomState.isEnterSeatWaiting.toggle()
                 debugPrint("enter seat error \(msg)")
+                completion?()
             }
     }
     

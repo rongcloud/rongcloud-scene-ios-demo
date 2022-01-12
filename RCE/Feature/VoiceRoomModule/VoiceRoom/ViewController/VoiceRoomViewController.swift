@@ -64,6 +64,9 @@ class VoiceRoomViewController: UIViewController {
         }
     }()
     lazy var pkView = VoiceRoomPKView()
+    
+    private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
+    
     private let isCreate: Bool
     
     init(roomInfo: VoiceRoom, isCreate: Bool = false) {
@@ -73,6 +76,9 @@ class VoiceRoomViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
         RCVoiceRoomEngine.sharedInstance().setDelegate(self)
+        DataSourceImpl.instance.roomId = roomInfo.roomId
+        DelegateImpl.instance.roomId = roomInfo.roomId
+        PlayerImpl.instance.type = .voice
     }
     
     required init?(coder: NSCoder) {
@@ -91,7 +97,13 @@ class VoiceRoomViewController: UIViewController {
         buildLayout()
         setupModules()
         addObserver()
+        bubbleViewAddGesture()
         UserDefaults.standard.increaseFeedbackCountdown()
+        if (!voiceRoomInfo.isOwner) {
+            DataSourceImpl.instance.fetchRoomPlayingMusicInfo { info in
+                self.musicInfoBubbleView?.info = info;
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -164,10 +176,34 @@ class VoiceRoomViewController: UIViewController {
             make.top.equalTo(roomNoticeView.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(12)
         }
+        guard let bubble = musicInfoBubbleView else {
+            return
+        }
+        view.addSubview(bubble)
+        bubble.snp.makeConstraints { make in
+            make.top.equalTo(moreButton.snp.bottom).offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.size.equalTo(CGSize(width: 150, height: 50))
+        }
     }
     
     private func addObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(noti:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    private func bubbleViewAddGesture() {
+        guard let bubble = musicInfoBubbleView else {
+            return
+        }
+        bubble.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action:#selector(presentMusicController))
+        bubble.addGestureRecognizer(tap)
+    }
+    
+    @objc func presentMusicController() {
+        //观众不展示音乐列表
+        if (!self.voiceRoomInfo.isOwner) {return}
+        RCMusicEngine.shareInstance().show(in: self, completion: nil)
     }
     
     @objc private func handleNotification(noti: Notification) {
@@ -180,7 +216,15 @@ class VoiceRoomViewController: UIViewController {
     ///设置模块，在viewDidLoad中调用
     dynamic func setupModules() {}
     ///消息回调，在engine模块中触发
-    dynamic func handleReceivedMessage(_ message: RCMessage) {}
+    dynamic func handleReceivedMessage(_ message: RCMessage) {
+        if (message.content.isKind(of: RCCommandMessage.classForCoder())) {
+            handleCommandMessage(message)
+        }
+    }
+    
+    func handleCommandMessage(_ message: RCMessage) {
+        CommandMessageHandler.handleMessage(message, musicInfoBubbleView)
+    }
 }
 
 extension VoiceRoomViewController {
@@ -210,11 +254,14 @@ extension VoiceRoomViewController {
     }
     
     func leaveRoom() {
+        clearMusicData()
         SceneRoomManager.shared
             .leave { [weak self] result in
                 RCRoomFloatingManager.shared.hide()
                 RCCall.shared().canIncomingCall = true
                 self?.navigationController?.safe_popToViewController(animated: true)
+                DataSourceImpl.instance.clear()
+                PlayerImpl.instance.clear()
                 switch result {
                 case .success:
                     print("leave room success")
@@ -227,7 +274,7 @@ extension VoiceRoomViewController {
     /// 关闭房间
     func closeRoom() {
         SVProgressHUD.show()
-        VoiceRoomNotification.roomClosed.send(content: voiceRoomInfo.roomId)
+        clearMusicData()
         let api: RCNetworkAPI = .closeRoom(roomId: voiceRoomInfo.roomId)
         networkProvider.request(api) { result in
             RCCall.shared().canIncomingCall = true
@@ -244,6 +291,14 @@ extension VoiceRoomViewController {
                     SVProgressHUD.showSuccess(withStatus: "关闭房间失败")
                 }
             }
+        }
+    }
+    
+    func clearMusicData() {
+        if (self.voiceRoomInfo.isOwner) {
+            DataSourceImpl.instance.clear()
+            PlayerImpl.instance.clear()
+            DelegateImpl.instance.clear()
         }
     }
 }

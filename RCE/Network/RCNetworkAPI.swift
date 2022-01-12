@@ -23,8 +23,8 @@ enum Paging {
 }
 
 enum RCNetworkAPI {
-    case sendCode(mobile: String)
-    case login(mobile: String, code: String, userName: String?, portrait: String?, deviceId: String)
+    case sendCode(mobile: String, region: String)
+    case login(mobile: String, code: String, userName: String?, portrait: String?, deviceId: String, region: String)
     case createRoom(name: String, themePictureUrl: String, backgroundUrl: String, kv: [[String: String]], isPrivate: Int, password: String?, roomType: Int)
     case roomlist(type: Int = 1, page: Int, size: Int)
     case usersInfo(id: [String])
@@ -41,8 +41,10 @@ enum RCNetworkAPI {
     case giftList(roomId: String)
     case sendGift(roomId: String, giftId: String, toUid: String, num: Int)
     case musiclist(roomId: String, type: Int)
-    case addMusic(roomId: String, musicName: String, author: String, type: Int, url: String, size: Int)
+    case addMusic(roomId: String, musicName: String, author: String, type: Int, url: String, backgroundUrl: String, thirdMusicId: String, size: Int)
     case deleteMusic(roomId: String, musicId: Int)
+    case syncRoomPlayingMusicInfo(roomId: String, musicId: Int)
+    case fetchRoomPlayingMusicInfo(roomId: String)
     case moveMusic(roomId: String, fromId: Int, toId: Int)
     case roomState(roomId: String)
     case refreshToken(auth: String)
@@ -60,10 +62,12 @@ enum RCNetworkAPI {
     case resumeRoom(roomId: String)
     case roomInfo(roomId: String)
     case roomBroadcast(userId: String, objectName: String, content: String)
-    case pkInfo(roomId: String)
+    case pkDetail(roomId: String)
     case checkCurrentRoom
     case isPK(roomId: String)
     case checkCreatedRoom
+    case resign
+    case checkVersion(platform: String)
 }
 
 extension RCNetworkAPI: TargetType {
@@ -111,6 +115,10 @@ extension RCNetworkAPI: TargetType {
             return "mic/room/music/add"
         case .deleteMusic:
             return "mic/room/music/delete"
+        case .syncRoomPlayingMusicInfo:
+            return "mic/room/music/play"
+        case let .fetchRoomPlayingMusicInfo(roomId):
+            return "mic/room/music/play/\(roomId)"
         case .moveMusic:
             return "mic/room/music/move"
         case let .roomState(roomId):
@@ -145,14 +153,18 @@ extension RCNetworkAPI: TargetType {
             return "mic/room/\(roomId)"
         case .roomBroadcast:
             return "mic/room/message/broadcast"
-        case let .pkInfo(roomId):
-            return "/mic/room/pk/info/\(roomId)"
+        case let .pkDetail(roomId):
+            return "/mic/room/pk/detail/\(roomId)"
         case .checkCurrentRoom:
             return "user/check"
         case let .isPK(roomId):
             return "/mic/room/pk/\(roomId)/isPk"
         case .checkCreatedRoom:
             return "/mic/room/create/check"
+        case .resign:
+            return "/user/resign"
+        case .checkVersion:
+            return "/appversion/latest"
         }
     }
     
@@ -196,6 +208,10 @@ extension RCNetworkAPI: TargetType {
             return .post
         case .deleteMusic:
             return .post
+        case .syncRoomPlayingMusicInfo:
+            return .post
+        case .fetchRoomPlayingMusicInfo:
+            return .get
         case .moveMusic:
             return .post
         case .roomState:
@@ -230,7 +246,7 @@ extension RCNetworkAPI: TargetType {
             return .get
         case .roomBroadcast:
             return .post
-        case .pkInfo:
+        case .pkDetail:
             return .get
         case .checkCurrentRoom:
             return .get
@@ -238,6 +254,10 @@ extension RCNetworkAPI: TargetType {
             return .get
         case .checkCreatedRoom:
             return .put
+        case .resign:
+            return .post
+        case .checkVersion:
+            return .get
         }
     }
     
@@ -247,14 +267,16 @@ extension RCNetworkAPI: TargetType {
     
     var task: Task {
         switch self {
-        case let .sendCode(number):
-            return .requestParameters(parameters: ["mobile": number], encoding: JSONEncoding.default)
-        case let .login(mobile, code, userName, portrait, deviceId):
+        case let .sendCode(number,region):
+            return .requestParameters(parameters: ["mobile": number,
+                                                   "region": region], encoding: JSONEncoding.default)
+        case let .login(mobile, code, userName, portrait, deviceId, region):
             return .requestParameters(parameters: ["mobile": mobile,
                                                    "verifyCode":code,
                                                    "userName": userName,
                                                    "portrait": portrait,
-                                                   "deviceId": deviceId].compactMapValues { $0 }, encoding: JSONEncoding.default)
+                                                   "deviceId": deviceId,
+                                                   "region": region].compactMapValues { $0 }, encoding: JSONEncoding.default)
         case let .createRoom(name, themePictureUrl, backgroundUrl, kv, isPrivate, password, roomType):
             var params: [String: Any] = ["name": name, "themePictureUrl": themePictureUrl, "kv": kv, "isPrivate": isPrivate, "backgroundUrl": backgroundUrl, "roomType": roomType]
             if let password = password {
@@ -301,12 +323,18 @@ extension RCNetworkAPI: TargetType {
         case let .musiclist(roomId, type):
             return .requestParameters(parameters: ["roomId": roomId, "type": type],
                                       encoding: JSONEncoding.default)
-        case let .addMusic(roomId, musicName, author, type, url, size):
-            return .requestParameters(parameters: ["roomId": roomId, "type": type, "name": musicName, "author": author, "url": url, "size": size],
+        case let .addMusic(roomId, musicName, author, type, url, backgroundUrl, thirdMusicId, size):
+            return .requestParameters(parameters: ["roomId": roomId, "type": type, "name": musicName, "author": author, "url": url, "size": size, "backgroundUrl":backgroundUrl, "thirdMusicId":thirdMusicId],
                                       encoding: JSONEncoding.default)
         case let .deleteMusic(roomId, musicId):
             return .requestParameters(parameters: ["roomId": roomId, "id": musicId],
                                       encoding: JSONEncoding.default)
+        case let .syncRoomPlayingMusicInfo(roomId, musicId):
+            let parameters = musicId == 0 ? ["roomId": roomId] : ["roomId": roomId, "id": musicId];
+            return .requestParameters(parameters: parameters,
+                                      encoding: JSONEncoding.default)
+        case .fetchRoomPlayingMusicInfo:
+            return .requestPlain
         case let .moveMusic(roomId, fromId, toId):
             return .requestParameters(parameters: ["roomId": roomId, "fromId": fromId, "toId": toId],
                                       encoding: JSONEncoding.default)
@@ -352,7 +380,7 @@ extension RCNetworkAPI: TargetType {
         case let .roomBroadcast(userId, objectName, content):
             return .requestParameters(parameters: ["fromUserId": userId, "objectName": objectName, "content": content],
                                       encoding: JSONEncoding.default)
-        case .pkInfo:
+        case .pkDetail:
             return .requestPlain
         case .checkCurrentRoom:
             return.requestPlain
@@ -360,6 +388,10 @@ extension RCNetworkAPI: TargetType {
             return .requestPlain
         case .checkCreatedRoom:
             return .requestPlain
+        case .resign:
+            return .requestPlain
+        case let .checkVersion(platform):
+            return .requestParameters(parameters: ["platform": platform], encoding: URLEncoding.default)
         }
     }
     

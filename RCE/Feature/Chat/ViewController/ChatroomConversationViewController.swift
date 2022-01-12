@@ -25,11 +25,8 @@ final class ChatroomConversationViewController: RCConversationViewController {
     }
     
     private func refreshUserInfo() {
-        UserInfoDownloaded.shared.refreshUserInfo(userId: targetId) { [weak self] user in
-            let userInfo = RCUserInfo(userId: user.userId, name: user.userName, portrait: user.portraitUrl)
-            RCIM.shared().refreshUserInfoCache(userInfo, withUserId: user.userId)
+        UserInfoDownloaded.shared.fetchUserInfo(userId: targetId) { [weak self] user in
             self?.navigationItem.title = user.userName
-            self?.conversationMessageCollectionView.reloadData()
         }
     }
     
@@ -68,6 +65,10 @@ final class ChatroomConversationViewController: RCConversationViewController {
                 cell.bubbleBackgroundView.tintColor = UIColor.white
                 cell.bubbleBackgroundView.image = cell.bubbleBackgroundView.image?.withRenderingMode(.alwaysTemplate)
             }
+        }
+        
+        if let cell = cell as? RCMessageCell {
+            cell.portraitImageView.contentMode = .scaleAspectFill
         }
     }
     

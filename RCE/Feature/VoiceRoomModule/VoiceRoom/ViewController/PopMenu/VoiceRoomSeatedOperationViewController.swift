@@ -64,7 +64,7 @@ class VoiceRoomSeatedOperationViewController: UIViewController {
     
     init(seatIndex: UInt, isMute: Bool, delegate: VoiceRoomSeatedOperationProtocol?, isSeatMute: Bool) {
         self.seatIndex = seatIndex
-        self.isMute = isMute
+        self.isMute = isMute || RCVoiceRoomEngine.sharedInstance().isDisableAudioRecording()
         self.delegate = delegate
         self.isSeatMute = isSeatMute
         super.init(nibName: nil, bundle: nil)

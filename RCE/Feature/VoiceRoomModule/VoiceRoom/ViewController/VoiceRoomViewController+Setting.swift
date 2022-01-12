@@ -74,7 +74,7 @@ extension VoiceRoomViewController: VoiceRoomSettingProtocol {
     }
     /// 音乐
     func musicDidClick() {
-        present(musicControlVC, animated: true, completion: nil)
+        presentMusicController()
     }
     /// 自由上麦
     func freeMicDidClick(isFree: Bool) {

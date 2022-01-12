@@ -9,34 +9,33 @@ import SVProgressHUD
 
 extension LiveVideoRoomViewController {
     
+    var messageView: RCChatroomSceneMessageView {
+        return chatroomView.messageView
+    }
+    
     @_dynamicReplacement(for: managers)
     private var publicMsg_managers: [VoiceRoomUser] {
         get { managers }
         set {
             managers = newValue
-            messageView.reloadMessages()
+            messageView.tableView.reloadData()
         }
     }
     
     @_dynamicReplacement(for: m_viewWillAppear(_:))
     private func broadcast_viewWillAppear(_ animated: Bool) {
         m_viewWillAppear(animated)
-        toolBarView.refreshUnreadMessageCount()
+        refreshUnreadMessageCount()
     }
     
     @_dynamicReplacement(for: m_viewDidLoad)
     private func publicMsg_viewDidLoad() {
         m_viewDidLoad()
-        messageView.delegate = self
-        messageView.dataSource = self
-        messageView.update(cId: room.userId,
-                           rName: room.roomName,
-                           uId: Environment.currentUserId)
+        messageView.setEventDelegate(self)
         addConstMessages()
-        messageView.reloadMessages()
-        toolBarView.add(message: self, action: #selector(handleMessageButtonClick))
-        toolBarView.add(chat: self, action: #selector(handleInputButtonClick))
-        toolBarView.refreshUnreadMessageCount()
+        messageView.tableView.reloadData()
+        messageButton.addTarget(self, action: #selector(handleMessageButtonClick), for: .touchUpInside)
+        refreshUnreadMessageCount()
     }
     
     @_dynamicReplacement(for: handleReceivedMessage(_:))
@@ -45,9 +44,11 @@ extension LiveVideoRoomViewController {
         guard let content = message.content else { return }
         switch message.conversationType {
         case .ConversationType_CHATROOM:
-            messageView.add(content)
+            if let msg = content as? RCChatroomSceneMessageProtocol {
+                chatroomView.messageView.addMessage(msg)
+            }
         case .ConversationType_PRIVATE:
-            toolBarView.refreshUnreadMessageCount()
+            refreshUnreadMessageCount()
         default: ()
         }
     }
@@ -55,10 +56,10 @@ extension LiveVideoRoomViewController {
     private func addConstMessages() {
         let welcome = RCTextMessage(content: "欢迎来到\(room.roomName)")!
         welcome.extra = "welcome"
-        messageView.add(welcome)
+        chatroomView.messageView.addMessage(welcome)
         let statement = RCTextMessage(content: "感谢使用融云 RTC 视频直播，请遵守相关法规，不要传播低俗、暴力等不良信息。欢迎您把使用过程中的感受反馈与我们。")!
         statement.extra = "statement"
-        messageView.add(statement)
+        chatroomView.messageView.addMessage(statement)
     }
     
     @objc private func handleInputButtonClick() {
@@ -68,21 +69,21 @@ extension LiveVideoRoomViewController {
     @objc private func handleMessageButtonClick() {
         navigator(.messagelist)
     }
-}
-
-extension LiveVideoRoomViewController: RCVRMViewDataSource {
-    func voiceRoomViewManagerIds(_ view: RCVRMView) -> [String] {
-        return managers.map { $0.userId }
+    
+    func refreshUnreadMessageCount() {
+        let unreadCount = RCIMClient.shared()
+            .getUnreadCount([RCConversationType.ConversationType_PRIVATE.rawValue])
+        messageButton.setBadgeCount(Int(unreadCount))
     }
 }
 
-extension LiveVideoRoomViewController: RCVRMViewDelegate {
-    func voiceRoomView(_ view: RCVRMView, didClick userId: String) {
+extension LiveVideoRoomViewController: RCChatroomSceneEventProtocol {
+    func cell(_ cell: UITableViewCell, didClickEvent eventId: String) {
         let currentUserId = Environment.currentUserId
-        if userId == currentUserId { return }
-        let dependency = VoiceRoomUserOperationDependency(room: room,
-                                                          presentUserId: userId)
-        navigator(.manageUser(dependency: dependency, delegate: self))
+        if eventId == currentUserId { return }
+        let alertController = RCLVRSeatAlertUserViewController(eventId)
+        alertController.userDelegate = self
+        present(alertController, animated: false)
     }
 }
 
@@ -94,7 +95,7 @@ extension LiveVideoRoomViewController {
             event.userId = user.userId
             event.userName = user.userName
             RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                self?.messageView.add(event)
+                self?.messageView.addMessage(event)
             } error: { code, mId in }
         }
     }
@@ -114,16 +115,7 @@ extension LiveVideoRoomViewController {
             let event = RCChatroomEnter()
             event.userId = user.userId
             event.userName = user.userName
-            self?.messageView.add(event)
-        }
-    }
-    
-    func handleUserExit(_ userId: String) {
-        UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { [weak self] user in
-            let event = RCChatroomLeave()
-            event.userId = user.userId
-            event.userName = user.userName
-            self?.messageView.add(event)
+            self?.messageView.addMessage(event)
         }
     }
     
@@ -134,7 +126,7 @@ extension LiveVideoRoomViewController {
             event.userName = users[0].userName
             event.targetId = users[1].userId
             event.targetName = users[1].userName
-            self?.messageView.add(event)
+            self?.messageView.addMessage(event)
         }
     }
 }
@@ -145,6 +137,6 @@ extension LiveVideoRoomViewController: VoiceRoomInputMessageProtocol {
         event.userId = userId
         event.userName = userName
         event.content = content
-        messageView.add(event)
+        messageView.addMessage(event)
     }
 }

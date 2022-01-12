@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import RCLiveVideoLib
 
 extension LiveVideoRoomViewController {
     @_dynamicReplacement(for: m_viewDidLoad)
     private func roomInfo_viewDidLoad() {
         m_viewDidLoad()
-        roomInfoView.updateRoom(info: room)
+        roomUserView.setRoom(room)
     }
 }

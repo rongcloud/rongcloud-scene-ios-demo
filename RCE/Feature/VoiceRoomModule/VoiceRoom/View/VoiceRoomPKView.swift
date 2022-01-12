@@ -11,11 +11,8 @@ protocol VoiceRoomPKViewDelegate: AnyObject {
     func silenceButtonDidClick()
 }
 
-typealias PKCallback = ((PKState, PKResult) -> Void)
-
 private struct Constants {
-    static let pkDuration = 150
-    static let punishDuration = 150
+    static let countdown = 180
     static let leftColor = UIColor(hexString: "#E92B88")
     static let rightColor = UIColor(hexString: "#505DFF")
 }
@@ -107,11 +104,8 @@ class VoiceRoomPKView: UIView {
        // instance.semanticContentAttribute = .forceRightToLeft
         return instance
     }()
-    var pkState = PKState.initial
-    private var pkCountdownTimer: Timer?
-    private var punishCountdownTimer: Timer?
-    private var pkSeconds = 0
-    private var punishmentSeconds = 0
+    private var countDownTimer: Timer?
+    private var countdownSec = 0
     private var pkInfo: VoiceRoomPKInfo?
     private var score: (Int, Int) = (0, 0)
     private lazy var muteButton: UIButton = {
@@ -223,125 +217,58 @@ class VoiceRoomPKView: UIView {
         }
     }
     
-    func pkViewBegin(info: VoiceRoomPKInfo, currentRoomOwnerId: String, currentRoomId: String, finish: @escaping PKCallback) {
+    func beginPK(info: VoiceRoomPKInfo, timeDiff: Int, currentRoomOwnerId: String, currentRoomId: String) {
         updateUserInfo(info: info, currentRoomOwnerId: currentRoomOwnerId)
         if info.currentUserRole() != .audience {
             muteButton.isHidden = false
         } else {
             muteButton.isHidden = true
         }
-        var pkTime = Date().timeIntervalSince1970
-        let group = DispatchGroup()
-        [info.inviteeRoomId, info.inviterRoomId].forEach {
-            [weak self] id in
-            guard let self = self else {
-                return
-            }
-            group.enter()
-            self.getCurrentPKInfo(roomId: id) { model in
-                guard let giftModel = model else {
-                    group.leave()
-                    return
-                }
-                self.updateGiftValue(content: PKGiftContent(score: giftModel.score, roomId: id, userList: giftModel.userInfoList), currentRoomId: currentRoomId)
-                if let timestamp = giftModel.pkTime {
-                    pkTime = TimeInterval(timestamp/1000)
-                }
-                group.leave()
-            }
-        }
-        group.notify(queue: .main) {
-            let pasedTime = max(Int(Date().timeIntervalSince1970 - pkTime), 1)
-            switch pasedTime {
-            case 0..<Constants.pkDuration:
-                self.pkSeconds = Constants.pkDuration - pasedTime
-                self.punishmentSeconds = Constants.punishDuration
-                self.pkState = .pkOngoing
-            case Constants.pkDuration..<Constants.pkDuration + Constants.punishDuration:
-                self.pkSeconds = 0
-                self.punishmentSeconds = (Constants.pkDuration + Constants.punishDuration) - pasedTime
-                self.pkState = .punishOngoing
-            default:
-                self.pkSeconds = 0
-                self.punishmentSeconds = 0
-                self.pkState = .end
-            }
-            self.beginCountdown(remainSeconds: self.pkSeconds, finish: finish)
-        }
+        let passedTime = timeDiff
+        self.countdownSec = Constants.countdown - passedTime
+        self.startCountdown(remainSeconds: self.countdownSec, state: .pkOngoing)
     }
     
-    private func getCurrentPKInfo(roomId: String, completion: @escaping ((PKGiftModel?) -> Void)) {
-        networkProvider.request(RCNetworkAPI.pkInfo(roomId: roomId)) { result in
-            switch result {
-            case let .success(response):
-                let pkInfo = try? JSONDecoder().decode(PKGiftModel.self, from: response.data, keyPath: "data")
-                completion(pkInfo)
-            case let .failure(error):
-                debugPrint(error.localizedDescription)
-            }
+    func beginPunishment(passedSeconds: Int, info: VoiceRoomPKInfo? = nil, currentRoomId: String? = nil) {
+        if let info = info, let roomId = currentRoomId {
+            updateUserInfo(info: info, currentRoomOwnerId: roomId)
         }
+        setupPKResult()
+        startCountdown(remainSeconds: Constants.countdown - passedSeconds, state: .punishOngoing)
     }
     
-    private func beginCountdown(remainSeconds: Int, finish: @escaping PKCallback) {
+    private func startCountdown(remainSeconds: Int, state: PKCountdownState) {
         guard remainSeconds > 0 else {
-            self.setupPKResult()
-            self.pkState = .punishOngoing
             countdownLabel.isHidden = true
-            pkCountdownTimer?.invalidate()
-            beginPunishmentCountdown(remainSeconds: punishmentSeconds, finish: finish);
+            punishCountdownLabel.isHidden = true
+            countDownTimer?.invalidate()
             return
         }
-        pkState = .pkOngoing
-        pkSeconds = remainSeconds
-        pkCountdownTimer?.invalidate()
-        pkCountdownTimer = Timer(timeInterval: 1, repeats: true, block: { [weak self] timer in
+        countdownSec = remainSeconds
+        countDownTimer?.invalidate()
+        countdownLabel.isHidden = (state == .punishOngoing)
+        punishCountdownLabel.isHidden = (state == .pkOngoing)
+        countDownTimer = Timer(timeInterval: 1, repeats: true, block: { [weak self] timer in
             guard let self = self else { return }
-            guard self.pkSeconds > 0 else {
+            guard self.countdownSec > 0 else {
                 timer.invalidate()
-                self.pkState = .punishOngoing
-                self.countdownLabel.isHidden = true
-                self.setupPKResult()
-                self.beginPunishmentCountdown(remainSeconds: self.punishmentSeconds, finish: finish);
                 return
             }
-            self.pkSeconds -= 1
-            let min = self.pkSeconds/60
-            let sec = self.pkSeconds % 60
-            let text = String(format: "%02d:%02d", min, sec)
-            self.countdownLabel.text = text
-        })
-        RunLoop.current.add(pkCountdownTimer!, forMode: .common)
-        pkCountdownTimer?.fire()
-    }
-    
-    private func beginPunishmentCountdown(remainSeconds: Int, finish: @escaping PKCallback) {
-        guard remainSeconds > 0 else {
-            punishCountdownTimer?.invalidate()
-            pkInfo = nil
-            pkState = .end
-            finish(.end, self.pkResult())
-            return
-        }
-        pkState = .punishOngoing
-        punishCountdownLabel.isHidden = false
-        punishmentSeconds = remainSeconds
-        punishCountdownTimer?.invalidate()
-        punishCountdownTimer = Timer(timeInterval: 1, repeats: true, block: { [weak self] timer in
-            guard let self = self else { return }
-            guard self.punishmentSeconds > 0 else {
-                timer.invalidate()
-                self.pkState = .end
-                finish(.end, self.pkResult())
-                return
+            self.countdownSec -= 1
+            let min = self.countdownSec/60
+            let sec = self.countdownSec % 60
+            switch state {
+            case .pkOngoing:
+                let text = String(format: "%02d:%02d", min, sec)
+                self.countdownLabel.text = text
+            case .punishOngoing:
+                let text = String(format: "%02d:%02d", min, sec)
+                self.punishCountdownLabel.text = text
             }
-            self.punishmentSeconds -= 1
-            let min = self.punishmentSeconds/60
-            let sec = self.punishmentSeconds % 60
-            let text = String(format: "%02d:%02d", min, sec)
-            self.punishCountdownLabel.text = "惩罚时间 " + text
+            
         })
-        RunLoop.current.add(punishCountdownTimer!, forMode: .common)
-        punishCountdownTimer?.fire()
+        RunLoop.current.add(countDownTimer!, forMode: .common)
+        countDownTimer?.fire()
     }
     
     private func pkResult() -> PKResult {
@@ -374,51 +301,49 @@ class VoiceRoomPKView: UIView {
         }
     }
     
-    func updateGiftValue(content: PKGiftContent, currentRoomId: String) {
-        log.debug(content)
-        guard let _ = self.pkInfo, pkState == .pkOngoing || pkState == .initial else {
-            return
-        }
-        let isLeft = (content.roomId == currentRoomId)
-        if isLeft {
-            score.0 = content.score ?? 0
-        } else {
-            score.1 = content.score ?? 0
-        }
-        if score.0 + score.1 > 0 {
-            let leftScale = CGFloat(score.0)/CGFloat(score.0 + score.1)
-            leftProgressView.snp.remakeConstraints { make in
-                make.left.top.bottom.equalToSuperview()
-                make.width.equalToSuperview().multipliedBy(leftScale)
+    func updateGiftValue(content: PKGiftModel, currentRoomId: String) {
+        for room in content.roomScores {
+            let isLeft = (room.roomId == currentRoomId)
+            if isLeft {
+                score.0 = room.score
+            } else {
+                score.1 = room.score
             }
-            rightProgressView.snp.remakeConstraints { make in
-                make.right.top.bottom.equalToSuperview()
-                make.width.equalToSuperview().multipliedBy(1 - leftScale)
-            }
-        }
-        let label = isLeft ? leftScoreLabel : rightScoreLabel
-        let stackView = isLeft ? leftStackView : rightStackView
-        let postition = isLeft ? "我方 " : "对方 "
-        label.text = postition + "\(content.score ?? 0)"
-        if content.userList.count > 0 {
-            for i in (0..<stackView.arrangedSubviews.count) {
-                let arrangedViews = isLeft ? stackView.arrangedSubviews.reversed() : stackView.arrangedSubviews
-                guard let giftView = arrangedViews[i] as? VoiceRoomPKGiftUserView else {
-                    return
+            if score.0 + score.1 > 0 {
+                let leftScale = CGFloat(score.0)/CGFloat(score.0 + score.1)
+                leftProgressView.snp.remakeConstraints { make in
+                    make.left.top.bottom.equalToSuperview()
+                    make.width.equalToSuperview().multipliedBy(leftScale)
                 }
-                if i < content.userList.count {
-                    giftView.updateColor(Constants.leftColor)
-                    giftView.updateUser(user: content.userList[i], rank: i + 1, isLeft: isLeft)
-                } else {
-                    giftView.updateColor(.clear)
-                    giftView.updateUser(user: nil, rank: i + 1, isLeft: isLeft)
+                rightProgressView.snp.remakeConstraints { make in
+                    make.right.top.bottom.equalToSuperview()
+                    make.width.equalToSuperview().multipliedBy(1 - leftScale)
                 }
-//                stackView.addArrangedSubview(instance)
+            }
+            let label = isLeft ? leftScoreLabel : rightScoreLabel
+            let stackView = isLeft ? leftStackView : rightStackView
+            let postition = isLeft ? "我方 " : "对方 "
+            label.text = postition + "\(room.score)"
+            if room.userInfoList.count > 0 {
+                for i in (0..<stackView.arrangedSubviews.count) {
+                    let arrangedViews = isLeft ? stackView.arrangedSubviews.reversed() : stackView.arrangedSubviews
+                    guard let giftView = arrangedViews[i] as? VoiceRoomPKGiftUserView else {
+                        return
+                    }
+                    if i < room.userInfoList.count {
+                        giftView.updateColor(Constants.leftColor)
+                        giftView.updateUser(user: room.userInfoList[i], rank: i + 1, isLeft: isLeft)
+                    } else {
+                        giftView.updateColor(.clear)
+                        giftView.updateUser(user: nil, rank: i + 1, isLeft: isLeft)
+                    }
+                }
+            }
+            UIView.animate(withDuration: 0.3) {
+                self.layoutIfNeeded()
             }
         }
-        UIView.animate(withDuration: 0.3) {
-            self.layoutIfNeeded()
-        }
+        
     }
     
     private func setupPKResult() {
@@ -454,11 +379,8 @@ class VoiceRoomPKView: UIView {
     func reset() {
         resetGiftViews()
         pkInfo = nil
-        pkState = .initial
-        pkCountdownTimer?.invalidate()
-        punishCountdownTimer?.invalidate()
-        pkSeconds = 0
-        punishmentSeconds = 0
+        countdownSec = 0
+        countDownTimer = nil
         countdownLabel.isHidden = false
         punishCountdownLabel.isHidden = true
         score = (0, 0)

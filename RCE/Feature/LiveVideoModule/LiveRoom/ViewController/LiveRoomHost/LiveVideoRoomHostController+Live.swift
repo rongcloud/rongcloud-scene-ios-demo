@@ -8,43 +8,60 @@
 import UIKit
 
 extension LiveVideoRoomHostController {
+    func layoutLiveVideoView(_ mixType: RCLiveVideoMixType) {
+        setupPreviewLayout(mixType)
+        setupMessageLayout(mixType)
+    }
     
-    func layoutLiveVideoView(_ frameInfo: [String: NSValue]) {
-        if let item = frameInfo.first {
-            layoutLiveVideoUserJoin(item.key, frame: item.value.cgRectValue)
-        } else {
-            layoutLiveVideoUserLeave()
+    private func setupPreviewLayout(_ mixType: RCLiveVideoMixType) {
+        let preview = RCLiveVideoEngine.shared().previewView()
+        switch mixType {
+        case .oneToOne:
+            preview.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        case .oneToSix:
+            preview.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(98)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-60)
+            }
+        default:
+            preview.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(98)
+                make.height.equalTo(preview.snp.width)
+            }
         }
     }
     
-    private func layoutLiveVideoUserJoin(_ userId: String, frame: CGRect) {
-        if frame == .zero { return }
-        let offset = view.bounds.width - frame.origin.x + 8
-        messageView.snp.remakeConstraints { make in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview().offset(-offset)
-            make.bottom.equalTo(toolBarView.snp.top)
-            make.height.equalTo(320.resize)
+    func setupMessageLayout(_ mixType: RCLiveVideoMixType) {
+        let preview = RCLiveVideoEngine.shared().previewView()
+        switch mixType {
+        case .oneToOne:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-140.resize)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.height.equalTo(320.resize)
+            }
+        case .oneToSix:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-120.resize)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.height.equalTo(320.resize)
+            }
+        default:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-100)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.top.equalTo(preview.snp.bottom).offset(8)
+            }
         }
-        messageView.reloadMessages()
-        
-        roomUserView.update(userId)
-        roomUserView.frame = frame
-        view.addSubview(roomUserView)
-    }
-    
-    private func layoutLiveVideoUserLeave() {
-        messageView.snp.remakeConstraints { make in
-            make.left.equalToSuperview()
-            make.bottom.equalTo(toolBarView.snp.top)
-            make.width.equalToSuperview().multipliedBy(278.0 / 375)
-            make.height.equalTo(320.resize)
+        DispatchQueue.main.async {
+            self.chatroomView.messageView.tableView.reloadData()
         }
-        messageView.reloadMessages()
-        
-        roomUserView.update(nil)
-        roomUserView.removeFromSuperview()
-        
-        view.layoutIfNeeded()
     }
 }

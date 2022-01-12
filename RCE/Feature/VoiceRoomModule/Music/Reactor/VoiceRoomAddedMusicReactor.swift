@@ -108,7 +108,7 @@ final class VoiceRoomAddedMusicReactor: Reactor {
                 }
                 .catchAndReturn(.setError(ReactorError("删除音乐失败，请重试")))
             if let currentPlayMusic = currentState.playingMusic, currentPlayMusic.id == musicId {
-                RCRTCAudioMixer.sharedInstance().stop()
+                player().stopMixing(with: nil)
                 return network.concat(stopStatus)
             } else {
                 return network
@@ -128,13 +128,16 @@ final class VoiceRoomAddedMusicReactor: Reactor {
                         guard SceneRoomManager.shared.isSitting() else {
                             return Observable<Mutation>.just(.setUserNotOnSeatWarning(true)).concat(Observable<Mutation>.just(.setUserNotOnSeatWarning(false)))
                         }
-                        let isPlaying = RCRTCAudioMixer.sharedInstance().startMixing(with: nextMusic.fileURL(), playback: true, mixerMode: .mixing, loopCount: 1)
+                        
+                        let info = nextMusic.rcMusicInfo();
+                        let isPlaying = self.player().startMixing(with: info);
                         if isPlaying {
                             return stop.concat(Observable<Mutation>.just(.setPlayStatus(.playing(nextMusic))))
                         } else {
                             return stop.concat(Observable<Mutation>.just(.setError(ReactorError("音乐文件无法播放"))))
                         }
                     }
+
                 }
             }
             return stop
@@ -194,6 +197,14 @@ final class VoiceRoomAddedMusicReactor: Reactor {
         }
         return state
     }
+    
+    private func player() -> RCMusicPlayer {
+        let player = RCMusicEngine.shareInstance().player
+        if (player == nil) {
+            assert(false, "player 没有初始化，需要设置RCMusicEngine.player")
+        }
+        return player!
+    }
 }
 
 extension VoiceRoomAddedMusicReactor {
@@ -202,11 +213,12 @@ extension VoiceRoomAddedMusicReactor {
         let download = MusicDownloader.shared.downloadMusic(music).flatMap {
             isSuccess -> Observable<Mutation> in
             if isSuccess {
-                RCRTCAudioMixer.sharedInstance().stop()
+                self.player().stopMixing(with: nil)
                 guard SceneRoomManager.shared.isSitting() else {
                     return Observable<Mutation>.just(.setUserNotOnSeatWarning(true)).concat(Observable<Mutation>.just(.setUserNotOnSeatWarning(false)))
                 }
-                let isPlaying = RCRTCAudioMixer.sharedInstance().startMixing(with: music.fileURL(), playback: true, mixerMode: .mixing, loopCount: 1)
+                let info = music.rcMusicInfo()
+                let isPlaying = self.player().startMixing(with: info)
                 if isPlaying {
                     let setPlaying = Observable<Mutation>.just(.setPlayStatus(MusicPlayStatus.playing(music)))
                     return setStopMusicStatus.concat(setPlaying).concat(setPlaying)
@@ -219,6 +231,7 @@ extension VoiceRoomAddedMusicReactor {
         }
         return download
     }
+    
     private func stick(_ music: VoiceRoomMusic) -> Observable<Mutation> {
         var items = currentState.addedItems
         ///如果没有播放，将音乐移到顶部

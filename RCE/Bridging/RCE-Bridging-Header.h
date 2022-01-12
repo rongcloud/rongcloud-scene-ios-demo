@@ -22,8 +22,8 @@
 #import <UMCommon/MobClick.h>
 
 #import "UIViewController+Swizzled.h"
+#import <RCVoiceRoomLib/RCVoiceRoomLib.h>
 #import "NSString+LogOutput.h"
-#import "HFOpenApiManager.h"
 
 #import "MHMeiyanMenusView.h"
 #import "MHStickersView.h"
@@ -36,5 +36,21 @@
 #import "ChatGPUImageHandler.h"
 #import "RCRefreshStateHeader.h"
 
-#import <RCVoiceRoomLib/RCVoiceRoomLib.h>
 #import <RCLiveVideoLib/RCLiveVideoLib.h>
+#import <RCChatroomSceneKit/RCChatroomSceneKit.h>
+
+#import <RCMusicControlKit/RCMusicEngine.h>
+#import <RCMusicControlKit/RCMusicPlayer.h>
+#import <RCMusicControlKit/RCMusicEngineDelegate.h>
+#import <RCMusicControlKit/RCMusicEngineDataSource.h>
+#import <RCMusicControlKit/RCMusicCategoryInfo.h>
+#import <RCMusicControlKit/RCMusicEffectInfo.h>
+#import <RCMusicControlKit/RCMusicSheetResponse.h>
+#import <RCMusicControlKit/RCMusicResponse.h>
+#import <RCMusicControlKit/RCMusicDataManager.h>
+#import <RCMusicControlKit/RCMusicChannelResponse.h>
+#import <RCMusicControlKit/RCMusicDetail.h>
+#import <RCMusicControlKit/RCMusicDataPath.h>
+#import <RCMusicControlKit/RCMusicDownloader.h>
+#import <CommonCrypto/CommonCrypto.h>
+#import <YYModel/YYModel.h>

@@ -17,7 +17,7 @@ final class MusicDownloader {
             completion?(true)
             return
         }
-        guard let urlString = music.url, let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
+      guard let url = URL(string: music.url.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
             completion?(false)
             fatalError("music url is nil")
         }
@@ -51,6 +51,35 @@ final class MusicDownloader {
                 }
             }
             return Disposables.create()
+        }
+    }
+    
+    
+    func hifiveDownload(music: MusicInfo, completion: @escaping (Bool) -> Void) {
+        
+        guard let filePath = music.fullPath(), !FileManager.default.fileExists(atPath: filePath)  else {
+            completion(true)
+            return
+        }
+        guard let fileUrl = music.fileUrl, let url = URL(string: fileUrl.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
+            completion(false)
+            fatalError("music url is nil")
+        }
+        let destination: DownloadRequest.Destination = { _, _ in
+            
+            let fileURL = URL(fileURLWithPath: filePath)
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        AF.download(url, to: destination).downloadProgress { progress in
+            SVProgressHUD.showProgress(Float(progress.fractionCompleted))
+        }.response { response in
+            debugPrint(response)
+            if response.error == nil{
+                SVProgressHUD.showSuccess(withStatus: "音乐下载成功")
+                completion(true)
+            } else {
+                completion(false)
+            }
         }
     }
 }

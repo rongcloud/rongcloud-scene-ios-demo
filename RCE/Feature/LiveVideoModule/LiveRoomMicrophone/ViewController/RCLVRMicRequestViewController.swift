@@ -90,9 +90,15 @@ extension RCLVRMicRequestViewController: RCLVMicRequestDelegate {
     func acceptMicRequest(_ user: VoiceRoomUser) {
         RCLiveVideoEngine.shared()
             .acceptRequest(user.userId) { [weak self] code in
-                if code == .success {
-                    self?.didAcceptMicRequest(user)
-                } else {
+                switch code {
+                case .success: self?.didAcceptMicRequest(user)
+                case .seatIsFull, .seatIsLock:
+                    SVProgressHUD.showError(withStatus: "没有空麦位了")
+                    self?.dismiss(animated: true)
+                case .seatUserExist:
+                    SVProgressHUD.showError(withStatus: "连麦已占用")
+                    self?.dismiss(animated: true)
+                default:
                     SVProgressHUD.showError(withStatus: "无法与对方进行视频连麦")
                     self?.dismiss(animated: true)
                 }

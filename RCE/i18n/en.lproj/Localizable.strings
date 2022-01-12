@@ -10,7 +10,6 @@
 "input_verify_code_placeholder" = "Please input verify code";
 "get_verify_code" = "Get verify code";
 "resend_verify_code" = "Resend";
-"CFBundleDisplayName" = "RC RTC";
 "Audio_Chat_Room" = "Audio Chat Room";
 "Radio" = "Radio";
 "Audio_Call" = "Audio Call";

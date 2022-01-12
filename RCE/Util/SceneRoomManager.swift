@@ -31,7 +31,8 @@ class SceneRoomManager {
     
     /// 当前场景类型，进入room时，用room.roomType
     static var scene = HomeItem.audioRoom
-    
+    /// 当前所在房间
+    var currentRoom: VoiceRoom?
     /// 座位信息：支持语聊房
     var seatlist = [RCVoiceSeatInfo]()
     /// 管理员
@@ -55,6 +56,18 @@ class SceneRoomManager {
             switch result {
             case .success(_): completion?(true)
             case .failure(_): completion?(false)
+            }
+        }
+    }
+    
+    func getCurrentPKInfo(roomId: String, completion: @escaping ((PKStatusModel?) -> Void)) {
+        networkProvider.request(RCNetworkAPI.pkDetail(roomId: roomId)) { result in
+            switch result {
+            case let .success(response):
+                let pkInfo = try? JSONDecoder().decode(PKStatusModel.self, from: response.data, keyPath: "data")
+                completion(pkInfo)
+            case let .failure(error):
+                debugPrint(error.localizedDescription)
             }
         }
     }

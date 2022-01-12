@@ -17,6 +17,31 @@ final class LoginViewController: UIViewController, View {
         instance.image = R.image.login_logo()
         return instance
     }()
+    
+    private lazy var countryCodeLabel: UILabel = {
+        let instance = UILabel()
+        instance.font = .systemFont(ofSize: 14)
+        instance.textAlignment = .right
+        instance.textColor = UIColor(hexString: "#9B9B9B")
+        instance.text = "+86"
+        instance.sizeToFit()
+        return instance
+    }()
+    
+    private lazy var countrySelectBtn: UIButton = {
+        let instance = UIButton()
+        instance.backgroundColor = .white
+        instance.setImage(R.image.country_select_indicator(), for: .normal)
+        instance.addTarget(self, action: #selector(selectCountry), for: .touchUpInside)
+        return instance
+    }()
+    
+    private lazy var inputComponent: UIStackView = {
+        let instance = UIStackView()
+        instance.distribution = .fillProportionally
+        return instance
+    }()
+    
     private lazy var container1: UIView = {
         let instance = UIView()
         instance.backgroundColor = .clear
@@ -25,6 +50,7 @@ final class LoginViewController: UIViewController, View {
         instance.layer.cornerRadius = 4
         return instance
     }()
+    
     private lazy var phoneTextField: UITextField = {
         let instance = UITextField(frame: .zero)
         instance.keyboardType = .numberPad
@@ -115,22 +141,48 @@ final class LoginViewController: UIViewController, View {
         let version = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "1.1.0"
         let text1 = "新登录用户即注册开通融云开发者账号\n且表示同意"
         let text2 = "《注册条款》"
-        let text3 = "\n融云 RTC \(version)"
+        let text3 = "和"
+        let text4 = "《隐私政策》"
+        let text5 = "\n融云 RTC \(version)"
         let attributedText1 = NSAttributedString(string: text1, attributes: [.foregroundColor: UIColor(hexString: "#5C6970"), .paragraphStyle : paragraphStyle])
         let attributedText2 = NSAttributedString(string: text2, attributes: [.foregroundColor: UIColor(hexString: "#0099FF"), .paragraphStyle : paragraphStyle])
         let attributedText3 = NSAttributedString(string: text3, attributes: [.foregroundColor: UIColor(hexString: "#5C6970"), .paragraphStyle : paragraphStyle])
+        let attributedText4 = NSAttributedString(string: text4, attributes: [.foregroundColor: UIColor(hexString: "#0099FF"), .paragraphStyle : paragraphStyle])
+        let attributedText5 = NSAttributedString(string: text5, attributes: [.foregroundColor: UIColor(hexString: "#5C6970"), .paragraphStyle : paragraphStyle])
         let value = NSMutableAttributedString()
         value.append(attributedText1)
         value.append(attributedText2)
         value.append(attributedText3)
+        value.append(attributedText4)
+        value.append(attributedText5)
         return value
+    }
+    
+    @objc private func selectCountry() {
+        let countryVc = CountryPhoneCodeListController()
+        countryVc.didSelectCountry = { [weak self] countryInfo in
+            guard let self = self else { return }
+            self.dismiss(animated: true, completion: nil)
+        }
+        countryVc.rx.itemSelected
+            .map { Reactor.Action.selectPhoneCode($0?.code ?? "") }
+            .bind(to: reactor!.action)
+            .disposed(by: disposeBag)
+        countryVc.show(self)
     }
     
     private func buildLayout() {
         view.backgroundColor = .white
         view.addSubview(logoImageView)
+        
+        inputComponent.addArrangedSubview(countryCodeLabel)
+        if Environment.current == .overseas {
+            inputComponent.addArrangedSubview(countrySelectBtn)
+        }
+        inputComponent.addArrangedSubview(phoneTextField)
+        container1.addSubview(inputComponent);
+        
         view.addSubview(container1)
-        container1.addSubview(phoneTextField)
         view.addSubview(verifyCodeTextField)
         view.addSubview(requestCodebutton)
         view.addSubview(countdownLabel)
@@ -148,8 +200,12 @@ final class LoginViewController: UIViewController, View {
             make.top.equalTo(logoImageView.snp.bottom).offset(84.resize)
         }
         
-        phoneTextField.snp.makeConstraints {
+        inputComponent.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        countryCodeLabel.snp.makeConstraints {
+            $0.width.equalTo(45.resize)
         }
         
         verifyCodeTextField.snp.makeConstraints {
@@ -185,13 +241,22 @@ final class LoginViewController: UIViewController, View {
     
     func bind(reactor: LoginReactor) {
         reactor.state
-            .map { $0.phoneNumber.count == 11 && $0.verifyCode.count == 6 }
+            .map { [weak self] (state) in
+                guard let `self` = self else { return false }
+                return self.verification(phone: state.phoneNumber) && state.verifyCode.count == 6
+            }
             .bind(to: loginButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         reactor.state
-            .map { $0.phoneNumber.count == 11 && $0.verifyCode.count == 6 }
-            .map { $0 ? 1 : 0.3 }
+            .map { [weak self] (state) in
+                guard let `self` = self else { return 0.3 }
+                if self.verification(phone: state.phoneNumber) && state.verifyCode.count == 6 {
+                    return 1
+                } else {
+                    return 0.3
+                }
+            }
             .bind(to: loginButton.rx.alpha)
             .disposed(by: disposeBag)
         
@@ -201,6 +266,13 @@ final class LoginViewController: UIViewController, View {
             .map { Reactor.Action.inputPhoneNumber($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        
+        reactor.state
+            .map { $0.phoneCode }
+            .bind(to: countryCodeLabel.rx.text)
+            .disposed(by: disposeBag)
+
         
         verifyCodeTextField.rx
             .text
@@ -248,13 +320,22 @@ final class LoginViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         reactor.state
-            .map { $0.phoneNumber.count == 11 }
-            .map { $0 ? 1 : 0.3 }
+            .map { [weak self] (state) in
+                guard let `self` = self else { return 0.3 }
+                if self.verification(phone: state.phoneNumber) {
+                    return 1
+                } else {
+                    return 0.3
+                }
+            }
             .bind(to: requestCodebutton.rx.alpha)
             .disposed(by: disposeBag)
         
         reactor.state
-            .map { $0.phoneNumber.count == 11 }
+            .map { [weak self] (state) in
+                guard let `self` = self else { return false }
+                return self.verification(phone: state.phoneNumber)
+            }
             .bind(to: requestCodebutton.rx.isEnabled)
             .disposed(by: disposeBag)
         
@@ -264,7 +345,7 @@ final class LoginViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         requestCodebutton.rx
-            .tap
+            .throttledTap
             .map { Reactor.Action.clickSendVerifyCode }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -273,6 +354,20 @@ final class LoginViewController: UIViewController, View {
             .tap
             .map { Reactor.Action.login }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map(\.sendCodeNetworkState)
+            .distinctUntilChanged()
+            .subscribe(onNext: { state in
+                switch state {
+                case .idle: ()
+                case .begin: SVProgressHUD.show()
+                case .success:
+                    SVProgressHUD.dismiss()
+                case let .failure(error):
+                    SVProgressHUD.showError(withStatus: error.message)
+                }
+            })
             .disposed(by: disposeBag)
         
         reactor.state.map(\.loginNetworkState)
@@ -298,14 +393,9 @@ final class LoginViewController: UIViewController, View {
             .subscribe(onNext: { [weak self] tap in
                 guard let self = self else { return }
                 guard let view = tap.view else { return }
-                let area = CGRect(x: view.bounds.width * 0.5,
-                                  y: view.bounds.height / 3,
-                                  width: view.bounds.width * 0.5 * 0.8,
-                                  height: view.bounds.height / 3)
                 let point = tap.location(in: view)
-                guard area.contains(point) else { return }
-                let path = Bundle.main.path(forResource: "privacy_cn", ofType: "html")!
-                WebViewController.show(self, title: "注册条款", path: path)
+                self.showRegisterPri(view, point: point)
+                self.showProvacyPri(view, point: point)
             })
             .disposed(by: disposeBag)
         
@@ -314,5 +404,29 @@ final class LoginViewController: UIViewController, View {
                 self?.view.endEditing(true)
             })
             .disposed(by: disposeBag)
+    }
+    private func verification(phone: String) -> Bool {
+        Environment.current == .overseas ? phone.count >= 6 : phone.count == 11
+    }
+    private func showRegisterPri(_ view: UIView, point: CGPoint) {
+        let area = CGRect(x: view.bounds.width / 3,
+                          y: view.bounds.height / 3,
+                          width: view.bounds.width / 3,
+                          height: view.bounds.height / 3)
+        guard area.contains(point) else { return }
+        WebViewController.show(self,
+                               title: "注册条款",
+                               path: "https://cdn.ronghub.com/term_of_service_zh.html")
+    }
+    
+    private func showProvacyPri(_ view: UIView, point: CGPoint) {
+        let area = CGRect(x: view.bounds.width / 3 * 2,
+                          y: view.bounds.height / 3,
+                          width: view.bounds.width / 3,
+                          height: view.bounds.height / 3)
+        guard area.contains(point) else { return }
+        WebViewController.show(self,
+                               title: "隐私协议",
+                               path: "https://cdn.ronghub.com/Privacy_agreement_zh.html")
     }
 }

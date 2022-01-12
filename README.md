@@ -116,3 +116,4 @@ private var roomInfo_kvRoomInfo: RCVoiceRoomInfo? {
 2. 申请 BusinessToken
     * BusinessToken 主要是防止滥用 quickdemo 里的测试appKey，我们为接口做了限制，一个 BusinessToken 最多可以支持10个用户注册，20天使用时长。点击此处 [获取BusinessToken](https://rcrtc-api.rongcloud.net/code)
 3. 申请完 BusinessToken 后,请在 Environment.swift 文件中替换即可.
+

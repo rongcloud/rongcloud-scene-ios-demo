@@ -7,6 +7,7 @@
 
 import UIKit
 import RCRTCAudio
+import SVProgressHUD
 
 enum RCVRVoiceButtonState {
     case none
@@ -68,6 +69,7 @@ final class RCVRVoiceButton: UIView {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressTriggle(_:)))
         longGesture.minimumPressDuration = 0.2
         addGestureRecognizer(longGesture)
+        longGesture.delegate = self
         
         gradientLayer.colors = [UIColor(hexString: "#E92B99").cgColor, UIColor(hexString: "#A835EF").cgColor]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -106,7 +108,7 @@ final class RCVRVoiceButton: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         print("touch end: \(Date().timeIntervalSince1970)")
-        if beginTime + 0.2 > Date().timeIntervalSince1970 {
+        if beginTime + 0.2 > Date().timeIntervalSince1970 && !RCCoreClient.shared().isAudioHolding() {
             state = .lack
         }
     }
@@ -152,4 +154,14 @@ final class RCVRVoiceButton: UIView {
         }
     }
     
+}
+
+extension RCVRVoiceButton: UIGestureRecognizerDelegate {
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if RCCoreClient.shared().isAudioHolding() {
+            SVProgressHUD.showError(withStatus: "声音通道被占用，请下麦后使用")
+            return false
+        }
+        return true
+    }
 }

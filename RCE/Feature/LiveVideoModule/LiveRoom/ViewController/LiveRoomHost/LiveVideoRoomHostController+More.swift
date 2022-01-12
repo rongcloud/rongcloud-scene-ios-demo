@@ -21,6 +21,7 @@ extension LiveVideoRoomHostController {
     }
     
     func closeRoom() {
+        clearMusicData()
         SVProgressHUD.show()
         networkProvider.request(.closeRoom(roomId: room.roomId)) { result in
             switch result.map(AppResponse.self) {
@@ -29,6 +30,8 @@ extension LiveVideoRoomHostController {
                     SVProgressHUD.showSuccess(withStatus: "直播结束，房间已关闭")
                     RCLiveVideoEngine.shared().finish { [weak self] _ in
                         self?.navigationController?.popViewController(animated: true)
+                        DataSourceImpl.instance.clear()
+                        PlayerImpl.instance.clear()
                     }
                 } else {
                     SVProgressHUD.showSuccess(withStatus: "关闭房间失败")
@@ -38,6 +41,12 @@ extension LiveVideoRoomHostController {
             }
         }
         networkProvider.request(.userUpdateCurrentRoom(roomId: "")) { _ in }
+    }
+    
+    func clearMusicData() {
+        DataSourceImpl.instance.clear()
+        PlayerImpl.instance.clear()
+        DelegateImpl.instance.clear()
     }
 }
 

@@ -38,7 +38,7 @@ public final class RCRTCAudioRecorder: NSObject {
         let url = URL(fileURLWithPath: path)
         
         let recordSettings: [String: Any] = [
-            AVSampleRateKey: 44100.0,
+            AVSampleRateKey: 8000.0,
             AVFormatIDKey: kAudioFormatLinearPCM,
             AVLinearPCMBitDepthKey: 16,
             AVNumberOfChannelsKey: 1,
@@ -127,7 +127,6 @@ extension RCRTCAudioRecorder {
     private func resetCategory() {
         do {
             try AVAudioSession.sharedInstance().setCategory(lastCategory)
-            try AVAudioSession.sharedInstance().setActive(true, options: [])
         } catch {
             debugPrint(error.localizedDescription)
         }

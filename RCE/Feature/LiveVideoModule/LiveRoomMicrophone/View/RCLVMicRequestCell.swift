@@ -17,8 +17,7 @@ class RCLVMicRequestCell: UITableViewCell, Reusable {
     
     private lazy var avatarImageView: UIImageView = {
         let instance = UIImageView()
-        instance.contentMode = .scaleToFill
-        instance.image = nil
+        instance.contentMode = .scaleAspectFill
         instance.layer.cornerRadius = (48.resize)/2
         instance.clipsToBounds = true
         instance.image = R.image.default_avatar()

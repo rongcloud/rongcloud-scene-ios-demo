@@ -7,57 +7,76 @@
 
 import Foundation
 import UIKit
+import RCLiveVideoLib
 
 extension LiveVideoRoomViewController {
-    @_dynamicReplacement(for: role)
-    private var live_role: RCRTCLiveRoleType {
-        get { role }
-        set {
-            role = newValue
-            if role == .audience {
-                layoutLiveVideoUserLeave()
+    func layoutLiveVideoView(_ mixType: RCLiveVideoMixType) {
+        previewView.setupPreviewLayout(mixType)
+        if RCRoomFloatingManager.shared.showing { return }
+        setupSeatLayout(mixType)
+        setupMessageLayout(mixType)
+    }
+    
+    func setupSeatLayout(_ mixType: RCLiveVideoMixType) {
+        switch mixType {
+        case .oneToOne:
+            seatView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        case .oneToSix:
+            seatView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(98)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-60)
+            }
+        default:
+            seatView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(98)
+                make.height.equalTo(seatView.snp.width)
             }
         }
     }
     
-    func layoutLiveVideoView(_ frameInfo: [String: NSValue]) {
-        if let item = frameInfo.first {
-            layoutLiveVideoUserJoin(item.key, frame: item.value.cgRectValue)
-        } else {
-            layoutLiveVideoUserLeave()
+    func setupMessageLayout(_ mixType: RCLiveVideoMixType) {
+        let preview = RCLiveVideoEngine.shared().previewView()
+        switch mixType {
+        case .oneToOne:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-140.resize)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.height.equalTo(320.resize)
+            }
+        case .oneToSix:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-120.resize)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.height.equalTo(320.resize)
+            }
+        default:
+            chatroomView.messageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview()
+                make.right.equalToSuperview().offset(-100)
+                make.bottom.equalTo(chatroomView.toolBar.snp.top)
+                make.top.equalTo(preview.snp.bottom).offset(8)
+            }
+        }
+        DispatchQueue.main.async {
+            self.chatroomView.messageView.tableView.reloadData()
         }
     }
     
-    private func layoutLiveVideoUserJoin(_ userId: String, frame: CGRect) {
-        if frame == .zero { return }
-        let offset = view.bounds.width - frame.origin.x + 8
-        messageView.snp.remakeConstraints { make in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview().offset(-offset)
-            make.bottom.equalTo(toolBarView.snp.top)
-            make.height.equalTo(320.resize)
-        }
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-        messageView.reloadMessages()
+    func floatingBack() {
+        previewView.backgroundColor = .clear
+        previewView.transform = .identity
         
-        roomUserView.update(userId)
-        roomUserView.frame = frame
-        view.addSubview(roomUserView)
-    }
-    
-    private func layoutLiveVideoUserLeave() {
-        if messageView.superview == nil { return }
-        messageView.snp.remakeConstraints { make in
-            make.left.equalToSuperview()
-            make.bottom.equalTo(toolBarView.snp.top)
-            make.width.equalToSuperview().multipliedBy(278.0 / 375)
-            make.height.equalTo(320.resize)
+        view.insertSubview(previewView, belowSubview: seatView)
+        previewView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
-        messageView.reloadMessages()
         
-        roomUserView.update(nil)
-        roomUserView.removeFromSuperview()
+        setupMessageLayout(RCLiveVideoEngine.shared().currentMixType)
     }
 }

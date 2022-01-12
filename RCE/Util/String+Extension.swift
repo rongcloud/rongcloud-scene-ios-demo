@@ -38,3 +38,14 @@ extension String {
         return CGRect(x: x, y: y, width: w, height: h)
     }
 }
+
+extension String {
+    func decode<T: Codable>(_ empty: T) -> T {
+        guard let data = data(using: .utf8) else { return empty }
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            return empty
+        }
+    }
+}

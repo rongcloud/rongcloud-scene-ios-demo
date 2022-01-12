@@ -9,7 +9,7 @@ import Foundation
 
 struct SendCodeResponse: Codable {
     let code: Int
-    
+    let msg: String?
     func validate() -> Bool {
         return code == 10000
     }

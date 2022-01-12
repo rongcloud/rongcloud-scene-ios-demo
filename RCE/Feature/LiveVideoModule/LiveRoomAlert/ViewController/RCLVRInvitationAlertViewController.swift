@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class RCLVRInvitationAlertViewController: UIViewController {
     
@@ -59,7 +60,11 @@ class RCLVRInvitationAlertViewController: UIViewController {
         }
     }
     
-    init() {
+    private let inviter: String
+    private let index: Int
+    init(_ inviter: String, index: Int) {
+        self.inviter = inviter
+        self.index = index
         super.init(nibName: nil, bundle: nil)
         modalTransitionStyle = .crossDissolve
         modalPresentationStyle = .overFullScreen
@@ -81,19 +86,23 @@ class RCLVRInvitationAlertViewController: UIViewController {
     @objc private func cancel() {
         timer.invalidate()
         dismissAlert()
-        RCLiveVideoEngine.shared().rejectInvitation { _ in }
+        RCLiveVideoEngine.shared().rejectInvitation(ofUser: inviter) { _ in }
     }
     
     @objc private func sure() {
         timer.invalidate()
         dismissAlert()
-        RCLiveVideoEngine.shared().acceptInvitation { code in }
+        RCLiveVideoEngine.shared().acceptInvitation(ofUser: inviter, at: index, completion: { code in
+            if (code != .success) {
+                SVProgressHUD.showError(withStatus: "没有空余麦位")
+            }
+        })
     }
     
     @objc private func overTime() {
         timer.invalidate()
         dismissAlert()
-        RCLiveVideoEngine.shared().rejectInvitation { code in }
+        RCLiveVideoEngine.shared().rejectInvitation(ofUser: inviter) { _ in }
     }
     
     func invitationDidCancel() {

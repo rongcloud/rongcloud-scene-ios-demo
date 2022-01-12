@@ -1,6 +1,9 @@
-/Pods
+Pods/
 R.generated.swift
 xcuserdata/
 .DS_Store
 *.ipa
 *.dSYM.zip
+node_modules/
+*.xcarchive
+FrameworkPod/

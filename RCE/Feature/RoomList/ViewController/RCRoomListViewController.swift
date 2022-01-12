@@ -7,6 +7,9 @@
 
 import MJRefresh
 import SVProgressHUD
+import UIKit
+
+var enableCDN: Bool = true
 
 final class RCRoomListViewController: UIViewController {
     
@@ -49,6 +52,9 @@ final class RCRoomListViewController: UIViewController {
         super.viewDidLoad()
         buildLayout()
         checkRoomInfo()
+        
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressedHandler(_:)))
+        tableView.addGestureRecognizer(gesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -223,6 +229,10 @@ extension RCRoomListViewController: UITableViewDataSource {
 
 extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordProtocol {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelect(indexPath)
+    }
+    
+    private func didSelect(_ indexPath: IndexPath) {
         let room = items[indexPath.row]
         if let roomId = RCRoomFloatingManager.shared.currentRoomId {
             if roomId == room.roomId {
@@ -261,5 +271,26 @@ extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordP
     
     func passwordDidVarify(_ room: VoiceRoom) {
         enter(room)
+    }
+}
+
+extension RCRoomListViewController {
+    @objc private func longPressedHandler(_ gesture: UILongPressGestureRecognizer) {
+        let point = gesture.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: point) else { return }
+        let controller = UIAlertController(title: "提示", message: "请选择进入方式，之后都以此方式观看", preferredStyle: .actionSheet)
+        let CDNAction = UIAlertAction(title: "CDN", style: .default) { _ in
+            enableCDN = true
+            self.didSelect(indexPath)
+        }
+        let RTCAction = UIAlertAction(title: "RTC", style: .default) { _ in
+            enableCDN = false
+            self.didSelect(indexPath)
+        }
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel)
+        controller.addAction(CDNAction)
+        controller.addAction(RTCAction)
+        controller.addAction(cancelAction)
+        present(controller, animated: true)
     }
 }

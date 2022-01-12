@@ -9,6 +9,7 @@ import UIKit
 
 protocol RoomInfoViewClickProtocol: AnyObject {
     func roomInfoDidClick()
+    func didFollowRoomUser(_ follow: Bool)
 }
 
 class SceneRoomInfoView: UIView {
@@ -80,6 +81,7 @@ class SceneRoomInfoView: UIView {
         fetchUserInfo()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleViewClick))
+        tap.numberOfTouchesRequired = 1
         addGestureRecognizer(tap)
     }
     
@@ -97,6 +99,7 @@ class SceneRoomInfoView: UIView {
         idLabel.text = "ID " + String(info.id)
         updateRoomUserNumber()
     }
+    
     
     public func updateRoomUserNumber() {
         RCChatRoomClient.shared()
@@ -212,6 +215,7 @@ extension SceneRoomInfoView {
     }
     
     private func updateFollow(_ isFollow: Bool) {
+        delegate?.didFollowRoomUser(isFollow)
         self.isFollow = isFollow
         if isFollow {
             followButton.setBackgroundImage(followedBackgroundImage(), for: .normal)

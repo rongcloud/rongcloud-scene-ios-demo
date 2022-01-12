@@ -135,7 +135,9 @@ final class RCRoomContainerViewController: UIViewController {
         controller.leaveRoom { [weak self] result in
             switch result {
             case .success:
-                self?.joinRoom()
+                DispatchQueue.main.async {
+                    self?.joinRoom()
+                }
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
             }

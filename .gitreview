@@ -1,0 +1,6 @@
+[gerrit]
+host=gerrit.rongcloud.net
+port=29418
+project=rcrtc-ios
+defaultbranch=dev
+

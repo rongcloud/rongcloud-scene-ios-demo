@@ -70,8 +70,11 @@ final class RCRoomEntraceViewController: UIViewController {
     }
     
     @objc private func info() {
-        let infoURLString = "https://docs.rongcloud.cn/v4/5X/views/scene/voiceroom/ios/intro/intro.html"
-        UIApplication.shared.open(URL(string: infoURLString)!, options: [:], completionHandler: nil)
+        var URLString = "https://doc.rongcloud.cn/voiceroom/IOS/2.X/overview"
+        if SceneRoomManager.scene == .liveVideo {
+            URLString = "https://doc.rongcloud.cn/livevideoroom/IOS/2.X/guides/intro"
+        }
+        UIApplication.shared.open(URL(string: URLString)!)
     }
     
     private func itemSelected(_ index: Int) {

@@ -24,7 +24,15 @@ class RCLVRMicInviteViewController: UIViewController {
         }
     }
     
-    private var inviteUserIds = Set<String>()
+    private let seatIndex: Int
+    init(_ seatIndex: Int) {
+        self.seatIndex = seatIndex
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,25 +49,11 @@ class RCLVRMicInviteViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        fetchMicInviteUsers()
         fetchRoomUserlist()
     }
     
-    private func fetchMicInviteUsers() {
-        RCLiveVideoEngine.shared()
-            .getInvitations { [weak self] code, userIds in
-                if code == .success {
-                    self?.inviteUserIds = Set(userIds)
-                    self?.tableView.reloadData()
-                } else {
-                    SVProgressHUD.showError(withStatus: "获取排麦用户列表失败")
-                }
-            }
-    }
-    
     private func fetchRoomUserlist() {
-        var micUserIds = RCLiveVideoEngine.shared().liveVideoUserIds
-        micUserIds.append(Environment.currentUserId)
+        let micUserIds = RCLiveVideoEngine.shared().currentSeats.map { $0.userId }
         let api = RCNetworkAPI.roomUsers(roomId: RCLiveVideoEngine.shared().roomId)
         networkProvider.request(api) { [weak self] result in
             switch result.map(RCNetworkWapper<[VoiceRoomUser]>.self) {
@@ -86,21 +80,18 @@ extension RCLVRMicInviteViewController: UITableViewDataSource {
         let user = userlist[indexPath.row]
         return tableView
             .dequeueReusableCell(for: indexPath, cellType: RCLVMicInviteCell.self)
-            .updateCell(user, isInvited: inviteUserIds.contains(user.userId))
+            .updateCell(user)
     }
 }
 
 extension RCLVRMicInviteViewController: RCLVMicInviteDelegate {
     func micInvite(_ user: VoiceRoomUser) {
         RCLiveVideoEngine.shared()
-            .inviteLiveVideo(user.userId, at: -1) { [weak self] code in
+            .inviteLiveVideo(user.userId, at: seatIndex) { [weak self] code in
                 switch code {
                 case .success:
                     self?.didMicInvite(user)
-                case .invitationIsFull:
-                    SVProgressHUD.showError(withStatus: "上麦邀请队列已满")
-                case .liveVideoIsFull:
-                    SVProgressHUD.showError(withStatus: "麦位已满")
+                    SVProgressHUD.showSuccess(withStatus: "已邀请上麦")
                 default:
                     SVProgressHUD.showError(withStatus: "邀请失败")
                 }

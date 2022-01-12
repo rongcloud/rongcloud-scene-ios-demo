@@ -114,7 +114,7 @@ extension VoiceRoomViewController: HandleRequestSeatProtocol {
 }
 
 extension VoiceRoomViewController: RequestSeatPopProtocol {
-    func cancelReqeustSeatDidClick() {
+    func cancelRequestSeatDidClick() {
         RCVoiceRoomEngine.sharedInstance().cancelRequestSeat {
             SVProgressHUD.showSuccess(withStatus: "已撤回连线申请")
             DispatchQueue.main.async {

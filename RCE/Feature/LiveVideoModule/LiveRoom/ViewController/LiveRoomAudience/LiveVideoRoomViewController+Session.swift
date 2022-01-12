@@ -20,7 +20,7 @@ extension LiveVideoRoomViewController {
             switch result {
             case .success:
                 debugPrint("join room success")
-                self?.handleUserEnter(Environment.currentUserId)
+                SceneRoomManager.shared.currentRoom = self?.room
                 self?.role = RCLiveVideoEngine.shared().currentRole
                 SVProgressHUD.dismiss(withDelay: 0.3)
             case let .failure(error):
@@ -31,7 +31,10 @@ extension LiveVideoRoomViewController {
     
     func leaveRoom() {
         leaveRoom { [weak self] _ in
+            SceneRoomManager.shared.currentRoom = nil
             self?.navigationController?.popViewController(animated: true)
+            DataSourceImpl.instance.clear()
+            PlayerImpl.instance.clear()
         }
     }
 }
@@ -45,12 +48,23 @@ extension LiveVideoRoomViewController: RCRoomCycleProtocol {
             case let .success(wrapper):
                 switch wrapper.code {
                 case 10000:
-                    RCLiveVideoEngine.shared().joinRoom(roomId) { code in
-                        if code == .success {
-                            networkProvider.request(.userUpdateCurrentRoom(roomId: roomId)) { _ in }
-                            completion(.success(()))
-                        } else {
-                            completion(.failure(ReactorError("加入房间失败:\(code.rawValue)")))
+                    if enableCDN {
+                        RCLiveVideoEngine.shared().joinCDNRoom(roomId) { code in
+                            if code == .success {
+                                networkProvider.request(.userUpdateCurrentRoom(roomId: roomId)) { _ in }
+                                completion(.success(()))
+                            } else {
+                                completion(.failure(ReactorError("加入房间失败:\(code.rawValue)")))
+                            }
+                        }
+                    } else {
+                        RCLiveVideoEngine.shared().joinRoom(roomId) { code in
+                            if code == .success {
+                                networkProvider.request(.userUpdateCurrentRoom(roomId: roomId)) { _ in }
+                                completion(.success(()))
+                            } else {
+                                completion(.failure(ReactorError("加入房间失败:\(code.rawValue)")))
+                            }
                         }
                     }
                 case 30001:
@@ -67,7 +81,7 @@ extension LiveVideoRoomViewController: RCRoomCycleProtocol {
     func leaveRoom(_ completion: @escaping (Result<Void, ReactorError>) -> Void) {
         RCLiveVideoEngine.shared().leaveRoom { code in
             switch code {
-            case .success, .notJoinRoom:
+            case .success, .roomStateError:
                 networkProvider.request(.userUpdateCurrentRoom(roomId: "")) { _ in }
                 completion(.success(()))
             default:
@@ -77,7 +91,7 @@ extension LiveVideoRoomViewController: RCRoomCycleProtocol {
     }
     
     func descendantViews() -> [UIView] {
-        return [messageView.tableView]
+        return [chatroomView.messageView.tableView]
     }
 }
 
@@ -104,10 +118,10 @@ extension LiveVideoRoomViewController {
     
     func didCloseRoom() {
         view.subviews.forEach {
-            if $0 == roomInfoView { return }
+            if $0 == roomUserView { return }
             $0.removeFromSuperview()
         }
-        roomInfoView.updateRoom(info: room)
+        roomUserView.setRoom(room)
 
         let tipLabel = UILabel()
         tipLabel.text = "该房间直播已结束"

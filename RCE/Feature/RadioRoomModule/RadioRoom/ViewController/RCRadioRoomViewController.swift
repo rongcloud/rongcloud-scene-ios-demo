@@ -23,12 +23,17 @@ final class RCRadioRoomViewController: RCModuleViewController {
     
     dynamic var managerlist = [VoiceRoomUser]()
     
+    private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
+
     var roomInfo: VoiceRoom
     let isCreate: Bool
     
     init(_ roomInfo: VoiceRoom, isCreate: Bool = false) {
         self.roomInfo = roomInfo
         self.isCreate = isCreate
+        DelegateImpl.instance.roomId = roomInfo.roomId
+        DataSourceImpl.instance.roomId = roomInfo.roomId
+        PlayerImpl.instance.type = .radio
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,11 +45,12 @@ final class RCRadioRoomViewController: RCModuleViewController {
         super.viewDidLoad()
         setupConstraints()
         RCCall.shared().canIncomingCall = false
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        RCCall.shared().canIncomingCall = true
+        bubbleViewAddGesture()
+        if (!roomInfo.isOwner) {
+            DataSourceImpl.instance.fetchRoomPlayingMusicInfo { info in
+                self.musicInfoBubbleView?.info = info;
+            }
+        }
     }
     
     deinit {
@@ -52,7 +58,13 @@ final class RCRadioRoomViewController: RCModuleViewController {
     }
     
     ///消息回调，在engine模块中触发
-    dynamic func handleReceivedMessage(_ message: RCMessage) {}
+    dynamic func handleReceivedMessage(_ message: RCMessage) {
+        handleCommandMessage(message)
+    }
+    //处理音乐消息同步指令消息
+    func handleCommandMessage(_ message: RCMessage) {
+        CommandMessageHandler.handleMessage(message, musicInfoBubbleView)
+    }
 }
 
 extension RCRadioRoomViewController {
@@ -97,5 +109,40 @@ extension RCRadioRoomViewController {
         }
         
         roomToolBarView.layoutUI(roomInfo)
+        
+        guard let bubble = musicInfoBubbleView else {
+            return
+        }
+        view.addSubview(bubble)
+        bubble.snp.makeConstraints { make in
+            make.top.equalTo(moreButton.snp.bottom).offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.size.equalTo(CGSize(width: 150, height: 50))
+        }
+    }
+    
+    private func bubbleViewAddGesture() {
+        guard let bubble = musicInfoBubbleView else {
+            return
+        }
+        bubble.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action:#selector(presentMusicController))
+        bubble.addGestureRecognizer(tap)
+    }
+    
+    @objc func presentMusicController() {
+        //观众不展示音乐列表
+        if (!roomInfo.isOwner) {return}
+        RCMusicEngine.shareInstance().show(in: self, completion: nil)
+    }
+}
+
+extension RCRadioRoomViewController: RCVoiceRoomDelegate {
+   
+    func messageDidReceive(_ message: RCMessage) {
+        if message.content == nil { return }
+        DispatchQueue.main.async {
+            self.handleReceivedMessage(message)
+        }
     }
 }

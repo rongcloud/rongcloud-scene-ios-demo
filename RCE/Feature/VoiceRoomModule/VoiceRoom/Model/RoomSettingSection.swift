@@ -45,21 +45,6 @@ struct VoiceRoomPKInfo {
         }
         return .audience
     }
-    
-//    func isInviter() -> Bool {
-//        return inviterId == UserDefaults.standard.loginUser()?.userId
-//    }
-//
-//    func pkId() -> String {
-//        return isInviter() ? inviteeId : inviterId
-//    }
-//
-//    func isUserPKAttender(userId: String?) -> Bool {
-//        guard let userId = userId else {
-//            return false
-//        }
-//        return userId == inviterId || userId == inviteeId
-//    }
 }
 
 struct RoomSettingState {
@@ -81,7 +66,9 @@ struct RoomSettingState {
     var currentPKInfo: VoiceRoomPKInfo?
     var connectState: ConnectMicState = .request {
         didSet {
-            connectStateChanged?(connectState)
+            if connectState != oldValue {
+                connectStateChanged?(connectState)
+            }
         }
     }
     var pkConnectState: ConnectMicState = .request {
@@ -141,6 +128,7 @@ enum RoomSettingItem {
     case lockAllSeat(Bool)
     case muteSelf(Bool)
     case music
+    case videoSetting
     case isFreeEnterSeat(Bool)
     case roomTitle
     case roomBackground
@@ -177,6 +165,8 @@ extension RoomSettingItem {
             return (isLess ? "设置8个座位" : "设置4个座位")
         case .music:
             return "音乐"
+        case .videoSetting:
+            return "视频设置"
         case .forbidden:
             return "屏蔽词"
         case .suspend:
@@ -203,6 +193,8 @@ extension RoomSettingItem {
             return isMute ? R.image.voiceroom_setting_unmute() : R.image.voiceroom_setting_mute()
         case .music:
             return R.image.voiceroom_setting_music()
+        case .videoSetting:
+            return R.image.videoroom_setting_videoprops()
         case let .isFreeEnterSeat(isFree):
             return isFree ? R.image.voiceroom_setting_freemode() : R.image.voiceroom_setting_applymode()
         case .roomTitle:

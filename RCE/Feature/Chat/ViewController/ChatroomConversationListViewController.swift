@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 final class ChatroomConversationListViewController: RCConversationListViewController {
     
@@ -14,8 +15,6 @@ final class ChatroomConversationListViewController: RCConversationListViewContro
         
         view.backgroundColor = UIColor.white
         
-        navigationController?.navigationBar.isTranslucent = false
-        
         conversationListTableView.separatorStyle = .singleLine
         conversationListTableView.separatorColor = UIColor("#E3E5E6")
         conversationListTableView.separatorInset = UIEdgeInsets(top: 0, left: 71.resize, bottom: 0, right: 0)
@@ -23,11 +22,6 @@ final class ChatroomConversationListViewController: RCConversationListViewContro
         conversationListTableView.tableFooterView = UIView()
         
         navigationItem.title = "消息"
-        
-        RCKitConfig.default().ui.globalConversationAvatarStyle = .USER_AVATAR_CYCLE
-        RCKitConfig.default().ui.globalMessageAvatarStyle = .USER_AVATAR_CYCLE
-        RCKitConfig.default().ui.globalConversationPortraitSize = CGSize(width: 48.resize, height: 48.resize)
-        RCKitConfig.default().ui.enableDarkMode = true
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: R.image.back_indicator_image(),
                                                            style: .plain,
@@ -43,7 +37,11 @@ final class ChatroomConversationListViewController: RCConversationListViewContro
         guard let userId = model.targetId else {
             return
         }
-        UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { [weak self] user in
+        SVProgressHUD.show()
+        UserInfoDownloaded.shared.refreshUserInfo(userId: userId) { [weak self] user in
+            SVProgressHUD.dismiss()
+            let userInfo = RCUserInfo(userId: user.userId, name: user.userName, portrait: user.portraitUrl)
+            RCIM.shared().refreshUserInfoCache(userInfo, withUserId: user.userId)
             self?.navigator(.privateChat(userId: user.userId))
         }
     }
@@ -64,6 +62,7 @@ final class ChatroomConversationListViewController: RCConversationListViewContro
         cell.messageContentLabel.textColor = UIColor(hexString: "#A0A5AB")
         cell.messageCreatedTimeLabel.font = UIFont.systemFont(ofSize: 13.resize)
         cell.messageCreatedTimeLabel.textColor = UIColor(red: 0.73, green: 0.75, blue: 0.79, alpha: 0.6)
+        cell.headerImageView.contentMode = .scaleAspectFill
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

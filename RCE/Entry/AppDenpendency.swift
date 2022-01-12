@@ -10,6 +10,7 @@ import UIKit
 import SVProgressHUD
 import IQKeyboardManager
 import SwiftyBeaver
+import SwiftUI
 
 public let log = SwiftyBeaver.self
 
@@ -21,6 +22,7 @@ struct AppDependency {
 }
 
 final class CompositionRoot: NSObject {
+    
     static func resolve() -> AppDependency {
         return AppDependency(window: configWindow,
                              configManagers: configManagers,
@@ -54,20 +56,27 @@ final class CompositionRoot: NSObject {
         UMConfigure.setLogEnabled(true)
         
         /// 初始化语聊房
-        RCVoiceRoomEngine.sharedInstance().initWithAppkey(Environment.current.rcKey)
-        RCCoreClient.shared().registerMessageType(RCGiftBroadcastMessage.self)
-        RCCoreClient.shared().registerMessageType(RCPKGiftMessage.self)
+        RCIM.shared().initWithAppKey(Environment.current.rcKey)
+        RCIM.shared().registerMessageType(RCGiftBroadcastMessage.self)
+        RCIM.shared().registerMessageType(RCPKGiftMessage.self)
+        RCIM.shared().registerMessageType(RCPKStatusMessage.self)
         if let rongToken = UserDefaults.standard.rongToken() {
-            RCVoiceRoomEngine.sharedInstance().connect(withToken: rongToken) {
+            RCIM.shared().connect(withToken: rongToken) { code in
+                debugPrint("db error code is \(code)")
+            } success: { userId in
                 UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
                     RCIM.shared().currentUserInfo = user.rcUser
                 }
-               // SVProgressHUD.showSuccess(withStatus: "连接融云成功")
-            } error: { errorCode, msg in
+            } error: { code in
                 fatalError("Connect rongcloud failed")
-               // SVProgressHUD.showError(withStatus: "连接融云失败")
             }
         }
+        /// IMKit 全局参数
+        RCKitConfig.default().ui.globalConversationAvatarStyle = .USER_AVATAR_CYCLE
+        RCKitConfig.default().ui.globalMessageAvatarStyle = .USER_AVATAR_CYCLE
+        RCKitConfig.default().ui.globalConversationPortraitSize = CGSize(width: 48.resize, height: 48.resize)
+        RCKitConfig.default().ui.enableDarkMode = true
+        
         RCChatroomMessageCenter.registerMessageTypes()
         /// 设置SVProgress
         SVProgressHUD.setMaximumDismissTimeInterval(2)
@@ -112,21 +121,23 @@ final class CompositionRoot: NSObject {
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         
+        // SwiftBeaver 添加输出到 console
         let console = ConsoleDestination()
         log.addDestination(console)
-        
-        // HIFIVE
-        if Environment.currentUserId.count > 0 {
-            HFOpenApiManager.shared().registerApp(withAppId: "hifive app id", serverCode: "hifive server code", clientId: Environment.currentUserId, version: "V4.1.2") { _ in
-                log.verbose("register hifive success")
-            } fail: { error in
-                fatalError("Register Hi five failed")
-            }
-        }
-        // log
+
+        // 把 imlog 写入文件
 //        RCIMClient.shared().logLevel = .log_Level_Verbose
 //        NSString.redirectNSlogToDocumentFolder()
         
-        MHSDK.shareInstance().`init`("美狐美颜key")
+        // HIFIVE
+        if Environment.currentUserId.count > 0 {
+            RCMusicEngine.shareInstance().delegate = DelegateImpl.instance
+            RCMusicEngine.shareInstance().player = PlayerImpl.instance
+            RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
+        }
+         
+        MHSDK.shareInstance().`init`(Environment.MHBeautyKey)
+        
+        RCNetworkReach.active()
     }
 }

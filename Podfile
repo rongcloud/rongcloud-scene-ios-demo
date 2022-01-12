@@ -2,9 +2,7 @@
 platform :ios, '13.0'
 inhibit_all_warnings!
 
-target 'RCE' do
-  use_frameworks!
-  # Pods for RCE
+def commonPods
   pod 'IQKeyboardManager'
   pod 'RxViewController'
   pod 'ReactorKit'
@@ -27,17 +25,27 @@ target 'RCE' do
   pod 'SDWebImage'
   pod 'XCoordinator'
   pod 'SwiftyBeaver'
+  pod 'ReachabilitySwift'
+  
+  pod 'RCVoiceRoomLib', '~>2.0.5'
+  pod 'RCLiveVideoLib', '~>2.0.2'
+  pod 'RCMusicControlKit'
   
   # CORE
   pod 'RongCloudIM/IMKit'
-  pod 'RongCloudRTC/RongRTCLib'
+  pod 'RongCloudRTC/RongRTCLib', '5.1.13'
   pod 'RongCloudRTC/RongRTCPlayer'
   
-  pod 'RCVoiceRoomLib'
-  pod 'RCLiveVideoLib'
-  
+  # Local Pod
   pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
+  pod 'RCChatroomSceneKit', :path => 'Lib/RCChatroomSceneKit'
   pod 'RCRTCAudio', :path => 'Lib/RCRTCAudio'
+  
+end
+
+target 'RCE' do
+  use_frameworks!
+  commonPods
   
   target 'RCETests' do
     inherit! :search_paths
@@ -48,7 +56,12 @@ target 'RCE' do
     inherit! :search_paths
     # Pods for testing
   end
-  
+end
+
+
+target 'RCE-OVERSEA' do
+  use_frameworks!
+  commonPods
 end
 
 target 'RCVoiceRoomMessage' do

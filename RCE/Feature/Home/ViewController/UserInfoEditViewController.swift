@@ -24,7 +24,6 @@ final class UserInfoEditViewController: UIViewController, View {
     private lazy var nameContainerView = UIView()
     private lazy var nameTextField = UITextField()
     private lazy var saveButton = UIButton()
-    private lazy var logoutButton = UIButton()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -133,12 +132,6 @@ final class UserInfoEditViewController: UIViewController, View {
             .map { Reactor.Action.update }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
-        logoutButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.logout()
-            })
-            .disposed(by: disposeBag)
     }
     
     private func updateInfo(_ user: VoiceRoomUser) {
@@ -147,14 +140,6 @@ final class UserInfoEditViewController: UIViewController, View {
         nameTextField.text = user.userName
         let userInfo = RCUserInfo(userId: user.userId, name: user.userName, portrait: user.portraitUrl)
         RCIM.shared().refreshUserInfoCache(userInfo, withUserId: user.userId)
-    }
-    
-    private func logout() {
-        UserDefaults.standard.clearLoginStatus()
-        RCVoiceRoomEngine.sharedInstance().disconnect()
-        dismiss(animated: true) {
-            NotificationNameLogout.post()
-        }
     }
     
     private func handleTextFieldEditing() {
@@ -181,13 +166,11 @@ extension UserInfoEditViewController {
         cardView.addSubview(nameContainerView)
         nameContainerView.addSubview(nameTextField)
         cardView.addSubview(saveButton)
-        cardView.addSubview(logoutButton)
         
         cardView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-30.resize)
             make.width.equalTo(293.resize)
-            make.height.equalTo(284.resize)
         }
         
         closeIconButton.snp.makeConstraints { make in
@@ -224,13 +207,7 @@ extension UserInfoEditViewController {
             make.top.equalTo(nameContainerView.snp.bottom).offset(30.resize)
             make.width.equalTo(nameContainerView)
             make.height.equalTo(40.resize)
-        }
-        
-        logoutButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalTo(cardView.snp.bottom).offset(-30.5.resize)
-            make.width.equalTo(120.resize)
-            make.height.equalTo(35.resize)
+            make.bottom.equalToSuperview().inset(30.resize)
         }
     }
     
@@ -263,12 +240,6 @@ extension UserInfoEditViewController {
             .font: UIFont.systemFont(ofSize: 17.resize)
         ]
         saveButton.setAttributedTitle(NSAttributedString(string: "保存", attributes: saveAttribute), for: .normal)
-        
-        let logoutAttribute: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor(hexString: "#020037"),
-            .font: UIFont.systemFont(ofSize: 15.resize)
-        ]
-        logoutButton.setAttributedTitle(NSAttributedString(string: "退出登录", attributes: logoutAttribute), for: .normal)
         
         let closeIcon = R.image.white_quite_icon()?.withRenderingMode(.alwaysTemplate)
         closeIconButton.setImage(closeIcon, for: .normal)

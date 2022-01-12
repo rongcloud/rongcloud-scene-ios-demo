@@ -13,16 +13,13 @@ enum Environment {
     case debug
     case production
     case release
+    case overseas
 }
+
 
 extension Environment {
     var url: URL {
-        switch self {
-        case .debug:
-            return URL(string: "https://rcrtc-api.rongcloud.net/")!
-        default:
-            return URL(string: "")!
-        }
+        return URL(string: "https://rcrtc-api.rongcloud.net/")!
     }
     
     static var current: Environment {
@@ -32,6 +29,8 @@ extension Environment {
         return .production
         #elseif RELEASE
         return .release
+        #elseif OVERSEA
+        return .overseas
         #endif
     }
     
@@ -39,38 +38,32 @@ extension Environment {
         return UserDefaults.standard.loginUser()?.userId ?? ""
     }
     
+    /// 融云 APP Key
     var rcKey: String {
-        switch self {
-        case .debug:
-            return "pvxdm17jpw7ar"
-        default:
-            return ""
-        }
+        return "pvxdm17jpw7ar"
     }
     
+    /// 友盟 Key
     var umengKey: String {
         return ""
     }
     
+    /// crash 收集
     var buglyKey: String {
         return ""
     }
     
+    /// 如果需要美颜，请再次配置 Key
     static var MHBeautyKey: String {
-        let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String
-        switch bundleID {
-        case "cn.rongcloud.rcrtc": return "29531f6d8b934a6e65ab7d86cad79fe9"
-        case "cn.rongcloud.rcrtc.appstore": return ""
-        default: return ""
-        }
+        return ""
     }
     
     static var currentUser: User? {
         return UserDefaults.standard.loginUser()
     }
     
+    /// 请申请您的 BusinessToken：https://rcrtc-api.rongcloud.net/code
     static var businessToken: String {
-        // 请通过 https://rcrtc-api.rongcloud.net/code 申请获取
         return ""
     }
 }

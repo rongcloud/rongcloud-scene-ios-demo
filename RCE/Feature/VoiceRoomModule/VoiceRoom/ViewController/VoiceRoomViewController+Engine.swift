@@ -44,7 +44,12 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     
     func roomKVDidReady() {
         if currentUserRole() == .creator {
-            enterSeat(index: 0)
+            enterSeat(index: 0) {
+                [weak self] in
+                self?.getPKStatus()
+            }
+        } else {
+            getPKStatus()
         }
         roomInfoView.updateRoomUserNumber()
     }
@@ -59,6 +64,7 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     }
     
     func userDidEnterSeat(_ seatIndex: Int, user userId: String) {
+        
     }
     
     func userDidLeaveSeat(_ seatIndex: Int, user userId: String) {
@@ -75,6 +81,7 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     func seatDidLock(_ index: Int, isLock: Bool) {
     }
     
+    
     func userDidEnter(_ userId: String) {
         roomInfoView.updateRoomUserNumber()
     }
@@ -83,15 +90,31 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
         roomInfoView.updateRoomUserNumber()
     }
     
-    func speakingStateDidChange(_ seatIndex: UInt, speakingState isSpeaking: Bool) {
-        if seatIndex == 0 {
-            ownerView.setSpeakingState(isSpeaking: isSpeaking)
-            RCRoomFloatingManager.shared.setSpeakingState(isSpeaking: isSpeaking, seatInfo: seatlist[0])
+
+    func seatSpeakingStateChanged(_ speaking: Bool, at index: Int, audioLevel level: Int) {
+        if index == 0 {
+            ownerView.setSpeakingState(isSpeaking: speaking)
+            RCRoomFloatingManager.shared.setSpeakingState(isSpeaking: speaking, seatInfo: seatlist[0])
         } else {
-            if let cell = collectionView.cellForItem(at: IndexPath(item: Int(seatIndex - 1), section: 0)) as? VoiceRoomSeatCollectionViewCell {
-                cell.setSpeakingState(isSpeaking: isSpeaking)
+            print("index:\(index),audioLevel:\(level)")
+            if let cell = collectionView.cellForItem(at: IndexPath(item: Int(index - 1), section: 0)) as? VoiceRoomSeatCollectionViewCell {
+                cell.setSpeakingState(isSpeaking: speaking)
             }
         }
+    }
+    
+    // will be deprecated
+    func speakingStateDidChange(_ seatIndex: UInt, speakingState isSpeaking: Bool) {
+        
+    }
+    
+    // room distory call back
+    func roomDidClosed() {
+        isRoomClosed = true
+        navigator(.voiceRoomAlert(title: "当前直播已结束",
+                                  actions: [.confirm("确定")],
+                                  alertType: alertTypeVideoAlreadyClose,
+                                  delegate: self))
     }
     
     func messageDidReceive(_ message: RCMessage) {
@@ -110,9 +133,6 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
             NotificationNameRoomBackgroundUpdated.post((voiceRoomInfo.roomId, content))
         case .mangerlistNeedRefresh:
             fetchManagerList()
-        case .roomClosed:
-            isRoomClosed = true
-            navigator(.voiceRoomAlert(title: "当前直播已结束", actions: [.confirm("确定")], alertType: alertTypeVideoAlreadyClose, delegate: self))
         case .rejectManagePick:
             if content == Environment.currentUserId {
                 SVProgressHUD.showError(withStatus: "用户拒绝邀请")
@@ -133,6 +153,10 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
         SVProgressHUD.showSuccess(withStatus: "您已被抱下麦")
         if !(currentUserRole() == .creator) {
             self.roomState.connectState = .request
+        } else {
+            if (self.voiceRoomInfo.isOwner && (PlayerImpl.instance.currentPlayState == .mixingStatePlaying || PlayerImpl.instance.currentPlayState == .mixingStatePause)) {
+                let _ = PlayerImpl.instance.stopMixing(with: nil)
+            }
         }
     }
     

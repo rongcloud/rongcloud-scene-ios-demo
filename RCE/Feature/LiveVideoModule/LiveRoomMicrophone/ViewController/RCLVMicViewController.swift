@@ -12,6 +12,7 @@ protocol RCLVMicViewControllerDelegate: AnyObject {
     func didAcceptSeatRequest(_ user: VoiceRoomUser)
     func didRejectRequest(_ user: VoiceRoomUser)
     func didSendInvitation(_ user: VoiceRoomUser)
+    func didSwitchMixType(_ type: RCLiveVideoMixType)
 }
 
 class RCLVMicViewController: UIViewController {
@@ -20,7 +21,14 @@ class RCLVMicViewController: UIViewController {
     
     private lazy var containerView = UIView()
     
-    private lazy var header = VoiceRoomScrollHeader(titleClick: { [weak self] in self?.move(index: $0) })
+    private lazy var header: RCLVRSegmentControl = {
+        let items: [RCLVRSegmentItem] = [
+            RCLVRSegmentItem(title: "申请列表"),
+            RCLVRSegmentItem(title: "邀请连麦"),
+            RCLVRSegmentItem(title: "布局设置"),
+        ]
+        return RCLVRSegmentControl(items) { [weak self] in self?.move(index: $0)}
+    }()
     private lazy var scrollView: UIScrollView = {
         let instance = UIScrollView()
         instance.showsVerticalScrollIndicator = false
@@ -35,13 +43,33 @@ class RCLVMicViewController: UIViewController {
     
     private lazy var controllers: [UIViewController] = {
         let request = RCLVRMicRequestViewController()
-        let invite = RCLVRMicInviteViewController()
-       return [request, invite]
+        let invite = RCLVRMicInviteViewController(seatIndex)
+        let layout = RCLVRMicLayoutViewController()
+       return [request, invite, layout]
     }()
+    
+    private let itemIndex: Int
+    private let seatIndex: Int
+    init(_ itemIndex: Int = 0, seatIndex: Int = -1) {
+        self.itemIndex = itemIndex
+        self.seatIndex = seatIndex
+        super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .overFullScreen
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buildLayout()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        move(index: self.itemIndex)
+        header.didMove(to: self.itemIndex)
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,7 +80,7 @@ class RCLVMicViewController: UIViewController {
     private func buildLayout() {
         enableClickingDismiss()
         
-        containerView.backgroundColor = UIColor(byteRed: 3, green: 6, blue: 47, alpha: 0.8)
+        containerView.backgroundColor = UIColor(byteRed: 3, green: 6, blue: 47)
         view.addSubview(containerView)
         containerView.addSubview(header)
         containerView.addSubview(scrollView)

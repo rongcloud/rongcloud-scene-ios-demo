@@ -19,7 +19,7 @@ struct User: Identifiable, Codable {
     let type: Int
     
     var portraitUrl: String {
-        return Environment.current.url.absoluteString + "/file/show?path=" + (portrait ?? "")
+        return Environment.current.url.absoluteString + "file/show?path=" + (portrait ?? "")
     }
 }
 
@@ -36,7 +36,8 @@ struct VoiceRoomUser: Codable, Equatable {
     
     var portraitUrl: String {
         if let portrait = portrait, portrait.count > 0 {
-            return Environment.current.url.absoluteString + "/file/show?path=" + portrait
+            
+            return Environment.current.url.absoluteString + "file/show?path=" + portrait
         }
         return "https://cdn.ronghub.com/demo/default/rce_default_avatar.png"
     }

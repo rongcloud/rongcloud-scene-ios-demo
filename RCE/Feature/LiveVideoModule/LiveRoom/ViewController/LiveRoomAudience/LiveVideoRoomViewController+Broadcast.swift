@@ -28,7 +28,7 @@ extension LiveVideoRoomViewController: RCRTCBroadcastDelegate {
         self.view.addSubview(view)
         view.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(roomInfoView.snp.bottom).offset(8)
+            make.top.equalTo(roomUserView.snp.bottom).offset(8)
             make.height.equalTo(30)
         }
     }

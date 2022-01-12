@@ -15,6 +15,12 @@ final class PromotionDetailViewController: UIViewController {
         instance.addTarget(self, action: #selector(back), for: .touchUpInside)
         return instance
     }()
+    private(set) lazy var settingButton: UIButton = {
+        let instance = UIButton()
+        instance.setImage(R.image.setting_icon(), for: .normal)
+        instance.addTarget(self, action: #selector(handleSettingClick), for: .touchUpInside)
+        return instance
+    }()
     
     private lazy var scrollView: UIScrollView = {
         let instance = UIScrollView()
@@ -23,6 +29,7 @@ final class PromotionDetailViewController: UIViewController {
     }()
     private lazy var avatarButton: UIButton = {
         let instance = UIButton()
+        instance.imageView?.contentMode = .scaleAspectFill
         instance.setBackgroundImage(R.image.default_avatar(), for: .normal)
         instance.addTarget(self, action: #selector(editButtonClicked), for: .touchUpInside)
         return instance
@@ -75,6 +82,7 @@ final class PromotionDetailViewController: UIViewController {
         avatarButton.kf.setImage(with: URL(string: user.portraitUrl),
                                  for: .normal,
                                  placeholder: R.image.default_avatar())
+        nameLabel.text = user.userName
     }
     
     @objc private func back() {
@@ -115,7 +123,6 @@ final class PromotionDetailViewController: UIViewController {
 extension PromotionDetailViewController {
     private func setupConstraint() {
         view.addSubview(scrollView)
-        view.addSubview(backButton)
         scrollView.addSubview(avatarButton)
         scrollView.addSubview(headerEditImageView)
         scrollView.addSubview(nameLabel)
@@ -123,15 +130,8 @@ extension PromotionDetailViewController {
         scrollView.addSubview(itemsView)
         scrollView.addSubview(serviceButton)
         
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.width.equalTo(54)
-            make.height.equalTo(44)
-        }
-        
         scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
             make.width.equalToSuperview()
         }
         
@@ -139,7 +139,7 @@ extension PromotionDetailViewController {
         avatarButton.layer.masksToBounds = true
         avatarButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(49)
+            make.top.equalToSuperview().offset(10)
             make.width.height.equalTo(70.resize)
         }
         
@@ -179,6 +179,10 @@ extension PromotionDetailViewController {
         }
     }
     
+    @objc func handleSettingClick() {
+        navigationController?.pushViewController(SettingViewController(), animated: true)
+    }
+    
     private func configUI() {
         if let user = Environment.currentUser {
             let avatarURL = URL(string: user.portraitUrl)
@@ -187,5 +191,7 @@ extension PromotionDetailViewController {
                                      placeholder: R.image.default_avatar())
             nameLabel.text = user.userName
         }
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: settingButton)
     }
 }

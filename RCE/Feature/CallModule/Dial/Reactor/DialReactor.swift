@@ -35,14 +35,17 @@ final class DialReactor: Reactor {
             sections = [.historySection(items: historyItems)]
         }
     }
+    private func verification(phone: String) -> Bool {
+        Environment.current == .overseas ? phone.count >= 6 : phone.count == 11
+    }
     
     var initialState: State = State()
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .callNumber(phone):
-            guard phone.count == 11 else {
-                return .just(.setError(ReactorError("请输入正确的手机号码")))
+            guard verification(phone: phone) else {
+                return .just(.setError(ReactorError("手机号码格式不正确")))
             }
             let beginHud = Observable<Mutation>.just(.setHudShow(true))
             let endHud = Observable<Mutation>.just(.setHudShow(false))

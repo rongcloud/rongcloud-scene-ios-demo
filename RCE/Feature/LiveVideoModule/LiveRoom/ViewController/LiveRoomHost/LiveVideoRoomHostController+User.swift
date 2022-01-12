@@ -9,11 +9,10 @@ import SVProgressHUD
 
 extension LiveVideoRoomHostController {
     @objc func liveVideoRequestDidClick() {
-        switch toolBarView.micState {
-        case .request:
+        switch micButton.micState {
+        case .user:
             let controller = RCLVMicViewController()
             controller.delegate = self
-            controller.modalPresentationStyle = .overFullScreen
             present(controller, animated: true)
         case .waiting:
             let controller = RCLVRCancelMicViewController(.invite, delegate: self)
@@ -21,6 +20,7 @@ extension LiveVideoRoomHostController {
         case .connecting:
             let controller = RCLVRCancelMicViewController(.connection, delegate: self)
             present(controller, animated: true)
+        default: ()
         }
     }
 }
@@ -36,36 +36,68 @@ extension LiveVideoRoomHostController: RCLiveVideoCancelDelegate {
                     /// code
                 }
             }
-            toolBarView.micState = .request
+            micButton.micState = .user
         case .connection:
-            let userId = RCLiveVideoEngine.shared().liveVideoUserIds.first
-            if let currentUserId = userId {
-                RCLiveVideoEngine.shared()
-                    .finishLiveVideo(currentUserId, completion: { [weak self] _ in
-                        self?.layoutLiveVideoView([:])
-                    })
-            }
-            toolBarView.micState = .request
+            let seat = RCLiveVideoEngine.shared().currentSeats.last { $0.userId.count > 0 }
+            guard
+                let userId = seat?.userId,
+                userId != Environment.currentUserId
+            else { return }
+            RCLiveVideoEngine.shared()
+                .kickUser(fromSeat:userId, completion: { code in
+                    debugPrint("kickUser \(code.rawValue)")
+                })
+            micButton.micState = .user
         }
     }
 }
 
 extension LiveVideoRoomHostController: RCLVMicViewControllerDelegate {
     func didAcceptSeatRequest(_ user: VoiceRoomUser) {
-        toolBarView.micState = .connecting
+        switch RCLiveVideoEngine.shared().currentMixType {
+        case .oneToOne:
+            micButton.micState = .connecting
+        default:
+            micButton.micState = .user
+        }
         RCLiveVideoEngine.shared().getRequests { [weak self] code, userIds in
-            self?.toolBarView.update(users: userIds.count)
+            self?.micButton.setBadgeCount(userIds.count)
         }
     }
     
     func didRejectRequest(_ user: VoiceRoomUser) {
         RCLiveVideoEngine.shared().getRequests { [weak self] code, userIds in
-            self?.toolBarView.update(users: userIds.count)
+            self?.micButton.setBadgeCount(userIds.count)
         }
     }
     
     func didSendInvitation(_ user: VoiceRoomUser) {
-        toolBarView.micState = .waiting
+        switch RCLiveVideoEngine.shared().currentMixType {
+        case .oneToOne:
+            micButton.micState = .waiting
+        default:
+            micButton.micState = .user
+        }
+    }
+    
+    func didSwitchMixType(_ type: RCLiveVideoMixType) {
+        if type != RCLiveVideoEngine.shared().currentMixType {
+            roomMixTypeDidChange(type)
+        }
+//        let mixType: RCLiveVideoMixType = type == .gridThree ? .custom : type
+        RCLiveVideoEngine.shared().setMixType(type) { [weak self] code in
+            switch code {
+            case .success:
+                debugPrint("switch success")
+                let message = RCTextMessage(content: "麦位布局已修改，请重新上麦")!
+                message.extra = "mixTypeChange"
+                RCLiveVideoEngine.shared().sendMessage(message) { code in
+                    self?.chatroomView.messageView.addMessage(message)
+                }
+            case .mixSame: ()
+            default: SVProgressHUD.showError(withStatus: "切换布局失败")
+            }
+        }
     }
 }
 
@@ -76,7 +108,6 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
         presentedViewController?.dismiss(animated: true)
         RCLiveVideoEngine.shared().kickOutRoom(userId) { [weak self] code in
             self?.handleKickOutRoom(userId, by: Environment.currentUserId)
-            self?.roomInfoView.updateRoomUserNumber()
         }
     }
     
@@ -84,11 +115,11 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
     func kickUserOffSeat(seatIndex: UInt) {
         presentedViewController?.dismiss(animated: true)
         let userId = SceneRoomManager.shared.seatlist[Int(seatIndex)].userId!
-        RCLiveVideoEngine.shared().finishLiveVideo(userId) { code in
+        RCLiveVideoEngine.shared().kickUser(fromSeat:userId) { code in
             if code == .success {
-                SVProgressHUD.showSuccess(withStatus: "发送下麦通知成功")
+                SVProgressHUD.showSuccess(withStatus: "抱下麦成功")
             } else {
-                SVProgressHUD.showError(withStatus: "发送下麦通知失败")
+                SVProgressHUD.showError(withStatus: "抱下麦失败")
             }
         }
     }
@@ -102,7 +133,7 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
             event.isAdmin = isManager
             RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
                 guard let self = self else { return }
-                self.messageView.add(event)
+                self.messageView.addMessage(event)
                 if isManager {
                     self.managers.append(user)
                 } else {
@@ -136,8 +167,9 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
             }
             return
         }
+        SceneRoomManager.updateLiveSeatList()
         let dependency = VoiceRoomGiftDependency(room: room,
-                                                 seats: [],
+                                                 seats: SceneRoomManager.shared.seatlist,
                                                  userIds: [userId])
         navigator(.gift(dependency: dependency, delegate: self))
     }
@@ -155,7 +187,7 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
                 } error: { eCode, mId in
                     print("send message fail: \(mId), code: \(eCode.rawValue)")
                 }
-                self?.messageView.add(message)
+                self?.messageView.addMessage(message)
             }
         }
     }
@@ -164,11 +196,10 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
         RCLiveVideoEngine.shared().inviteLiveVideo(userId, at: -1) { [weak self] code in
             switch code {
             case .success:
-                self?.toolBarView.micState = .waiting
-            case .invitationIsFull:
-                SVProgressHUD.showError(withStatus: "上麦邀请队列已满")
-            case .liveVideoIsFull:
-                SVProgressHUD.showError(withStatus: "麦位已满")
+                if RCLiveVideoEngine.shared().currentMixType == .oneToOne {
+                    self?.micButton.micState = .waiting
+                }
+                SVProgressHUD.showSuccess(withStatus: "已邀请上麦")
             default:
                 SVProgressHUD.showError(withStatus: "邀请失败")
             }

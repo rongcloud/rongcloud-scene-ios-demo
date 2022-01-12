@@ -5,7 +5,6 @@
   Created by 叶孤城 on 2021/4/20.
   
 */
-"CFBundleDisplayName" = "融云 RTC";
 "login" = "登录";
 "input_phone_placeholder" = "请输入您的手机号码";
 "input_verify_code_placeholder" = "请输入验证码";

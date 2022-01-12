@@ -43,7 +43,7 @@ extension LiveVideoRoomViewController {
         let likeGesture = RCLikeTapGesture(target: self,
                                            action: #selector(onLikeClicked(_:)),
                                            descendant: [])
-        likeView.addGestureRecognizer(likeGesture)
+        view.addGestureRecognizer(likeGesture)
     }
     
     @objc func onLikeClicked(_ gesture: UITapGestureRecognizer) {
@@ -86,7 +86,7 @@ extension LiveVideoRoomViewController {
         let layer = VoiceRoomLikeIconLayer("like")
         view.layer.addSublayer(layer)
         
-        let tempFrame = view.convert(toolBarView.rightMostViewFrame, from: toolBarView)
+        let tempFrame = view.convert(messageButton.frame, from: messageButton.superview)
         let width = tempFrame.width
         let height = tempFrame.height
         let x = tempFrame.midX - width * 0.5

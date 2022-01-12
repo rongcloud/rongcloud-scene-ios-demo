@@ -63,7 +63,7 @@ class VoiceRoomPKGiftUserView: UIView {
         avatarImageView.layer.borderColor = color.cgColor
     }
     
-    func updateUser(user: RespRoomUser?, rank: Int, isLeft: Bool) {
+    func updateUser(user: PKSendGiftUser?, rank: Int, isLeft: Bool) {
         if let user = user {
             avatarImageView.kf.setImage(with: URL.potraitURL(portrait: user.portrait), placeholder: R.image.default_avatar())
             if isLeft {

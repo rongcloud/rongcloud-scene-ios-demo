@@ -9,10 +9,10 @@ import Foundation
 
 public enum HomeItem: Int, CaseIterable {
     case audioRoom = 1
-    case videoCall = 10
-    case audioCall = 11
-    case radioRoom = 2
     case liveVideo = 3
+    case radioRoom = 2
+    case audioCall = 11
+    case videoCall = 10
 }
 
 public extension HomeItem {
@@ -42,7 +42,7 @@ public extension HomeItem {
         case .audioCall:
             return "拥有智能降噪的无差别 电话体验"
         case .liveVideo:
-            return "低延迟、高清晰度视频通话"
+            return "视频直播间，支持高级美颜、观众连麦互动"
         }
     }
     

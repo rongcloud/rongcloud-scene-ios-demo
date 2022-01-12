@@ -7,11 +7,9 @@
 
 import Foundation
 
-enum PKState {
-    case initial
+enum PKCountdownState {
     case pkOngoing
     case punishOngoing
-    case end
 }
 
 enum PKResult {
