@@ -27,18 +27,18 @@ def commonPods
   pod 'SwiftyBeaver'
   pod 'ReachabilitySwift'
   
-  pod 'RCVoiceRoomLib', '~>2.0.5'
+  pod 'RCVoiceRoomLib', '~>2.0.7'
   pod 'RCLiveVideoLib', '~>2.0.2'
-  pod 'RCMusicControlKit'
   
   # CORE
   pod 'RongCloudIM/IMKit'
-  pod 'RongCloudRTC/RongRTCLib', '5.1.13'
+  pod 'RongCloudRTC/RongRTCLib'
   pod 'RongCloudRTC/RongRTCPlayer'
   
   # Local Pod
   pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
   pod 'RCChatroomSceneKit', :path => 'Lib/RCChatroomSceneKit'
+  pod 'RCMusicControlKit', :path => 'Lib/RCMusicControlKit'
   pod 'RCRTCAudio', :path => 'Lib/RCRTCAudio'
   
 end

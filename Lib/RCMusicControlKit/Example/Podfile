@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'RCMusicControlKit_Example' do
+  pod 'RCMusicControlKit', :path => '../'
+
+  target 'RCMusicControlKit_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

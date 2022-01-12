@@ -1,0 +1,244 @@
+{
+  "module": {
+    "toolBar": {
+      "backgroundColor": {
+        "red": "0",
+        "green": "0",
+        "blue": "0",
+        "alpha": "0"
+      },
+      "leading": "14",
+      "trailing": "-14",
+      "spacing": "10",
+      "turnOnMusicControl": true,
+      "turnOnSoundEffect": true,
+      "items": [
+          {
+            "normalImage": {
+              "local": "local_music_normal_icon",
+              "remote": ""
+            },
+            "selectedImage": {
+              "local": "local_music_selected_icon",
+              "remote": ""
+            }
+          },
+          {
+            "normalImage": {
+              "local": "remote_music_normal_icon",
+              "remote": ""
+            },
+            "selectedImage": {
+              "local": "remote_music_selected_icon",
+              "remote": ""
+            }
+          },
+          {
+            "normalImage": {
+              "local": "music_control_normal_icon",
+              "remote": ""
+            },
+            "selectedImage": {
+              "local": "music_control_selected_icon",
+              "remote": ""
+            }
+          },
+          {
+            "normalImage": {
+              "local": "sound_effect_normal_icon",
+              "remote": ""
+            },
+            "selectedImage": {
+              "local": "sound_effect_selected_icon",
+              "remote": ""
+            }
+          }
+        ]
+    },
+    "barItem": {
+      "backgroundColor": {
+        "red": "0",
+        "green": "0",
+        "blue": "0",
+        "alpha": "0"
+      },
+      "size": {
+        "width": "36",
+        "height": "36"
+      },
+      "contentMode": "1",
+      "contentInset": {
+        "top": "0",
+        "bottom": "0",
+        "left": "0",
+        "right": "0"
+      }
+    },
+    "categorySelector": {
+      "backgroundColor": {
+        "red": "0",
+        "green": "0",
+        "blue": "0",
+        "alpha": "0"
+      },
+      "showIndicator": "1",
+      "indicatorSize": {
+        "width": "20",
+        "height": "2"
+      },
+      "labelAttributes": {
+        "normalFont": {
+          "size": "11",
+          "weight": "400"
+        },
+        "selectedFont": {
+          "size": "12",
+          "weight": "700"
+        },
+        "normalColor": {
+          "red": "255",
+          "green": "255",
+          "blue": "255",
+          "alpha": "1"
+        },
+        "selectedColor": {
+          "red": "239",
+          "green": "73",
+          "blue": "154",
+          "alpha": "1"
+        }
+      }
+    },
+    "musicList": {
+      "turnOnLocalUpload": true,
+      "backgroundColor": {
+        "red": "0",
+        "green": "0",
+        "blue": "0",
+        "alpha": "0"
+      },
+      "avatarSize": {
+        "width": "44",
+        "height": "44"
+      },
+      "avatarInsets": {
+        "top": "0",
+        "bottom": "0",
+        "left": "0",
+        "right": "0"
+      },
+      "separatorInset": {
+        "top": "0",
+        "bottom": "0",
+        "left": "74",
+        "right": "0"
+      },
+      "titleAttribute": {
+        "textColor": {
+          "red": "255",
+          "green": "255",
+          "blue": "255",
+          "alpha": "1"
+        },
+        "font": {
+          "size": "15",
+          "weight": "700"
+        },
+        "titleInsets": {
+          "top": "0",
+          "bottom": "0",
+          "left": "74",
+          "right": "0"
+        },
+        "alignment": "0"
+      },
+      "contentAttribute": {
+        "textColor": {
+          "red": "255",
+          "green": "255",
+          "blue": "255",
+          "alpha": "0.7"
+        },
+        "font": {
+          "size": "12",
+          "weight": "400"
+        },
+        "titleInsets": {
+          "top": "0",
+          "bottom": "0",
+          "left": "74",
+          "right": "0"
+        },
+        "alignment": "0"
+      },
+      "sizeAttribute": {
+        "textColor": {
+          "red": "255",
+          "green": "255",
+          "blue": "255",
+          "alpha": "0.7"
+        },
+        "font": {
+          "size": "9",
+          "weight": "400"
+        },
+        "titleInsets": {
+          "top": "0",
+          "bottom": "0",
+          "left": "74",
+          "right": "0"
+        },
+        "alignment": "0"
+      }
+    },
+    "musicControl": {
+      "backgroundColor": {
+        "red": "0",
+        "green": "0",
+        "blue": "0",
+        "alpha": "0"
+      },
+      "tintColor": {
+        "red": "239",
+        "green": "73",
+        "blue": "154",
+        "alpha": "1"
+      },
+      "textColor": {
+        "red": "255",
+        "green": "255",
+        "blue": "255",
+        "alpha": "1"
+      },
+      "font": {
+        "size": "14",
+        "weight": "400"
+      }
+    },
+    "soundEffect": {
+         "backgroundColor": {
+           "red": "255",
+           "green": "255",
+           "blue": "255",
+           "alpha": "0.16"
+          },
+          "borderColor": {
+            "red": "255",
+            "green": "255",
+            "blue": "255",
+            "alpha": "0.2"
+          },
+          "borderWidth": "1",
+          "textColor": {
+            "red": "255",
+            "green": "255",
+            "blue": "255",
+            "alpha": "0.7"
+          },
+          "font": {
+            "size": "14",
+            "weight": "400"
+          }
+        }
+      }
+    }

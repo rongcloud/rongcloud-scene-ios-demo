@@ -1,0 +1,16 @@
+PODS:
+  - RCMusicControlKit (0.1.0)
+
+DEPENDENCIES:
+  - RCMusicControlKit (from `../`)
+
+EXTERNAL SOURCES:
+  RCMusicControlKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  RCMusicControlKit: da12b115828eac481a8cf0a673e29c6cd76e6f68
+
+PODFILE CHECKSUM: d4809736fe694366bcf8b29bbeea635f4aed0149
+
+COCOAPODS: 1.11.2

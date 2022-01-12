@@ -2,7 +2,6 @@ PODS:
   - Alamofire (5.5.0)
   - Bugly (2.5.91)
   - Differentiator (5.0.0)
-  - FCFileManager (1.0.20)
   - GrowingTextView (0.7.2)
   - IQKeyboardManager (6.5.9)
   - ISEmojiView (0.2.6)
@@ -20,25 +19,21 @@ PODS:
   - RCChatroomSceneKit (0.0.1):
     - Masonry
     - YYModel
-  - RCCoreKit (0.0.1):
-    - FCFileManager
-    - SSZipArchive
-    - YYModel
   - RCLiveVideoLib (2.0.2):
     - RongCloudIM/IMLib (~> 5.1.7)
     - RongCloudRTC/RongRTCLib (= 5.1.13)
   - RCMusicControlKit (0.0.1):
     - Masonry
-    - RCCoreKit
     - SDWebImage
+    - SVProgressHUD
     - YYModel
   - RCRTCAudio (0.0.1)
   - RCVoiceRoomCallKit (0.0.1):
     - RongCloudIM/IMLib (~> 5.1.3)
     - RongCloudRTC/RongCallLib (~> 5.1.3)
-  - RCVoiceRoomLib (2.0.4):
-    - RongCloudIM/IMLib (~> 5.1.5)
-    - RongCloudRTC/RongRTCLib (~> 5.1.9)
+  - RCVoiceRoomLib (2.0.7):
+    - RongCloudIM/IMLib (~> 5.1.6)
+    - RongCloudRTC/RongRTCLib (~> 5.1.13)
   - ReachabilitySwift (5.0.0)
   - ReactorKit (3.1.0):
     - RxSwift (~> 6.0)
@@ -94,7 +89,6 @@ PODS:
     - SDWebImage/Core (= 5.12.1)
   - SDWebImage/Core (5.12.1)
   - SnapKit (5.0.1)
-  - SSZipArchive (2.4.2)
   - SVProgressHUD (2.2.5)
   - SwiftyBeaver (1.9.5)
   - UMCommon (7.3.5):
@@ -118,16 +112,16 @@ DEPENDENCIES:
   - Pulsator
   - R.swift
   - RCChatroomSceneKit (from `Lib/RCChatroomSceneKit`)
-  - RCLiveVideoLib
-  - RCMusicControlKit
+  - RCLiveVideoLib (~> 2.0.2)
+  - RCMusicControlKit (from `Lib/RCMusicControlKit`)
   - RCRTCAudio (from `Lib/RCRTCAudio`)
   - RCVoiceRoomCallKit (from `Lib/RCVoiceRoomCallKit`)
-  - RCVoiceRoomLib
+  - RCVoiceRoomLib (~> 2.0.7)
   - ReachabilitySwift
   - ReactorKit
   - Reusable
   - RongCloudIM/IMKit
-  - RongCloudRTC/RongRTCLib (= 5.1.13)
+  - RongCloudRTC/RongRTCLib
   - RongCloudRTC/RongRTCPlayer
   - RxDataSources
   - RxGesture
@@ -145,7 +139,6 @@ SPEC REPOS:
     - Alamofire
     - Bugly
     - Differentiator
-    - FCFileManager
     - GrowingTextView
     - IQKeyboardManager
     - ISEmojiView
@@ -156,9 +149,7 @@ SPEC REPOS:
     - Pulsator
     - R.swift
     - R.swift.Library
-    - RCCoreKit
     - RCLiveVideoLib
-    - RCMusicControlKit
     - RCVoiceRoomLib
     - ReachabilitySwift
     - ReactorKit
@@ -173,7 +164,6 @@ SPEC REPOS:
     - RxViewController
     - SDWebImage
     - SnapKit
-    - SSZipArchive
     - SVProgressHUD
     - SwiftyBeaver
     - UMCommon
@@ -186,6 +176,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   RCChatroomSceneKit:
     :path: Lib/RCChatroomSceneKit
+  RCMusicControlKit:
+    :path: Lib/RCMusicControlKit
   RCRTCAudio:
     :path: Lib/RCRTCAudio
   RCVoiceRoomCallKit:
@@ -195,7 +187,6 @@ SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
-  FCFileManager: e0f73316e6aa2eb04d2ff4caa75fe7df1ae44270
   GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   IQKeyboardManager: 241cc94ccabc9deb8f8bd7d12f00d73288d13ecc
   ISEmojiView: f7cd94a6c93307f429ec5da001293d0b02247f03
@@ -207,12 +198,11 @@ SPEC CHECKSUMS:
   R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
   RCChatroomSceneKit: 23ce92b525e5f6730d73d152a2d9bff57e3ba350
-  RCCoreKit: 3f143441ac62880b454cca9066f526a27c45d4ce
   RCLiveVideoLib: 0cf6e1e979f13aa2457a3ec9ee0aafed3cb9dc6d
-  RCMusicControlKit: 53c7486fccd6b1a256479c3aa481fa9e9f7fc072
+  RCMusicControlKit: b259226fb3fad8a9cfabb3a9ab5a522dbfdc0344
   RCRTCAudio: c8f611e0dcca3bf05aec5c58e643a41fb35135c9
   RCVoiceRoomCallKit: 5607679315894cbec77019e35a51a97dd900c137
-  RCVoiceRoomLib: d93269c0f0ee12d5bae8b95f7f3935f074c4a1a9
+  RCVoiceRoomLib: d8ede7631716066c91dd49da3424186fc6b2cdde
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   ReactorKit: a06dd2a5c9339287aedf3dc821cfab6347eca106
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
@@ -226,7 +216,6 @@ SPEC CHECKSUMS:
   RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
   UMCommon: ab4d875ddefe1b06c60b577e4a58bc4d433ee067
@@ -236,6 +225,6 @@ SPEC CHECKSUMS:
   XCoordinator: 9ee654fedef1ffede33d5c11677708a555c00542
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: b2e860c43f8e431be056cc21fe622a95e32343df
+PODFILE CHECKSUM: dc04f0850c7c40a00f6c35eb50a66d3b1acf694e
 
 COCOAPODS: 1.11.2
