@@ -1,23 +1,22 @@
-# 语聊房Demo介绍
+# 融云 RTC
 
-
+## 简介
+本仓库是融云 RTC 项目开源代码，为开发者提供接入场景化 SDK 代码示例。
 
 ## 基础架构
 
-融云场景Demo的主要代码模块有以下几类。
+融云 RTC 开发语言以 Swfit 为主，
 
-* 常规业务： `RxSwift + ReactorKit` 来实现 `MVVM` 的基本逻辑，例如 `UI <---> Data` 双向绑定等。
+* 常规业务：根据业务简易程度，实现 `MVC` 和 `MVVM` 的基本逻辑。
 * 静态资源：使用 `R.swift` 来管理静态资源。
-* 网络请求： 基于RxMoya的网络请求
-* 列表数据源：使用`RxDataSources`绑定`UITableView`和`UICollectionView`的数据源。
-* 核心业务开发： 以防部分开发对响应式编程和MVVM结构不熟悉。我们在重要的演示模块，例如语聊房核心代码，依旧使用了常规的MVC开发。
-* 视图导航： 基于Swift Enum的AppNavigation，用户也可基于 `runtime` 去动态生成视图来做视图间的解耦。
+* 网络请求：基于 `Moya` 封装网络请求没，每个业务接口以 Enum 的方式实现 Moya.TargetType 协议。
+* 视图导航：基于 Swift 中 Enum 的 `AppNavigation`，用户也可基于 `runtime` 去动态生成视图来做视图间的解耦。
+* 环境变量：除了默认的 `Debug` 和 `Release`，额外增加海外 `Overseas` 和打包 `Production` 两个环境。
 
 
+## 模块结构
 
-## 目录结构
-
-主体目录结构如下。
+融云 RTC 的主要模块：
 
 ![](https://tva1.sinaimg.cn/large/008i3skNly1grt4fatbqwj31130u0q8n.jpg)
 
