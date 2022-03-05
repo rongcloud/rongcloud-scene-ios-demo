@@ -2,6 +2,8 @@
 platform :ios, '13.0'
 inhibit_all_warnings!
 
+install! 'cocoapods', :disable_input_output_paths => true
+
 def commonPods
   pod 'IQKeyboardManager'
   pod 'RxViewController'
@@ -19,7 +21,6 @@ def commonPods
   pod 'MJRefresh'
   pod 'GrowingTextView', '0.7.2'
   pod 'ISEmojiView'
-  pod 'SwiftyBeaver'
   pod 'RxGesture'
   pod "ViewAnimator"
   pod 'SDWebImage'
@@ -27,19 +28,20 @@ def commonPods
   pod 'SwiftyBeaver'
   pod 'ReachabilitySwift'
   
-  pod 'RCVoiceRoomLib', '~>2.0.7'
-  pod 'RCLiveVideoLib', '~>2.0.2'
-  
-  # CORE
+  # RC Core
   pod 'RongCloudIM/IMKit'
-  pod 'RongCloudRTC/RongRTCLib'
+  pod 'RCMusicControlKit'
   pod 'RongCloudRTC/RongRTCPlayer'
+  
+  # Scene
+  pod 'RCVoiceRoomLib', '2.0.8.2'
+  pod 'RCLiveVideoLib', '2.1.0.2'
+  pod 'RCChatroomSceneKit'
   
   # Local Pod
   pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
-  pod 'RCChatroomSceneKit', :path => 'Lib/RCChatroomSceneKit'
-  pod 'RCMusicControlKit', :path => 'Lib/RCMusicControlKit'
-  pod 'RCRTCAudio', :path => 'Lib/RCRTCAudio'
+  pod 'RCSceneRoomSetting', :path => 'Feature/RCSceneRoomSetting'
+  pod 'RCSceneMessage', :path => 'Feature/RCSceneMessage'
   
 end
 
@@ -56,19 +58,6 @@ target 'RCE' do
     inherit! :search_paths
     # Pods for testing
   end
-end
-
-
-target 'RCE-OVERSEA' do
-  use_frameworks!
-  commonPods
-end
-
-target 'RCVoiceRoomMessage' do
-  use_frameworks!
-  pod 'RongCloudIM/IMKit'
-  pod 'RCRTCAudio', :path => 'Lib/RCRTCAudio'
-#  pod 'ChatRoomScene', :path => 'Lib/ChatRoomScene'
 end
 
 post_install do |installer|

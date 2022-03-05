@@ -22,6 +22,6 @@ extension LiveVideoRoomViewController {
 }
 
 extension LiveVideoRoomViewController: VoiceRoomNoticeDelegate {
-    func noticeDidModfied(notice: String) {
+    func noticeDidModified(notice: String) {
     }
 }

@@ -10,14 +10,8 @@ import SVProgressHUD
 import RCChatroomSceneKit
 
 final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
-  
-    /// 视频流相关
-    let gpuHandler = ChatGPUImageHandler()
-    private(set) lazy var beautyManager: MHBeautyManager = {
-        let instance = MHBeautyManager()
-        instance.setupDefault()
-        return instance
-    }()
+    
+    private(set) lazy var beautyPlugin = RCBeautyPlugin()
     
     var room: VoiceRoom! {
         didSet {
@@ -52,7 +46,7 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         return instance
     }()
     
-    private(set) lazy var creationView = LiveVideoRoomCreationView(beautyManager)
+    private(set) lazy var creationView = LiveVideoRoomCreationView(beautyPlugin)
     
     private(set) lazy var containerView = UIView()
     private(set) lazy var seatView = UIView()
@@ -63,20 +57,17 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
     private(set) lazy var roomMoreView = RCLiveVideoRoomMoreView()
     
     private(set) lazy var chatroomView = RCChatroomSceneView()
+    private(set) lazy var pkButton = RCChatroomSceneButton(.pk)
     private(set) lazy var micButton = RCChatroomSceneButton(.mic)
     private(set) lazy var giftButton = RCChatroomSceneButton(.gift)
     private(set) lazy var messageButton = RCChatroomSceneButton(.message)
     private(set) lazy var settingButton = RCChatroomSceneButton(.setting)
     
-    private(set) lazy var sticker = RCMHStickerViewController(beautyManager)
-    private(set) lazy var retouch = RCMHRetouchViewController(beautyManager)
-    private(set) lazy var makeup = RCMHMakeupViewController(beautyManager)
-    private(set) lazy var effect = RCMHEffectViewController(beautyManager)
-    
-    private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: room!.roomId)
     private(set) lazy var videoPropsSetVc = VideoPropertiesSetViewController()
     
     private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
+    
+    lazy var pkView = LiveVideoRoomPKView()
     
     init(_ room: VoiceRoom? = nil) {
         self.room = room
@@ -96,6 +87,7 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         UIApplication.shared.isIdleTimerDisabled = true
         videoPropsSetVc.delegate = self
         PlayerImpl.instance.type = .live
+        PlayerImpl.instance.initializedEarMonitoring()
         bubbleViewAddGesture()
     }
     
@@ -137,7 +129,8 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
         let preview = RCLiveVideoEngine.shared().previewView()
         containerView.addSubview(preview)
         preview.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.bottom.right.equalToSuperview()
+            make.width.equalTo(preview.snp.height).multipliedBy(9.0 / 16)
         }
         
         containerView.addSubview(seatView)
@@ -234,14 +227,15 @@ final class LiveVideoRoomHostController: LiveVideoRoomModuleHostController {
     deinit {
         UIApplication.shared.isIdleTimerDisabled = false
         RCCall.shared().canIncomingCall = true
-        beautyManager.destroy()
         debugPrint("Live deinit")
     }
 }
 
 extension LiveVideoRoomHostController {
     dynamic func roomDidCreated() {}
-    dynamic func handleReceivedMessage(_ message: RCMessage) {}
+    dynamic func handleReceivedMessage(_ message: RCMessage) {
+        RoomMessageHandlerManager.handleMessage(message, musicInfoBubbleView)
+    }
 }
 
 extension LiveVideoRoomHostController: RCRoomCycleProtocol {

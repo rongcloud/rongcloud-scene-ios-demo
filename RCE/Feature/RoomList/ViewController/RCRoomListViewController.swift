@@ -109,7 +109,9 @@ final class RCRoomListViewController: UIViewController {
                 SVProgressHUD.dismiss()
                 if let room = wrapper.data {
                     self?.userDidCreateRoom(room) {
-                        self?.didCreatedRoom(room)
+                        let controller = RCRoomContainerViewController([room], index: 0, dataSource: self)
+                        guard let nav = self?.navigationController else { return }
+                        nav.pushViewController(controller, animated: true)
                     }
                 } else {
                     self?.createRoom()

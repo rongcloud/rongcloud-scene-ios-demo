@@ -6,18 +6,73 @@
 //
 
 import SVProgressHUD
+import RCSceneRoomSetting
 
 extension VoiceRoomViewController {
     @_dynamicReplacement(for: setupModules)
     private func setupSettingModule() {
         setupModules()
-        toolBarView.add(setting: self, action: #selector(handleSettingClick))
     }
     
-    @objc private func handleSettingClick() {
-        navigator(.roomSetting(roomState.settinglist(), self))
+    @objc func handleSettingClick() {
+        let notice = kvRoomInfo?.extra ?? "欢迎来到\(voiceRoomInfo.roomName)"
+        var items: [Item] {
+            return [
+                .roomLock(voiceRoomInfo.isPrivate == 0),
+                .roomName(voiceRoomInfo.roomName),
+                .roomNotice(notice),
+                .roomBackground,
+                .seatFree(!roomState.isFreeEnterSeat),
+                .seatMute(!roomState.isMuteAll),
+                .seatLock(!roomState.isLockAll),
+                .speaker(enable: !roomState.isSilence),
+                .seatCount(roomState.isSeatModeLess ? 8 : 4),
+                .forbidden,
+                .music
+            ]
+        }
+        let controller = RCSceneRoomSettingViewController(items: items, delegate: self)
+        controller.modalTransitionStyle = .crossDissolve
+        controller.modalPresentationStyle = .overFullScreen
+        present(controller, animated: true)
+    }
+}
+
+extension VoiceRoomViewController: RCSceneRoomSettingProtocol {
+    func eventWillTrigger(_ item: Item) -> Bool {
+        return false
     }
     
+    func eventDidTrigger(_ item: Item, extra: String?) {
+        switch item {
+        case .roomLock(let lock):
+            setRoomType(isPrivate: lock, password: extra)
+        case .roomName(let name):
+            roomUpdate(name: name)
+        case .roomNotice(let notice):
+            noticeDidModified(notice: notice)
+        case .roomBackground:
+            modifyRoomBackgroundDidClick()
+        case .seatFree(let free):
+            freeMicDidClick(isFree: free)
+        case .seatMute(let mute):
+            muteAllSeatDidClick(isMute: mute)
+        case .seatLock(let lock):
+            lockAllSeatDidClick(isLock: lock)
+        case .speaker(let enable):
+            silenceSelfDidClick(isSilence: enable)
+        case .seatCount(let count):
+            lessSeatDidClick(isLess: count == 4)
+        case .music:
+            presentMusicController()
+        case .forbidden:
+            forbiddenDidClick()
+        default: ()
+        }
+    }
+}
+
+extension VoiceRoomViewController {
     private func setRoomType(isPrivate: Bool, password: String?) {
         let title = isPrivate ? "设置房间密码" : "解锁"
         let api: RCNetworkAPI = .setRoomType(roomId: voiceRoomInfo.roomId,
@@ -25,7 +80,7 @@ extension VoiceRoomViewController {
                                              password: password)
         func onSuccess() {
             SVProgressHUD.showSuccess(withStatus: "已\(title)")
-            roomState.isPrivate = isPrivate
+            voiceRoomInfo.isPrivate = isPrivate ? 1 : 0
         }
         func onError() {
             SVProgressHUD.showError(withStatus: title + "失败")
@@ -42,24 +97,14 @@ extension VoiceRoomViewController {
             }
         }
     }
-}
-
-//MARK: - Voice Room Setting Delegate
-extension VoiceRoomViewController: VoiceRoomSettingProtocol {
-    /// 房间上锁&解锁
-    func lockRoomDidClick(isLock: Bool) {
-        if isLock {
-            navigator(.inputPassword(type: .input, delegate: self))
-        } else {
-            setRoomType(isPrivate: false, password: nil)
-        }
-    }
+    
     /// 全麦锁麦
     func muteAllSeatDidClick(isMute: Bool) {
         roomState.isMuteAll = isMute
         RCVoiceRoomEngine.sharedInstance().muteOtherSeats(isMute)
         SVProgressHUD.showSuccess(withStatus: isMute ? "全部麦位已静音" : "已解锁全麦")
     }
+    
     /// 全麦锁座
     func lockAllSeatDidClick(isLock: Bool) {
         roomState.isLockAll = isLock
@@ -87,15 +132,6 @@ extension VoiceRoomViewController: VoiceRoomSettingProtocol {
             }
         }
     }
-    /// 房间标题
-    func modifyRoomTitleDidClick() {
-        navigator(.inputText(name: voiceRoomInfo.roomName ,delegate: self))
-    }
-    /// 房间通知
-    func noticeDidClick() {
-        let notice = kvRoomInfo?.extra ?? "欢迎来到\(voiceRoomInfo.roomName)"
-        navigator(.notice(modify: true, notice: notice, delegate: self))
-    }
     /// 房间背景
     func modifyRoomBackgroundDidClick() {
         navigator(.changeBackground(imagelist: SceneRoomManager.shared.backgroundlist ,delegate: self))
@@ -113,13 +149,10 @@ extension VoiceRoomViewController: VoiceRoomSettingProtocol {
         }
         kvRoom.isMuteAll = false
         kvRoom.isLockAll = false
-        let roomId = voiceRoomInfo.roomId
         RCVoiceRoomEngine.sharedInstance().setRoomInfo(kvRoom) {
             let content = RCChatroomSeats()
             content.count = kvRoom.seatCount - 1
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: content) { [weak self] mId in
-                self?.messageView.add(content)
-            } error: { eCode, mId in }
+            ChatroomSendMessage(content, messageView: self.messageView)
         } error: { code, msg in
             SVProgressHUD.showError(withStatus: msg)
         }
@@ -143,7 +176,7 @@ extension VoiceRoomViewController: VoiceRoomInputPasswordProtocol {
 extension VoiceRoomViewController: ChangeBackgroundImageProtocol {
     func didConfirmImage(urlSuffix: String) {
         NotificationNameRoomBackgroundUpdated.post((voiceRoomInfo.roomId, urlSuffix))
-        let api: RCNetworkAPI = .updateRoombackgroundUrl(roomId: voiceRoomInfo.roomId, backgroundUrl: urlSuffix)
+        let api: RCNetworkAPI = .updateRoomBackground(roomId: voiceRoomInfo.roomId, backgroundUrl: urlSuffix)
         networkProvider.request(api) { result in
             switch result.map(AppResponse.self) {
             case let .success(response):
@@ -160,30 +193,25 @@ extension VoiceRoomViewController: ChangeBackgroundImageProtocol {
     }
 }
 
-// MARK: - Modify Room Name Delegate
-extension VoiceRoomViewController: VoiceRoomInputTextProtocol {
-    func textDidInput(text: String) {
-        /// 接口合并
-        let api: RCNetworkAPI = .setRoomName(roomId: voiceRoomInfo.roomId, name: text)
+extension VoiceRoomViewController {
+    func roomUpdate(name: String) {
+        let api: RCNetworkAPI = .setRoomName(roomId: voiceRoomInfo.roomId, name: name)
         networkProvider.request(api) { result in
             switch result.map(AppResponse.self) {
             case let .success(response):
                 if response.validate() {
                     SVProgressHUD.showSuccess(withStatus: "更新房间名称成功")
+                    if let roomInfo = self.kvRoomInfo {
+                        roomInfo.roomName = name
+                        RCVoiceRoomEngine.sharedInstance().setRoomInfo(roomInfo) {
+                        } error: { code, msg in
+                        }
+                    }
                 } else {
-                    SVProgressHUD.showError(withStatus: "更新房间名称失败")
+                    SVProgressHUD.showError(withStatus: response.msg ?? "更新房间名称失败")
                 }
             case .failure:
                 SVProgressHUD.showError(withStatus: "更新房间名称失败")
-            }
-        }
-        
-        if let roomInfo = kvRoomInfo {
-            roomInfo.roomName = text
-            RCVoiceRoomEngine.sharedInstance().setRoomInfo(roomInfo) {
-                
-            } error: { code, msg in
-                
             }
         }
     }

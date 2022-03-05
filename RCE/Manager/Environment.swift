@@ -19,7 +19,14 @@ enum Environment {
 
 extension Environment {
     var url: URL {
-        return URL(string: "https://rcrtc-api.rongcloud.net/")!
+        switch self {
+        case .debug:
+            return URL(string: "开发环境地址")!
+        case .overseas:
+            return URL(string: "海外环境地址")!
+        default:
+            return URL(string: "正式环境地址")!
+        }
     }
     
     static var current: Environment {
@@ -38,24 +45,30 @@ extension Environment {
         return UserDefaults.standard.loginUser()?.userId ?? ""
     }
     
-    /// 融云 APP Key
     var rcKey: String {
-        return "pvxdm17jpw7ar"
+        switch self {
+        case .debug:
+            return "开发环境 key"
+        case .overseas:
+            return "海外环境 key"
+        default:
+            return "正式环境 key"
+        }
     }
     
-    /// 友盟 Key
     var umengKey: String {
-        return ""
+        return "友盟 key"
     }
     
-    /// crash 收集
     var buglyKey: String {
-        return ""
+        return "bugly key"
     }
     
-    /// 如果需要美颜，请再次配置 Key
     static var MHBeautyKey: String {
-        return ""
+        let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String
+        switch bundleID {
+        default: return "美狐美颜 key"
+        }
     }
     
     static var currentUser: User? {

@@ -15,9 +15,9 @@ extension VoiceRoomViewController {
             seatlist = newValue
             SceneRoomManager.shared.seatlist = seatlist
             collectionView.reloadData()
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
                 self.updateCollectionViewHeight()
-            }
+            })
             
             if let seatInfo = seatlist.first {
                 ownerView.updateOwner(seatInfo: seatInfo)
@@ -26,6 +26,8 @@ extension VoiceRoomViewController {
             /// 当麦位数量变化时，触发连麦用户下麦，需要更新状态
             if roomState.connectState == .connecting {
                 roomState.connectState = isSitting() ? .connecting : .request
+            } else if isSitting() {
+                micButton.micState = voiceRoomInfo.isOwner ? .user : .connecting
             }
             if seatlist.contains(where: { $0.userId == Environment.currentUserId }) {
                 (self.parent as? RCRoomContainerViewController)?.disableSwitchRoom()
@@ -41,7 +43,7 @@ extension VoiceRoomViewController {
         set {
             managerlist = newValue
             SceneRoomManager.shared.managerlist = managerlist.map(\.userId)
-            messageView.reloadMessages()
+            messageView.tableView.reloadData()
             collectionView.reloadData()
         }
     }
@@ -112,7 +114,6 @@ extension VoiceRoomViewController {
     func enterSeat(index: Int, _ isPicked: Bool = false, completion: EnterSeatCompletion? = nil) {
         if roomState.isEnterSeatWaiting { return }
         roomState.isEnterSeatWaiting.toggle()
-        roomState.isCloseSelfMic = false
         RCVoiceRoomEngine.sharedInstance()
             .enterSeat(UInt(index)) { [weak self] in
                 self?.roomState.isEnterSeatWaiting.toggle()
@@ -136,7 +137,6 @@ extension VoiceRoomViewController {
             [weak self] in
             guard let `self` = self else { return }
             DispatchQueue.main.async {
-                self.roomState.isCloseSelfMic = false
                 if !isKickout {
                     SVProgressHUD.showSuccess(withStatus: "下麦成功")
                 } else {
@@ -194,7 +194,6 @@ extension VoiceRoomViewController: UICollectionViewDelegate {
                         guard let self = self else { return }
                         self.roomState.isEnterSeatWaiting.toggle()
                         guard !self.seatlist[seatIndex].isMuted else { return }
-                        RCVoiceRoomEngine.sharedInstance().disableAudioRecording(self.roomState.isCloseSelfMic)
                     } error: { [weak self] code, msg in
                         self?.roomState.isEnterSeatWaiting.toggle()
                     }

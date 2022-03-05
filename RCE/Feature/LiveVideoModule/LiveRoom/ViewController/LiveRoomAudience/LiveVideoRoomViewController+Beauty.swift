@@ -24,32 +24,11 @@ extension LiveVideoRoomViewController {
         config.maxBitrate = 800
         RCRTCEngine.sharedInstance().defaultVideoStream.videoConfig = config
         
-        /// 设置美颜
-        setupBeautyManagerIfNeeded()
-        
         /// 开始直播
         RCRTCEngine.sharedInstance().defaultVideoStream.startCapture()
     }
     
-    func didOutputSampleBuffer(_ sampleBuffer: CMSampleBuffer?) -> Unmanaged<CMSampleBuffer>? {
-        guard let sampleBuffer = sampleBuffer else { return nil }
-        guard
-            let osTypeHandler = osTypeHandler,
-            let beautyManager = beautyManager,
-            let processedSampleBuffer = osTypeHandler.onGPUFilterSource(sampleBuffer),
-            let pixelBuffer = CMSampleBufferGetImageBuffer(processedSampleBuffer.takeUnretainedValue())
-        else { return Unmanaged.passUnretained(sampleBuffer) }
-        beautyManager.process(with: pixelBuffer, formatType: kCVPixelFormatType_32BGRA)
-        return processedSampleBuffer
-    }
-    
-    private func setupBeautyManagerIfNeeded() {
-        if osTypeHandler == nil {
-            osTypeHandler = ChatGPUImageHandler()
-        }
-        if beautyManager == nil {
-            beautyManager = MHBeautyManager()
-            beautyManager?.setupDefault()
-        }
+    func didOutputFrame(_ frame: RCRTCVideoFrame) -> RCRTCVideoFrame {
+        return beautyPlugin.didOutput(frame)
     }
 }

@@ -48,12 +48,9 @@ extension RCRadioRoomViewController {
     
     @objc func onLikeClicked(_ gesture: UITapGestureRecognizer) {
         let point = gesture.location(in: view)
-        let like = RCChatroomLike()
         showTapIcon(point)
         showLikeIcons()
-        RCChatroomMessageCenter
-            .sendChatMessage(roomInfo.roomId, content: like)
-                { mId in } error: { eCode, mId in }
+        ChatroomSendMessage(RCChatroomLike())
     }
     
     @_dynamicReplacement(for: handleReceivedMessage(_:))
@@ -86,7 +83,8 @@ extension RCRadioRoomViewController {
         let layer = VoiceRoomLikeIconLayer("like")
         view.layer.addSublayer(layer)
         
-        let tempFrame = view.convert(roomToolBarView.rightMostViewFrame, from: roomToolBarView)
+        let tmpView: UIView = roomInfo.isOwner ? settingButton : messageButton
+        let tempFrame = view.convert(tmpView.frame, from: tmpView.superview)
         let width = tempFrame.width
         let height = tempFrame.height
         let x = tempFrame.midX - width * 0.5

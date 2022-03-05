@@ -67,6 +67,6 @@ extension WebViewController {
         let nav = UINavigationController(rootViewController: web)
         nav.modalTransitionStyle = .coverVertical
         nav.modalPresentationStyle = .overFullScreen
-        controller.present(nav, animated: true, completion: nil)
+        controller.present(nav, animated: true)
     }
 }

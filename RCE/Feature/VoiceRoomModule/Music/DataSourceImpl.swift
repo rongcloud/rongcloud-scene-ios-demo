@@ -84,15 +84,14 @@ class MusicInfo: NSObject,RCMusicInfo {
     }
     
     func fullPath() -> String? {
-        guard let musicId = musicId, let dir = RCMusicDataPath.musicsDir(RCMusicDataPath.document()) else {
+        guard let musicId = musicId, let dir = DataSourceImpl.musicDir() else {
             return nil
         }
         return dir + "/" + musicId
     }
     
     static func localMusic(_ fileURL: URL) -> MusicInfo? {
-        let filePath = RCMusicDataPath.musicsDir(RCMusicDataPath.document())
-        guard var filePath = filePath else {
+        guard var filePath = DataSourceImpl.musicDir() else {
             return nil
         }
         do {
@@ -183,6 +182,24 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
     
     var groupId: String?
     
+    
+    static func musicDir() -> String? {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent("rcm_musics")
+        var isDirectory: ObjCBool = false
+        let isExists = FileManager.default.fileExists(atPath: fileURL.path, isDirectory: &isDirectory) && isDirectory.boolValue;
+        if (!isExists) {
+            do {
+                try FileManager.default.createDirectory(atPath: fileURL.path,
+                                                         withIntermediateDirectories: true,
+                                                         attributes: nil)
+            } catch {
+                log.debug("create rcm_musics fail");
+            }
+        }
+        return fileURL.path
+    }
+    
     func dataSourceInitialized() {
         HFOpenApiManager.shared().registerApp(withAppId: "6f78321c38ee4db3bb4dae7e56d464b1", serverCode: "ca41ad68e8054610a2", clientId: Environment.currentUserId, version: "V4.1.2") { _ in
             log.verbose("register hifive success")
@@ -211,7 +228,7 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
                 log.debug("DataSourceImpl fetch groupId fail")
                 SVProgressHUD.showError(withStatus: "获取歌曲类别失败")
                 sem.signal()
-                completion(nil)
+                return completion(nil)
             }
             
             let _ = sem.wait(timeout: .now() + 20)
@@ -239,6 +256,7 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
                 completion(result)
                 log.debug("DataSourceImpl fetch categories success")
             } fail: { error  in
+                completion(nil)
                 log.debug("DataSourceImpl fetch categories failed \(error.debugDescription)")
             }
         }
@@ -267,6 +285,7 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
             completion(result)
             log.debug("DataSourceImpl fetch musics success")
         } fail: { error in
+            completion(nil)
             log.debug("DataSourceImpl fetch musics failed \(error?.localizedDescription ?? "")")
             SVProgressHUD.showError(withStatus: "在线歌曲获取失败")
         }
@@ -329,28 +348,30 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
             return
         }
         
-        RCMusicDataManager.trafficHQListen(withMusicId: musicId, audioFormat: nil, audioRate: nil) { detail in
-            log.debug("success")
-            guard let detail = detail else {
+        HFOpenApiManager.shared().trafficHQListen(withMusicId: musicId, audioFormat: nil, audioRate: nil) { response in
+            guard let response = response as? [AnyHashable : Any], let detail = RCMusicDetail.yy_model(with: response) else {
                 return completion(nil)
             }
             info.fileUrl = detail.fileUrl
             info.size = ByteCountFormatter.string(fromByteCount: Int64(detail.fileSize), countStyle: .file)
             completion(info)
         } fail: { error in
-            log.debug("fail")
-            SVProgressHUD.showError(withStatus: "音乐详情获取失败 code:\(error?.localizedDescription ?? "")")
+            completion(nil)
+            log.debug("DataSourceImpl fetch music detail failed \(error?.localizedDescription ?? "")")
+            SVProgressHUD.showError(withStatus: "歌曲详情获取失败")
         }
     }
     
     func fetchSearchResult(withKeyWord keyWord: String, completion: @escaping ([Any]?) -> Void) {
-        RCMusicDataManager.searchMusic(withKeyWord: keyWord) { records, error in
-            guard let records = records else {
-                SVProgressHUD.showError(withStatus: "搜索结果获取失败 code:\(error.localizedDescription)")
+        
+        HFOpenApiManager.shared().searchMusic(withTagIds: nil, priceFromCent: nil, priceToCent: nil, bpmFrom: nil, bpmTo: nil, durationFrom: nil, durationTo: nil, keyword: keyWord, language: "0", searchFiled: nil, searchSmart: nil, page: "1", pageSize: "100") { response in
+            guard let response = response as? [AnyHashable : Any], let data = RCMusicData.yy_model(with: response), let records = data.record else {
                 return completion(nil)
             }
+            
+            var result = Array<MusicInfo>()
+            
             if (records.count > 0) {
-                var result = Array<MusicInfo>()
                 for record in records {
                     let info = MusicInfo()
                     info.coverUrl = record.coverUrl
@@ -360,15 +381,19 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
                     info.musicId = record.musicId
                     result.append(info)
                 }
-                completion(Array(result))
             }
+            completion(result)
+        } fail: { error in
+            completion(nil)
+            log.debug("DataSourceImpl fetch search result failed \(error?.localizedDescription ?? "")")
+            SVProgressHUD.showError(withStatus: "获取搜索结果失败")
         }
     }
     
     func fetchRoomPlayingMusicInfo(completion: @escaping (MusicInfo?) -> Void) {
         guard let roomId = roomId else {
             log.debug("获取直播间正在播放的音乐信息失败，roomId不能为空")
-            return
+            return completion(nil)
         }
         let api: RCNetworkAPI = .fetchRoomPlayingMusicInfo(roomId: roomId)
         networkProvider.request(api) { result in
@@ -381,6 +406,8 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
                     info.coverUrl = data.backgroundUrl
                     info.author = data.author
                     completion(info)
+                } else {
+                    completion(nil)
                 }
                 case let .failure(error):
                     log.debug("获取直播间正在播放的音乐信息失败 error\(error)")
@@ -405,11 +432,10 @@ class DataSourceImpl: NSObject, RCMusicEngineDataSource {
         
         guard let resourcePath = resourcePath else {
             SVProgressHUD.showError(withStatus: "当前没有特效资源")
-            completion(nil)
-            return
+            return completion(nil)
         }
         
-        let bundlePath = resourcePath + "/" + "RCMusicControlKit.bundle" + "/" + "RCMusicSource.bundle"
+        let bundlePath = resourcePath + "/" + "RCMusicControlKit.bundle" + "/" + "Assets"
         
         let info1 = EffectInfo()
         info1.soundId = 1

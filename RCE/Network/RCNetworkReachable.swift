@@ -12,7 +12,8 @@ fileprivate var reachability: Reachability?
 class RCNetworkReach {
     static func active() {
         do {
-            reachability = try Reachability()
+            let hostName = Environment.current.url.host ?? ""
+            reachability = try Reachability(hostname: hostName)
             try reachability!.startNotifier()
         } catch {
             debugPrint(error.localizedDescription)

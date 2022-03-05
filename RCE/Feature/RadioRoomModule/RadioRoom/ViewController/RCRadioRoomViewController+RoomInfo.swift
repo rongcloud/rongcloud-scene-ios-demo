@@ -48,20 +48,13 @@ extension RCRadioRoomViewController: RoomInfoViewClickProtocol {
     }
     
     func didFollowRoomUser(_ follow: Bool) {
-        let roomId = roomInfo.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: roomInfo.userId) { followUser in
             guard follow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                self?.messageView.add(message)
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
-                }
-                
+                ChatroomSendMessage(message, messageView: self?.messageView)
             }
         }
     }

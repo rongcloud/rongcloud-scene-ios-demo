@@ -52,7 +52,7 @@ class SceneRoomInfoView: UIView {
     private lazy var networkLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 9)
-        instance.textColor = .white.withAlphaComponent(0.7)
+        instance.textColor = UIColor.white.withAlphaComponent(0.7)
         return instance
     }()
     private(set) lazy var followButton: UIButton = {
@@ -220,7 +220,7 @@ extension SceneRoomInfoView {
         if isFollow {
             followButton.setBackgroundImage(followedBackgroundImage(), for: .normal)
             followButton.setTitle("已关注", for: .normal)
-            followButton.setTitleColor(.white.withAlphaComponent(0.8), for: .normal)
+            followButton.setTitleColor(UIColor.white.withAlphaComponent(0.8), for: .normal)
         } else {
             followButton.setBackgroundImage(followBackgroundImage(), for: .normal)
             followButton.setTitle("关注", for: .normal)

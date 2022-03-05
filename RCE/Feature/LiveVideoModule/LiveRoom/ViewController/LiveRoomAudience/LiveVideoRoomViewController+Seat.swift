@@ -14,7 +14,11 @@ extension LiveVideoRoomViewController {
         get { role }
         set {
             role = newValue
-            micButton.micState = role == .broadcaster ? .connecting : .request
+            if role == .broadcaster {
+                micButton.micState = .connecting
+            } else if micButton.micState == .connecting {
+                micButton.micState = .request
+            }
         }
     }
     
@@ -41,6 +45,9 @@ extension LiveVideoRoomViewController {
     }
     
     func requestSeat(_ index: Int = -1) {
+        if RCLiveVideoEngine.shared().pkInfo != nil {
+            return SVProgressHUD.showError(withStatus: "当前 PK 中，无法进行操作")
+        }
         guard micButton.micState == .request else { return }
         if isSeatFreeEnter {
             enterSeat(index)
@@ -57,6 +64,9 @@ extension LiveVideoRoomViewController {
     }
     
     func enterSeat(_ index: Int) {
+        if RCLiveVideoEngine.shared().pkInfo != nil {
+            SVProgressHUD.showError(withStatus: "当前 PK 中，无法进行操作")
+        }
         SVProgressHUD.show()
         RCLiveVideoEngine.shared().joinLiveVideo(at: index) { code in
             switch code {

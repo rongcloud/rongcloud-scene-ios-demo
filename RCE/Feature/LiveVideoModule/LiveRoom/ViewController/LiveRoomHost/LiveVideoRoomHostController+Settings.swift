@@ -6,7 +6,7 @@
 //
 
 import SVProgressHUD
-import UIKit
+import RCSceneRoomSetting
 
 extension LiveVideoRoomHostController {
  
@@ -23,23 +23,27 @@ extension LiveVideoRoomHostController {
     }
     
     @objc func handleSettingClick() {
-        var settinglist: [RoomSettingItem] {
+        let notice = room.notice ?? "欢迎来到\(room.roomName)"
+        let items: [Item] = {
             return [
-                .lockRoom(room.isPrivate == 1),
-                .roomTitle,
-                .notice,
+                .roomLock(room.isPrivate == 0),
+                .roomName(room.roomName),
+                .roomNotice(notice),
                 .forbidden,
-                .switchCamera,
-                .sticker,
-                .retouch,
-                .makeup,
-                .effect,
+                .cameraSwitch,
+                .beautySticker,
+                .beautyRetouch,
+                .beautyMakeup,
+                .beautyEffect,
                 .music,
-                .videoSetting,
-                .isFreeEnterSeat(isSeatFreeEnter)
+                .cameraSetting,
+                .seatFree(!isSeatFreeEnter)
             ]
-        }
-        navigator(.roomSetting(settinglist, self))
+        }()
+        let controller = RCSceneRoomSettingViewController(items: items, delegate: self)
+        controller.modalTransitionStyle = .crossDissolve
+        controller.modalPresentationStyle = .overFullScreen
+        present(controller, animated: true)
     }
     
     private func setRoomType(isPrivate: Bool, password: String?) {
@@ -68,27 +72,44 @@ extension LiveVideoRoomHostController {
     }
 }
 
-//MARK: - Voice Room Setting Delegate
-extension LiveVideoRoomHostController: VoiceRoomSettingProtocol {
-    /// 房间上锁&解锁
-    func lockRoomDidClick(isLock: Bool) {
-        if isLock {
-            navigator(.inputPassword(type: .input, delegate: self))
-        } else {
-            setRoomType(isPrivate: false, password: nil)
+extension LiveVideoRoomHostController: RCSceneRoomSettingProtocol {
+    func eventWillTrigger(_ item: Item) -> Bool {
+        return false
+    }
+    
+    func eventDidTrigger(_ item: Item, extra: String?) {
+        switch item {
+        case .roomLock(let lock):
+            setRoomType(isPrivate: lock, password: extra)
+        case .roomName(let name):
+            roomUpdate(name: name)
+        case .roomNotice(let notice):
+            roomUpdate(notice: notice)
+        case .music:
+            presentMusicController()
+        case .forbidden:
+            forbiddenDidClick()
+        case .seatFree(let free):
+            freeMicDidClick(isFree: free)
+        case .cameraSetting:
+            present(videoPropsSetVc, animated: true)
+        case .cameraSwitch:
+            switchCameraDidClick()
+        case .beautyRetouch:
+            beautyPlugin.didClick(.retouch)
+        case .beautySticker:
+            beautyPlugin.didClick(.sticker)
+        case .beautyMakeup:
+            beautyPlugin.didClick(.makeup)
+        case .beautyEffect:
+            beautyPlugin.didClick(.effect)
+        default: ()
         }
     }
-    
-    /// 房间标题
-    func modifyRoomTitleDidClick() {
-        navigator(.inputText(name: room.roomName ,delegate: self))
-    }
-    
-    /// 公告
-    func noticeDidClick() {
-        let notice = room.notice ?? "欢迎来到\(room.roomName)"
-        navigator(.notice(modify: true, notice: notice, delegate: self))
-    }
+}
+
+//MARK: - Voice Room Setting Delegate
+extension LiveVideoRoomHostController {
     
     /// 屏蔽词
     func forbiddenDidClick() {
@@ -98,38 +119,15 @@ extension LiveVideoRoomHostController: VoiceRoomSettingProtocol {
     }
     
     func switchCameraDidClick() {
-        RCRTCEngine.sharedInstance().defaultVideoStream.switchCamera()
-        let postion = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
-        let needMirror = postion == .captureDeviceFront
+//        RCRTCEngine.sharedInstance().defaultVideoStream.switchCamera()
+        let position = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
+        let needMirror = position == .captureDeviceFront
         RCRTCEngine.sharedInstance().defaultVideoStream.isEncoderMirror = needMirror
-        RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror = needMirror
+        let mirror = RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror;
+        RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror = !mirror;
+        debugPrint("video stream mirror: \(mirror)")
     }
     
-    func stickerDidClick() {
-        present(sticker, animated: true)
-    }
-    
-    func retouchDidClick() {
-        present(retouch, animated: true)
-    }
-    
-    func makeupDidClick() {
-        present(makeup, animated: true)
-    }
-    
-    func effectDidClick() {
-        present(effect, animated: true)
-    }
-    
-    /// 音乐
-    func musicDidClick() {
-        presentMusicController()
-    }
-    
-    /// 视频设置
-    func videoSetItemClick() {
-        present(videoPropsSetVc, animated: true)
-    }
     func freeMicDidClick(isFree: Bool) {
         isSeatFreeEnter = isFree
         let value: String = isFree ? "1" : "0"
@@ -180,25 +178,18 @@ extension LiveVideoRoomHostController: VideoPropertiesDelegate {
     }
 }
 
-// MARK: - Modify Room type Delegate
-extension LiveVideoRoomHostController: VoiceRoomInputPasswordProtocol {
-    func passwordDidEnter(password: String) {
-        setRoomType(isPrivate: true, password: password)
-    }
-}
-
 // MARK: - Modify Room Name Delegate
-extension LiveVideoRoomHostController: VoiceRoomInputTextProtocol {
-    func textDidInput(text: String) {
-        let api: RCNetworkAPI = .setRoomName(roomId: room.roomId, name: text)
+extension LiveVideoRoomHostController {
+    func roomUpdate(name: String) {
+        let api: RCNetworkAPI = .setRoomName(roomId: room.roomId, name: name)
         networkProvider.request(api) { [weak self] result in
             switch result.map(AppResponse.self) {
             case let .success(response):
                 if response.validate() {
-                    self?.didUpdateRoomName(text)
+                    self?.didUpdateRoomName(name)
                     SVProgressHUD.showSuccess(withStatus: "更新房间名称成功")
                 } else {
-                    SVProgressHUD.showError(withStatus: "更新房间名称失败")
+                    SVProgressHUD.showError(withStatus: response.msg ?? "更新房间名称失败")
                 }
             case .failure:
                 SVProgressHUD.showError(withStatus: "更新房间名称失败")
@@ -210,19 +201,29 @@ extension LiveVideoRoomHostController: VoiceRoomInputTextProtocol {
         room.roomName = name
         RCLiveVideoEngine.shared().setRoomInfo(["name": name]) { _ in }
     }
-}
-
-extension LiveVideoRoomHostController: VoiceRoomNoticeDelegate {
-    func noticeDidModfied(notice: String) {
-        /// 本地更新
-        room.notice = notice
-        /// 远端更新
-        RCLiveVideoEngine.shared().setRoomInfo(["notice": notice]) { _ in }
-        
-        /// 本地公屏消息
-        let message = RCTextMessage(content: "房间公告已更新")!
-        messageView.addMessage(message)
-        RCChatroomMessageCenter.sendChatMessage(room.roomId, content: message) { _ in } error: { _, _ in }
+    
+    func roomUpdate(notice: String) {
+        LiveNoticeChecker.check(notice) { pass, msg in
+            if (pass) {
+                /// 本地更新
+                self.room.notice = notice
+                /// 远端更新
+                RCLiveVideoEngine.shared().setRoomInfo(["notice": notice]) { _ in }
+                
+                /// 本地公屏消息
+                let message = RCTextMessage(content: "房间公告已更新")!
+                ChatroomSendMessage(message) { result in
+                    switch result {
+                    case .success:
+                        self.messageView.addMessage(message)
+                    case .failure(let error):
+                        SVProgressHUD.showError(withStatus: error.localizedDescription)
+                    }
+                }
+            } else {
+                SVProgressHUD.showError(withStatus: msg);
+            }
+        }
     }
 }
 
@@ -239,4 +240,8 @@ extension LiveVideoRoomHostController: LiveVideoRoomForbiddenDelegate {
             debugPrint("setRoomInfo \(error.localizedDescription)")
         }
     }
+}
+
+extension LiveVideoRoomHostController: VoiceRoomNoticeDelegate {
+    func noticeDidModified(notice: String) {}
 }

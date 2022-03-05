@@ -25,32 +25,23 @@
 #import <RCVoiceRoomLib/RCVoiceRoomLib.h>
 #import "NSString+LogOutput.h"
 
-#import "MHMeiyanMenusView.h"
-#import "MHStickersView.h"
-#import "MHBeautyAssembleView.h"
-#import "MHMakeUpView.h"
-#import "MHSpecificAssembleView.h"
+#import "RCMHBeauty.h"
 
-#import <MHBeautySDK/MHBeautyManager.h>
-#import "MHBeautyParams.h"
-#import "ChatGPUImageHandler.h"
 #import "RCRefreshStateHeader.h"
 
 #import <RCLiveVideoLib/RCLiveVideoLib.h>
+#import <RCLiveVideoLib/RCLiveVideoPK.h>
 #import <RCChatroomSceneKit/RCChatroomSceneKit.h>
 
-#import <RCMusicControlKit/RCMusicEngine.h>
-#import <RCMusicControlKit/RCMusicPlayer.h>
-#import <RCMusicControlKit/RCMusicEngineDelegate.h>
-#import <RCMusicControlKit/RCMusicEngineDataSource.h>
-#import <RCMusicControlKit/RCMusicCategoryInfo.h>
-#import <RCMusicControlKit/RCMusicEffectInfo.h>
-#import <RCMusicControlKit/RCMusicSheetResponse.h>
-#import <RCMusicControlKit/RCMusicResponse.h>
-#import <RCMusicControlKit/RCMusicDataManager.h>
-#import <RCMusicControlKit/RCMusicChannelResponse.h>
-#import <RCMusicControlKit/RCMusicDetail.h>
-#import <RCMusicControlKit/RCMusicDataPath.h>
-#import <RCMusicControlKit/RCMusicDownloader.h>
+#import <RCMusicControlKit/RCMusicControlKit.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import <YYModel/YYModel.h>
+#import "HFOpenApiManager.h"
+#import "RCMusicInfo.h"
+#import "RCMusicSheetResponse.h"
+#import "RCMusicResponse.h"
+#import "RCMusicChannelResponse.h"
+#import "RCMusicDetail.h"
+
+#import <RCSceneMessage/RCSceneMessage.h>
+#import <SVProgressHUD/SVProgressHUD.h>

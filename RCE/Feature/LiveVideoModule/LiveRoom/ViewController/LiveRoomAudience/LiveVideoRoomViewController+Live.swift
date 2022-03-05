@@ -19,9 +19,10 @@ extension LiveVideoRoomViewController {
     
     func setupSeatLayout(_ mixType: RCLiveVideoMixType) {
         switch mixType {
-        case .oneToOne:
+        case .default, .oneToOne:
             seatView.snp.remakeConstraints { make in
-                make.edges.equalToSuperview()
+                make.top.bottom.right.equalToSuperview()
+                make.width.equalTo(seatView.snp.height).multipliedBy(9.0 / 16)
             }
         case .oneToSix:
             seatView.snp.remakeConstraints { make in

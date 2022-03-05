@@ -18,7 +18,7 @@ struct AppDependency {
     let window: () -> UIWindow
     let configManagers: (_ options: [UIApplication.LaunchOptionsKey: Any]?) -> Void
     let configureSDKs: (_ options: [UIApplication.LaunchOptionsKey: Any]?) -> Void
-    let configureAppearence: () -> Void
+    let configureAppearance: () -> Void
 }
 
 final class CompositionRoot: NSObject {
@@ -27,7 +27,7 @@ final class CompositionRoot: NSObject {
         return AppDependency(window: configWindow,
                              configManagers: configManagers,
                              configureSDKs: configSDKs,
-                             configureAppearence: configAppearence)
+                             configureAppearance: configAppearance)
     }
     
     static func configWindow() -> UIWindow {
@@ -39,7 +39,7 @@ final class CompositionRoot: NSObject {
         
     }
     
-    static func configAppearence() {
+    static func configAppearance() {
         
     }
     
@@ -60,10 +60,24 @@ final class CompositionRoot: NSObject {
         RCIM.shared().registerMessageType(RCGiftBroadcastMessage.self)
         RCIM.shared().registerMessageType(RCPKGiftMessage.self)
         RCIM.shared().registerMessageType(RCPKStatusMessage.self)
+        RCIM.shared().registerMessageType(RCShuMeiMessage.self)
+        RCIM.shared().registerMessageType(RCLoginDeviceMessage.self)
+        
+        ///MessageHandlerManager 注册handler
+        RoomMessageHandlerManager.registerMessageHandler(SyncMusicInfoMessageHandler.self);
+        
         if let rongToken = UserDefaults.standard.rongToken() {
             RCIM.shared().connect(withToken: rongToken) { code in
                 debugPrint("db error code is \(code)")
             } success: { userId in
+                networkProvider.request(.loginDevice) { result in
+                    switch result {
+                    case .success(let response):
+                        print(response)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
                 UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
                     RCIM.shared().currentUserInfo = user.rcUser
                 }
@@ -85,7 +99,7 @@ final class CompositionRoot: NSObject {
         /// 注册Router
         Router.default.setupAppNavigation(appNavigation: RCAppNavigation())
         /// 适配UI
-        Adaptor.set(design: CGSize(width: 375, height: 651))
+        Adaptor.set(design: CGSize(width: 375, height: 667))
         /// 设置RxSwift 的ImagePicker
         RxImagePickerDelegateProxy.register { RxImagePickerDelegateProxy(imagePicker: $0) }
         /// 禁止constraint log
@@ -135,9 +149,8 @@ final class CompositionRoot: NSObject {
             RCMusicEngine.shareInstance().player = PlayerImpl.instance
             RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
         }
-         
-        MHSDK.shareInstance().`init`(Environment.MHBeautyKey)
         
+        RCBeautyPlugin.active()
         RCNetworkReach.active()
     }
 }

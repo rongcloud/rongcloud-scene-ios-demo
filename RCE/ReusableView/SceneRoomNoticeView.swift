@@ -17,7 +17,7 @@ class SceneRoomMarkView: UIView {
         let instance = UILabel()
         instance.text = "公告"
         instance.font = .systemFont(ofSize: 12.resize)
-        instance.textColor = .white.withAlphaComponent(0.8)
+        instance.textColor = UIColor.white.withAlphaComponent(0.8)
         return instance
     }()
     
@@ -83,7 +83,7 @@ class SceneRoomNoticeView: SceneRoomMarkView {
 }
 
 extension SceneRoomNoticeView: VoiceRoomNoticeDelegate {
-    func noticeDidModfied(notice: String) {
+    func noticeDidModified(notice: String) {
         
     }
 }

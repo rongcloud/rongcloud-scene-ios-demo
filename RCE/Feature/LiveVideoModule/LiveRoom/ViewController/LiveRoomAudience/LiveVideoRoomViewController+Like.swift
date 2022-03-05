@@ -48,12 +48,9 @@ extension LiveVideoRoomViewController {
     
     @objc func onLikeClicked(_ gesture: UITapGestureRecognizer) {
         let point = gesture.location(in: view)
-        let like = RCChatroomLike()
         showTapIcon(point)
         showLikeIcons()
-        RCChatroomMessageCenter
-            .sendChatMessage(room.roomId, content: like)
-                { mId in } error: { eCode, mId in }
+        ChatroomSendMessage(RCChatroomLike())
     }
     
     @_dynamicReplacement(for: handleReceivedMessage(_:))

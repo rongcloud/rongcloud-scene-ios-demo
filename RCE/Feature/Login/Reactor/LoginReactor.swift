@@ -164,7 +164,7 @@ extension LoginReactor {
                                        userName: nil,
                                        portrait: nil,
                                        deviceId: UIDevice.current.identifierForVendor!.uuidString,
-                                       region: currentState.phoneCode)
+                                       region: currentState.phoneCode, platform: "mobile")
         return networkProvider.rx
             .request(api)
             .map(User.self, atKeyPath: "data", using: JSONDecoder(), failsOnEmptyData: true)

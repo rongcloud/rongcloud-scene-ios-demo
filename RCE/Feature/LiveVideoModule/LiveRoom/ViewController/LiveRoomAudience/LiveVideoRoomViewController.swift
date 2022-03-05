@@ -16,8 +16,7 @@ class LiveVideoRoomViewController: RCLiveModuleViewController {
     dynamic var managers = [VoiceRoomUser]()
     
     /// 主播美颜
-    var osTypeHandler: ChatGPUImageHandler?
-    var beautyManager: MHBeautyManager?
+    private(set) lazy var beautyPlugin = RCBeautyPlugin()
     
     private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
     
@@ -47,22 +46,16 @@ class LiveVideoRoomViewController: RCLiveModuleViewController {
     private(set) lazy var giftButton = RCChatroomSceneButton(.gift)
     private(set) lazy var messageButton = RCChatroomSceneButton(.message)
     
-    private(set) lazy var sticker = RCMHStickerViewController(beautyManager!)
-    private(set) lazy var retouch = RCMHRetouchViewController(beautyManager!)
-    private(set) lazy var makeup = RCMHMakeupViewController(beautyManager!)
-    private(set) lazy var effect = RCMHEffectViewController(beautyManager!)
-    
-    private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: room.roomId)
+    lazy var PKView = LiveVideoRoomPKView()
     
     dynamic var role: RCRTCLiveRoleType = .audience
     
     var isSeatFreeEnter: Bool = false
     
     var room: VoiceRoom
-    init(_ room: VoiceRoom, beautyManager: MHBeautyManager? = nil) {
+    init(_ room: VoiceRoom) {
         self.room = room
         self.role = room.isOwner ? .broadcaster : .audience
-        self.beautyManager = beautyManager
         super.init(nibName: nil, bundle: nil)
         SceneRoomManager.shared.forbiddenWordlist = []
     }
@@ -73,7 +66,6 @@ class LiveVideoRoomViewController: RCLiveModuleViewController {
     
     deinit {
         RCCall.shared().canIncomingCall = true
-        beautyManager?.destroy()
         debugPrint("LVRV deinit")
     }
     
@@ -175,7 +167,7 @@ class LiveVideoRoomViewController: RCLiveModuleViewController {
     }
     
     func handleCommandMessage(_ message: RCMessage) {
-        CommandMessageHandler.handleMessage(message, musicInfoBubbleView)
+        RoomMessageHandlerManager.handleMessage(message, musicInfoBubbleView)
     }
 }
 

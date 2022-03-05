@@ -6,6 +6,16 @@
 //
 
 import Pulsator
+import SwiftUI
+
+extension RCVoiceSeatInfo {
+    var radarDisable: Bool {
+        if userId == nil || userId?.count == 0 {
+            return true
+        }
+        return self.disableRecording
+    }
+}
 
 protocol VoiceRoomMasterViewProtocol: AnyObject {
     func masterViewDidClick()
@@ -119,8 +129,9 @@ class VoiceRoomMasterView: UIView {
             self.avatarImageView.image = R.image.empty_seat_user_avatar()
             self.nameLabel.text = " "
         }
-        muteMicrophoneImageView.isHidden = !seatInfo.isMuted
-        radarView.isHidden = (seatInfo.userId == nil)
+
+        muteMicrophoneImageView.isHidden = !seatInfo.disableRecording
+        radarView.isHidden = seatInfo.radarDisable
         borderImageView.isHidden = (seatInfo.userId == nil)
     }
     

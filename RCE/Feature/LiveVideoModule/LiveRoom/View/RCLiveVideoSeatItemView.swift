@@ -140,7 +140,7 @@ class RCLiveVideoSeatItemView: UIView {
             make.right.lessThanOrEqualToSuperview().offset(-4)
         }
         
-        giftView.backgroundColor = .black.withAlphaComponent(0.25)
+        giftView.backgroundColor = UIColor.black.withAlphaComponent(0.25)
         giftView.layer.cornerRadius = 7
         giftView.layer.masksToBounds = true
         giftView.snp.makeConstraints { make in

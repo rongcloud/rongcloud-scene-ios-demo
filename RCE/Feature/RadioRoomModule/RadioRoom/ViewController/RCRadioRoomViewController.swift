@@ -6,6 +6,7 @@
 //
 
 import SVProgressHUD
+import RCChatroomSceneKit
 
 final class RCRadioRoomViewController: RCModuleViewController {
     private(set) lazy var queue = DispatchQueue(label: "rc_radio_room_queue")
@@ -14,10 +15,20 @@ final class RCRadioRoomViewController: RCModuleViewController {
     private(set) lazy var roomNoticeView = SceneRoomNoticeView()
     private(set) lazy var roomOwnerView = RCRadioRoomOwnerView()
     private(set) lazy var roomSuspendView = RCRadioRoomSuspendView(roomInfo)
-    private(set) lazy var messageView = RCVRMView()
-    private(set) lazy var roomToolBarView = RCRadioRoomToolBarView()
+    
+    private(set) lazy var chatroomView = RCChatroomSceneView()
+    private(set) lazy var giftButton = RCChatroomSceneButton(.gift)
+    private(set) lazy var messageButton = RCChatroomSceneButton(.message)
+    private(set) lazy var settingButton = RCChatroomSceneButton(.setting)
+    
+    var messageView: RCChatroomSceneMessageView {
+        return chatroomView.messageView
+    }
+    var roomToolBarView: RCChatroomSceneToolBar {
+        return chatroomView.toolBar
+    }
+    
     private(set) lazy var moreButton = UIButton()
-    private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: roomInfo.roomId)
     
     private(set) lazy var roomKVState = RCRadioRoomKVState(roomInfo)
     
@@ -45,6 +56,7 @@ final class RCRadioRoomViewController: RCModuleViewController {
         super.viewDidLoad()
         setupConstraints()
         RCCall.shared().canIncomingCall = false
+        PlayerImpl.instance.initializedEarMonitoring()
         bubbleViewAddGesture()
         if (!roomInfo.isOwner) {
             DataSourceImpl.instance.fetchRoomPlayingMusicInfo { info in
@@ -63,7 +75,7 @@ final class RCRadioRoomViewController: RCModuleViewController {
     }
     //处理音乐消息同步指令消息
     func handleCommandMessage(_ message: RCMessage) {
-        CommandMessageHandler.handleMessage(message, musicInfoBubbleView)
+        RoomMessageHandlerManager.handleMessage(message, musicInfoBubbleView)
     }
 }
 
@@ -107,8 +119,6 @@ extension RCRadioRoomViewController {
             $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(44)
         }
-        
-        roomToolBarView.layoutUI(roomInfo)
         
         guard let bubble = musicInfoBubbleView else {
             return

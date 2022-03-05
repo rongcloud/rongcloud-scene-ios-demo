@@ -55,12 +55,12 @@ class VoiceRoomAlertViewController: UIViewController {
     }()
     private lazy var sepratorline1: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .white.withAlphaComponent(0.2)
+        instance.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         return instance
     }()
     private lazy var sepratorline2: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .white.withAlphaComponent(0.2)
+        instance.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         return instance
     }()
     private let actions: [VoiceRoomAlertAction]

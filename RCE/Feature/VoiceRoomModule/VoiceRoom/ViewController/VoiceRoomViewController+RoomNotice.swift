@@ -5,7 +5,6 @@
 //  Created by 叶孤城 on 2021/8/2.
 //
 
-import Foundation
 import SVProgressHUD
 
 extension VoiceRoomViewController {
@@ -23,23 +22,25 @@ extension VoiceRoomViewController {
 }
 
 extension VoiceRoomViewController: VoiceRoomNoticeDelegate {
-    func noticeDidModfied(notice: String) {
-        guard let kvRoom = kvRoomInfo else {
-            return
-        }
-        kvRoom.extra = notice
-        RCVoiceRoomEngine.sharedInstance().setRoomInfo(kvRoom) {
-            SVProgressHUD.showSuccess(withStatus: "修改公告成功")
-        } error: { code, msg in
-            SVProgressHUD.showError(withStatus: "修改公告失败 \(msg)")
-        }
-        let textMessage = RCTextMessage()
-        textMessage.content = "房间公告已更新"
-        RCVoiceRoomEngine.sharedInstance().sendMessage(textMessage) {
-            [weak self] in
-            self?.messageView.add(textMessage)
-        } error: { code, msg in
-            
+    func noticeDidModified(notice: String) {
+        LiveNoticeChecker.check(notice) { pass, msg in
+            guard let kvRoom = self.kvRoomInfo, pass else {
+                return SVProgressHUD.showError(withStatus: msg)
+            }
+            kvRoom.extra = notice
+            RCVoiceRoomEngine.sharedInstance().setRoomInfo(kvRoom) {
+                SVProgressHUD.showSuccess(withStatus: "修改公告成功")
+            } error: { code, msg in
+                SVProgressHUD.showError(withStatus: "修改公告失败 \(msg)")
+            }
+            let textMessage = RCTextMessage()
+            textMessage.content = "房间公告已更新"
+            RCVoiceRoomEngine.sharedInstance().sendMessage(textMessage) {
+                [weak self] in
+                self?.messageView.addMessage(textMessage)
+            } error: { code, msg in
+                
+            }
         }
     }
 }

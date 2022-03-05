@@ -6,30 +6,65 @@
 //
 
 import SVProgressHUD
+import RCSceneRoomSetting
 
 extension RCRadioRoomViewController {
     @_dynamicReplacement(for: m_viewDidLoad)
     private func setting_viewDidLoad() {
         m_viewDidLoad()
-        roomToolBarView.add(setting: self, action: #selector(handleSettingClick))
     }
     
-    @objc private func handleSettingClick() {
-        navigator(.roomSetting(settinglist, self))
+    @objc func handleSettingClick() {
+        let notice = roomKVState.notice.count == 0
+        ? "欢迎来到\(roomKVState.roomName)"
+        : roomKVState.notice
+        var items: [Item] {
+            return [
+                .roomLock(roomInfo.isPrivate == 0),
+                .roomName(roomInfo.roomName),
+                .roomNotice(notice),
+                .roomBackground,
+                .forbidden,
+                .music,
+                .roomSuspend(!roomKVState.suspend)
+            ]
+        }
+        let controller = RCSceneRoomSettingViewController(items: items, delegate: self)
+        controller.modalTransitionStyle = .crossDissolve
+        controller.modalPresentationStyle = .overFullScreen
+        present(controller, animated: true)
+    }
+}
+
+extension RCRadioRoomViewController: RCSceneRoomSettingProtocol {
+    func eventWillTrigger(_ item: Item) -> Bool {
+        return false
     }
     
-    var settinglist: [RoomSettingItem] {
-        return [
-            .lockRoom(roomInfo.isPrivate == 1),
-            .roomTitle,
-            .notice,
-            .roomBackground,
-            .forbidden,
-            .music,
-            .suspend,
-        ]
+    func eventDidTrigger(_ item: Item, extra: String?) {
+        switch item {
+        case .roomLock(let lock):
+            setRoomType(isPrivate: lock, password: extra)
+        case .roomName(let name):
+            roomUpdate(name: name)
+        case .roomNotice(let notice):
+            noticeDidModified(notice: notice)
+        case .roomBackground:
+            modifyRoomBackgroundDidClick()
+        case .music:
+            musicDidClick()
+        case .forbidden:
+            forbiddenDidClick()
+        case .roomSuspend:
+            suspend()
+        default: ()
+        }
     }
-    
+}
+
+//MARK: - Voice Room Setting Delegate
+extension RCRadioRoomViewController {
+    /// 房间密码
     private func setRoomType(isPrivate: Bool, password: String?) {
         let title = isPrivate ? "设置房间密码" : "解锁"
         let api: RCNetworkAPI = .setRoomType(roomId: roomInfo.roomId,
@@ -54,49 +89,34 @@ extension RCRadioRoomViewController {
             }
         }
     }
-}
-
-//MARK: - Voice Room Setting Delegate
-extension RCRadioRoomViewController: VoiceRoomSettingProtocol {
-    /// 房间上锁&解锁
-    func lockRoomDidClick(isLock: Bool) {
-        if isLock {
-            navigator(.inputPassword(type: .input, delegate: self))
-        } else {
-            setRoomType(isPrivate: false, password: nil)
+    /// 房间名称
+    func roomUpdate(name: String) {
+        let api: RCNetworkAPI = .setRoomName(roomId: roomInfo.roomId, name: name)
+        networkProvider.request(api) { result in
+            switch result.map(AppResponse.self) {
+            case let .success(response):
+                if response.validate() {
+                    SVProgressHUD.showSuccess(withStatus: "更新房间名称成功")
+                    self.roomKVState.update(roomName: name)
+                } else {
+                    SVProgressHUD.showError(withStatus: response.msg ?? "更新房间名称失败")
+                }
+            case .failure:
+                SVProgressHUD.showError(withStatus: "更新房间名称失败")
+            }
         }
-    }
-    /// 音乐
-    func musicDidClick() {
-        RCMusicEngine.shareInstance().show(in: self, completion: nil)
-    }
-    /// 房间标题
-    func modifyRoomTitleDidClick() {
-        navigator(.inputText(name: roomInfo.roomName ,delegate: self))
     }
     /// 房间背景
     func modifyRoomBackgroundDidClick() {
         navigator(.changeBackground(imagelist: SceneRoomManager.shared.backgroundlist ,delegate: self))
     }
-    
+    /// 音乐
+    func musicDidClick() {
+        RCMusicEngine.shareInstance().show(in: self, completion: nil)
+    }
+    /// 屏蔽词
     func forbiddenDidClick() {
         navigator(.forbiddenList(roomId: roomInfo.roomId))
-    }
-    
-    func noticeDidClick() {
-        let notice = roomKVState.notice.count == 0 ? "欢迎来到\(roomKVState.roomName)" : roomKVState.notice
-        navigator(.notice(modify: true, notice: notice, delegate: self))
-    }
-    
-    func suspendDidClick() {
-        suspend()
-    }
-}
-
-// MARK: - Modify Room type Delegate
-extension RCRadioRoomViewController: VoiceRoomInputPasswordProtocol {
-    func passwordDidEnter(password: String) {
-        setRoomType(isPrivate: true, password: password)
     }
 }
 
@@ -104,7 +124,7 @@ extension RCRadioRoomViewController: ChangeBackgroundImageProtocol {
     func didConfirmImage(urlSuffix: String) {
         roomKVState.update(roomBGName: urlSuffix)
         NotificationNameRoomBackgroundUpdated.post((roomInfo.roomId, urlSuffix))
-        let api: RCNetworkAPI = .updateRoombackgroundUrl(roomId: roomInfo.roomId, backgroundUrl: urlSuffix)
+        let api: RCNetworkAPI = .updateRoomBackground(roomId: roomInfo.roomId, backgroundUrl: urlSuffix)
         networkProvider.request(api) { result in
             switch result.map(AppResponse.self) {
             case let .success(response):
@@ -117,26 +137,5 @@ extension RCRadioRoomViewController: ChangeBackgroundImageProtocol {
                 SVProgressHUD.showError(withStatus: "更新房间背景失败")
             }
         }
-    }
-}
-
-// MARK: - Modify Room Name Delegate
-extension RCRadioRoomViewController: VoiceRoomInputTextProtocol {
-    func textDidInput(text: String) {
-        /// 接口合并
-        let api: RCNetworkAPI = .setRoomName(roomId: roomInfo.roomId, name: text)
-        networkProvider.request(api) { result in
-            switch result.map(AppResponse.self) {
-            case let .success(response):
-                if response.validate() {
-                    SVProgressHUD.showSuccess(withStatus: "更新房间名称成功")
-                } else {
-                    SVProgressHUD.showError(withStatus: "更新房间名称失败")
-                }
-            case .failure:
-                SVProgressHUD.showError(withStatus: "更新房间名称失败")
-            }
-        }
-        roomKVState.update(roomName: text)
     }
 }

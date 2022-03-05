@@ -22,8 +22,14 @@ extension RCRadioRoomViewController {
 }
 
 extension RCRadioRoomViewController: VoiceRoomNoticeDelegate {
-    func noticeDidModfied(notice: String) {
-        roomKVState.update(notice: notice)
+    func noticeDidModified(notice: String) {
+        LiveNoticeChecker.check(notice) { pass, msg in
+            if (pass) {
+                self.roomKVState.update(notice: notice)
+            } else {
+                SVProgressHUD.showError(withStatus: msg);
+            }
+        }
     }
 }
 

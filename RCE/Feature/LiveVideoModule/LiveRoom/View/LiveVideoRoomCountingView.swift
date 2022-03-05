@@ -41,7 +41,7 @@ class LiveVideoRoomCountingView: UIView {
     }
     
     private func buildLayout() {
-        backgroundColor = .white.withAlphaComponent(0.25)
+        backgroundColor = UIColor.white.withAlphaComponent(0.25)
         clipsToBounds = true
         
         addSubview(imageView)

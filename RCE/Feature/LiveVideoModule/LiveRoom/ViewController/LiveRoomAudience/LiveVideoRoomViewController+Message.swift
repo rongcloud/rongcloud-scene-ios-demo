@@ -89,24 +89,27 @@ extension LiveVideoRoomViewController: RCChatroomSceneEventProtocol {
 
 extension LiveVideoRoomViewController {
     func sendJoinRoomMessage() {
-        let roomId = room.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
             let event = RCChatroomEnter()
             event.userId = user.userId
             event.userName = user.userName
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                self?.messageView.addMessage(event)
-            } error: { code, mId in }
+            ChatroomSendMessage(event) { result in
+                switch result {
+                case .success:
+                    self.messageView.addMessage(event)
+                case .failure(let error):
+                    SVProgressHUD.showError(withStatus: error.localizedDescription)
+                }
+            }
         }
     }
     
     func sendLeaveRoomMessage() {
-        let roomId = room.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
             let event = RCChatroomLeave()
             event.userId = user.userId
             event.userName = user.userName
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { _ in } error: { _, _ in }
+            ChatroomSendMessage(event)
         }
     }
     

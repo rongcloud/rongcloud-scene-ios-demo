@@ -62,7 +62,7 @@ final class RCRadioRoomSuspendBroadcasterView: UIView {
     init(_ continueLive: @escaping () -> Void) {
         self.continueLive = continueLive
         super.init(frame: .zero)
-        backgroundColor = .black.withAlphaComponent(0.4)
+        backgroundColor = UIColor.black.withAlphaComponent(0.4)
         
         addSubview(titleLabel)
         addSubview(continueButton)
@@ -122,7 +122,7 @@ final class RCRadioRoomSuspendAudienceView: UIView {
     private lazy var subtitleLabel: UILabel = {
         let instance = UILabel()
         instance.text = "请耐心等待，马上回来"
-        instance.textColor = .white.withAlphaComponent(0.7)
+        instance.textColor = UIColor.white.withAlphaComponent(0.7)
         instance.font = UIFont.systemFont(ofSize: 17.resize, weight: .medium)
         return instance
     }()

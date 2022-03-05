@@ -34,11 +34,11 @@ extension VoiceRoomViewController: LeaveViewProtocol {
     }
     
     func closeRoomDidClick() {
-        guard !roomState.isPKOngoing() else {
-            SVProgressHUD.showError(withStatus: "正在PK中， 无法进行该操作")
-            return
+        var title = "确定结束本次直播么？"
+        if roomState.isPKOngoing() {
+            title = "正在进行 PK，" + title
         }
-        let navigation: RCNavigation = .voiceRoomAlert(title: "确定结束本次直播么？",
+        let navigation: RCNavigation = .voiceRoomAlert(title: title,
                                                        actions: [.cancel("取消"), .confirm("确认")],
                                                        alertType: alertTypeConfirmCloseRoom,
                                                        delegate: self)

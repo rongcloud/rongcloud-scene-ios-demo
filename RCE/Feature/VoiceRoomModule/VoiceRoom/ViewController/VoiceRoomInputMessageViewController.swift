@@ -119,7 +119,6 @@ class VoiceRoomInputMessageViewController: UIViewController {
         else {
             return SVProgressHUD.showError(withStatus: "消息不能为空")
         }
-        let roomId = self.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
             guard text.isCivilized else {
                 self?.delegate?.onSendMessage(user.userId, userName: user.userName, content: text)
@@ -130,13 +129,15 @@ class VoiceRoomInputMessageViewController: UIViewController {
             event.userId = user.userId
             event.userName = user.userName
             event.content = text.civilized
-            RCChatroomMessageCenter
-                .sendChatMessage(roomId, content: event, success: { [weak self] mId in
+            ChatroomSendMessage(event) { result in
+                switch result {
+                case .success:
                     self?.delegate?.onSendMessage(user.userId, userName: user.userName, content: text)
                     self?.dismiss(animated: true, completion: nil)
-                }, error: { errorCode, mId in
-                    SVProgressHUD.showError(withStatus: "消息发送失败")
-                })
+                case .failure(let error):
+                    SVProgressHUD.showError(withStatus: error.localizedDescription)
+                }
+            }
         }
     }
 }

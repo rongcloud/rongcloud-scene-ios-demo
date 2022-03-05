@@ -34,7 +34,7 @@ final class CreateVoiceRoomReacotor: Reactor {
         case setBacroundImage(String)
         case setRoomType(RoomType)
         case setError(ReactorError)
-        case setPassword(String)
+        case setPassword(String?)
         case setSuccess(ReactorSuccess)
         case createRoomSuccess(CreateVoiceRoomWrapper)
         case uploadImage(UploadfileResponse)
@@ -149,7 +149,7 @@ final class CreateVoiceRoomReacotor: Reactor {
                     if wrapper.needLogin() {
                         return Observable<Mutation>.just(.setNeedLogin(true))
                     } else {
-                        return Observable<Mutation>.just(.setError(ReactorError("创建失败，请稍后重试")))
+                        return Observable<Mutation>.just(.setError(ReactorError(wrapper.msg ?? "创建失败，请稍后重试"))).concat(Observable<Mutation>.just(.setPassword(nil)))
                     }
                 }
                 if wrapper.isCreated() {

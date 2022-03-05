@@ -62,7 +62,6 @@ extension RCRadioRoomViewController {
 extension RCRadioRoomViewController: VoiceRoomUserOperationProtocol {
     /// 踢出房间
     func kickoutRoom(userId: String) {
-        let roomId = roomInfo.roomId
         let ids = [Environment.currentUserId, userId]
         UserInfoDownloaded.shared.fetch(ids) { users in
             let event = RCChatroomKickOut()
@@ -70,24 +69,18 @@ extension RCRadioRoomViewController: VoiceRoomUserOperationProtocol {
             event.userName = users[0].userName
             event.targetId = users[1].userId
             event.targetName = users[1].userName
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] _ in
-                self?.messageView.add(event)
-            } error: { _, _ in }
+            ChatroomSendMessage(event, messageView: self.messageView)
         }
     }
     
     func didSetManager(userId: String, isManager: Bool) {
         fetchManagerList()
-        let roomId = roomInfo.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { user in
             let event = RCChatroomAdmin()
             event.userId = user.userId
             event.userName = user.userName
             event.isAdmin = isManager
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                guard let self = self else { return }
-                self.messageView.add(event)
-            } error: { errorCode, mId in }
+            ChatroomSendMessage(event, messageView: self.messageView)
         }
         if isManager {
             SVProgressHUD.showSuccess(withStatus: "已设为管理员")
@@ -122,19 +115,14 @@ extension RCRadioRoomViewController: VoiceRoomUserOperationProtocol {
     }
     
     func didFollow(userId: String, isFollow: Bool) {
-        let roomId = roomInfo.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: userId) { followUser in
             guard isFollow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
-                }
-                self?.messageView.add(message)
+                ChatroomSendMessage(message)
+                self?.messageView.addMessage(message)
             }
         }
     }

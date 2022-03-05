@@ -11,7 +11,7 @@ import Reusable
 class AppendForbiddenCollectionViewCell: UICollectionViewCell, Reusable {
     private lazy var container: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .white.withAlphaComponent(0.28)
+        instance.backgroundColor = UIColor.white.withAlphaComponent(0.28)
         instance.layer.cornerRadius = 15
         instance.clipsToBounds = true
         return instance

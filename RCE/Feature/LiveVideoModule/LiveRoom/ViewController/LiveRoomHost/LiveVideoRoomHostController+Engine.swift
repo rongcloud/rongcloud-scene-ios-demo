@@ -7,7 +7,7 @@
 
 import SVProgressHUD
 import CoreGraphics
-import SwiftUI
+import RCLiveVideoLib
 
 extension LiveVideoRoomHostController {
     @_dynamicReplacement(for: m_viewDidLoad)
@@ -76,16 +76,8 @@ extension LiveVideoRoomHostController: RCLiveVideoDelegate {
         handleKickOutRoom(userId, by: operatorId)
     }
     
-    func didOutputSampleBuffer(_ sampleBuffer: CMSampleBuffer?) -> Unmanaged<CMSampleBuffer>? {
-        guard let sampleBuffer = sampleBuffer else { return nil }
-        guard let processedSampleBuffer = gpuHandler.onGPUFilterSource(sampleBuffer) else {
-            return Unmanaged.passUnretained(sampleBuffer)
-        }
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(processedSampleBuffer.takeUnretainedValue()) else {
-            return Unmanaged.passUnretained(sampleBuffer)
-        }
-        beautyManager.process(with: pixelBuffer, formatType: kCVPixelFormatType_32BGRA)
-        return processedSampleBuffer
+    func didOutputFrame(_ frame: RCRTCVideoFrame) -> RCRTCVideoFrame {
+        return beautyPlugin.didOutput(frame)
     }
     
     func liveVideoUserDidUpdate(_ userIds: [String]) {
@@ -167,14 +159,14 @@ extension LiveVideoRoomHostController: RCLiveVideoDelegate {
         seatView.subviews.forEach { $0.removeFromSuperview() }
     }
     
-    func seatDidLock(_ isLock: Bool, at index: Int) {
-        debugPrint("seat did lock \(index)")
+    func roomDidClosed() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
 extension LiveVideoRoomHostController: RCLiveVideoMixDataSource {
     func liveVideoPreviewSize() -> CGSize {
-        return CGSize(width: 720, height: 720)
+        return CGSize(width: 720, height: 1280)
     }
     
     func liveVideoFrames() -> [NSValue] {
@@ -188,6 +180,7 @@ extension LiveVideoRoomHostController: RCLiveVideoMixDataSource {
 
 extension LiveVideoRoomHostController: RCLiveVideoMixDelegate {
     func liveVideoDidLayout(_ seat: RCLiveVideoSeat, withFrame frame: CGRect) {
+        if RCLiveVideoEngine.shared().pkInfo != nil { return }
         guard let room = room else { return }
         let tag = seat.index + 10000
         seatView.viewWithTag(tag)?.removeFromSuperview()
@@ -198,6 +191,7 @@ extension LiveVideoRoomHostController: RCLiveVideoMixDelegate {
         seatView.addSubview(view)
         view.frame = frame
         view.tag = tag
+        debugPrint("frame: \(frame)")
     }
 }
 

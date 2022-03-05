@@ -54,15 +54,22 @@ class VoiceRoomViewController: UIViewController {
         instance.showsVerticalScrollIndicator = false
         return instance
     }()
-    private(set) lazy var musicControlVC = VoiceRoomMusicControlViewController(roomId: voiceRoomInfo.roomId)
-    private(set) lazy var messageView = RCVRMView()
-    private(set) lazy var toolBarView: SceneRoomToolBarView = {
-        if currentUserRole() == .creator {
-            return SceneRoomToolBarView(toolist: [.userlist, .pk, .gift, .message, .setting])
-        } else {
-            return SceneRoomToolBarView(toolist: [.requestMic,.gift, .message])
-        }
-    }()
+    
+    private(set) lazy var chatroomView = RCChatroomSceneView()
+    private(set) lazy var pkButton = RCChatroomSceneButton(.pk)
+    private(set) lazy var micButton = RCChatroomSceneButton(.mic)
+    private(set) lazy var giftButton = RCChatroomSceneButton(.gift)
+    private(set) lazy var messageButton = RCChatroomSceneButton(.message)
+    private(set) lazy var settingButton = RCChatroomSceneButton(.setting)
+    
+    var messageView: RCChatroomSceneMessageView {
+        return chatroomView.messageView
+    }
+    var toolBarView: RCChatroomSceneToolBar {
+        return chatroomView.toolBar
+    }
+    
+    
     lazy var pkView = VoiceRoomPKView()
     
     private let musicInfoBubbleView = RCMusicEngine.musicInfoBubbleView
@@ -104,6 +111,8 @@ class VoiceRoomViewController: UIViewController {
                 self.musicInfoBubbleView?.info = info;
             }
         }
+        RCIM.shared().addReceiveMessageDelegate(self)
+        PlayerImpl.instance.initializedEarMonitoring()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +121,7 @@ class VoiceRoomViewController: UIViewController {
             navigationController?.setNavigationBarHidden(true, animated: animated)
         }
         fetchManagerList()
-        toolBarView.refreshUnreadMessageCount()
+        messageButton.refreshMessageCount()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -217,13 +226,11 @@ class VoiceRoomViewController: UIViewController {
     dynamic func setupModules() {}
     ///消息回调，在engine模块中触发
     dynamic func handleReceivedMessage(_ message: RCMessage) {
-        if (message.content.isKind(of: RCCommandMessage.classForCoder())) {
-            handleCommandMessage(message)
-        }
+        handleCommandMessage(message)
     }
     
     func handleCommandMessage(_ message: RCMessage) {
-        CommandMessageHandler.handleMessage(message, musicInfoBubbleView)
+        RoomMessageHandlerManager.handleMessage(message, musicInfoBubbleView)
     }
 }
 
@@ -245,6 +252,7 @@ extension VoiceRoomViewController {
                 self.moreButton.isEnabled = true
                 switch result {
                 case .success:
+                    SceneRoomManager.shared.currentRoom = self.voiceRoomInfo
                     SVProgressHUD.dismiss()
                     self.sendJoinRoomMessage()
                 case let .failure(error):
@@ -257,6 +265,7 @@ extension VoiceRoomViewController {
         clearMusicData()
         SceneRoomManager.shared
             .leave { [weak self] result in
+                SceneRoomManager.shared.currentRoom = nil
                 RCRoomFloatingManager.shared.hide()
                 RCCall.shared().canIncomingCall = true
                 self?.navigationController?.safe_popToViewController(animated: true)
@@ -379,5 +388,12 @@ extension VoiceRoomViewController: RCRoomCycleProtocol {
     
     func descendantViews() -> [UIView] {
         return [messageView.tableView]
+    }
+}
+
+
+extension VoiceRoomViewController: RCIMReceiveMessageDelegate {
+    func onRCIMCustomAlertSound(_ message: RCMessage!) -> Bool {
+        return true
     }
 }

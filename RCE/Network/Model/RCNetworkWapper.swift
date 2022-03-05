@@ -9,5 +9,6 @@ import Foundation
 
 struct RCNetworkWapper<T: Codable>: Codable {
     let code: Int
+    let msg: String?
     let data: T?
 }

@@ -24,7 +24,8 @@ enum Paging {
 
 enum RCNetworkAPI {
     case sendCode(mobile: String, region: String)
-    case login(mobile: String, code: String, userName: String?, portrait: String?, deviceId: String, region: String)
+    case login(mobile: String, code: String, userName: String?, portrait: String?, deviceId: String, region: String, platform: String)
+    case loginDevice
     case createRoom(name: String, themePictureUrl: String, backgroundUrl: String, kv: [[String: String]], isPrivate: Int, password: String?, roomType: Int)
     case roomlist(type: Int = 1, page: Int, size: Int)
     case usersInfo(id: [String])
@@ -37,7 +38,7 @@ enum RCNetworkAPI {
     case setRoomManager(roomId: String, userId: String, isManager: Bool)
     case updateUserInfo(userName: String, portrait: String)
     case closeRoom(roomId: String)
-    case updateRoombackgroundUrl(roomId: String, backgroundUrl: String)
+    case updateRoomBackground(roomId: String, backgroundUrl: String)
     case giftList(roomId: String)
     case sendGift(roomId: String, giftId: String, toUid: String, num: Int)
     case musiclist(roomId: String, type: Int)
@@ -68,6 +69,7 @@ enum RCNetworkAPI {
     case checkCreatedRoom
     case resign
     case checkVersion(platform: String)
+    case checkText(text: String)
 }
 
 extension RCNetworkAPI: TargetType {
@@ -81,6 +83,8 @@ extension RCNetworkAPI: TargetType {
             return "user/sendCode"
         case .login:
             return "user/login"
+        case .loginDevice:
+            return "user/login/device/mobile"
         case .createRoom:
             return "mic/room/create"
         case .roomlist:
@@ -103,7 +107,7 @@ extension RCNetworkAPI: TargetType {
             return "user/update"
         case let .closeRoom(roomId):
             return "mic/room/\(roomId)/delete"
-        case .updateRoombackgroundUrl:
+        case .updateRoomBackground:
             return "mic/room/background"
         case let .giftList(roomId):
             return "mic/room/\(roomId)/gift/list"
@@ -165,6 +169,8 @@ extension RCNetworkAPI: TargetType {
             return "/user/resign"
         case .checkVersion:
             return "/appversion/latest"
+        case let .checkText(text):
+            return "mic/audit/text/\(text)"
         }
     }
     
@@ -173,6 +179,8 @@ extension RCNetworkAPI: TargetType {
         case .sendCode:
             return .post
         case .login:
+            return .post
+        case .loginDevice:
             return .post
         case .createRoom:
             return .post
@@ -196,7 +204,7 @@ extension RCNetworkAPI: TargetType {
             return .post
         case .closeRoom:
             return .get
-        case .updateRoombackgroundUrl:
+        case .updateRoomBackground:
             return .put
         case .giftList:
             return .get
@@ -258,25 +266,30 @@ extension RCNetworkAPI: TargetType {
             return .post
         case .checkVersion:
             return .get
+        case .checkText:
+            return .post
         }
     }
     
     var sampleData: Data {
         return Data()
     }
-    
+
     var task: Task {
         switch self {
         case let .sendCode(number,region):
             return .requestParameters(parameters: ["mobile": number,
                                                    "region": region], encoding: JSONEncoding.default)
-        case let .login(mobile, code, userName, portrait, deviceId, region):
+        case let .login(mobile, code, userName, portrait, deviceId, region, platform):
             return .requestParameters(parameters: ["mobile": mobile,
                                                    "verifyCode":code,
                                                    "userName": userName,
                                                    "portrait": portrait,
                                                    "deviceId": deviceId,
+                                                   "platform": platform,
                                                    "region": region].compactMapValues { $0 }, encoding: JSONEncoding.default)
+        case .loginDevice:
+            return.requestPlain
         case let .createRoom(name, themePictureUrl, backgroundUrl, kv, isPrivate, password, roomType):
             var params: [String: Any] = ["name": name, "themePictureUrl": themePictureUrl, "kv": kv, "isPrivate": isPrivate, "backgroundUrl": backgroundUrl, "roomType": roomType]
             if let password = password {
@@ -313,7 +326,7 @@ extension RCNetworkAPI: TargetType {
             return .requestParameters(parameters: ["userName": userName, "portrait": portrait], encoding: JSONEncoding.default)
         case .closeRoom:
             return .requestPlain
-        case let .updateRoombackgroundUrl(roomId, backgroundUrl):
+        case let .updateRoomBackground(roomId, backgroundUrl):
             return .requestParameters(parameters: ["roomId": roomId, "backgroundUrl": backgroundUrl], encoding: JSONEncoding.default)
         case .giftList:
             return .requestPlain
@@ -392,6 +405,8 @@ extension RCNetworkAPI: TargetType {
             return .requestPlain
         case let .checkVersion(platform):
             return .requestParameters(parameters: ["platform": platform], encoding: URLEncoding.default)
+        case .checkText:
+            return .requestPlain
         }
     }
     

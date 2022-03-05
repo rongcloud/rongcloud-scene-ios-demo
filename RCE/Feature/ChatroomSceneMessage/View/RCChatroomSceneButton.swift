@@ -40,6 +40,19 @@ enum RCChatroomSceneMicState {
     }
 }
 
+enum RCChatroomScenePKState {
+    case request
+    case waiting(otherRoomId: String, otherRoomUserId: String)
+    case connecting(otherRoomId: String, otherRoomUserId: String)
+    var image: UIImage? {
+        switch self {
+        case .request: return R.image.voiceroom_pk_button()
+        case .waiting: return R.image.connect_mic_state_waiting()
+        case .connecting: return R.image.pk_ongoing_icon()
+        }
+    }
+}
+
 class RCChatroomSceneButton: UIButton {
     
     private lazy var badgeView = VoiceRoomChatBageView()
@@ -49,6 +62,12 @@ class RCChatroomSceneButton: UIButton {
         didSet {
             hideBadgeIfNeeded()
             setImage(micState.image, for: .normal)
+        }
+    }
+    
+    var pkState: RCChatroomScenePKState = .request {
+        didSet {
+            setImage(pkState.image, for: .normal)
         }
     }
 

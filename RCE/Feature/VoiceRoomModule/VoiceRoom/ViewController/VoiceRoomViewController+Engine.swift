@@ -72,10 +72,7 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     }
     
     func seatDidMute(_ index: Int, isMute: Bool) {
-        let seatInfo = seatlist[index]
-        if !isMute, seatInfo.userId == Environment.currentUserId {
-            RCVoiceRoomEngine.sharedInstance().disableAudioRecording(roomState.isCloseSelfMic)
-        }
+    
     }
     
     func seatDidLock(_ index: Int, isLock: Bool) {
@@ -92,13 +89,14 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     
 
     func seatSpeakingStateChanged(_ speaking: Bool, at index: Int, audioLevel level: Int) {
+        let isSpeaking = level > 4
+        print("speaking:\(isSpeaking),index:\(index),audioLevel:\(level)")
         if index == 0 {
-            ownerView.setSpeakingState(isSpeaking: speaking)
-            RCRoomFloatingManager.shared.setSpeakingState(isSpeaking: speaking, seatInfo: seatlist[0])
+            ownerView.setSpeakingState(isSpeaking: isSpeaking)
+            RCRoomFloatingManager.shared.setSpeakingState(isSpeaking: isSpeaking, seatInfo: seatlist[0])
         } else {
-            print("index:\(index),audioLevel:\(level)")
             if let cell = collectionView.cellForItem(at: IndexPath(item: Int(index - 1), section: 0)) as? VoiceRoomSeatCollectionViewCell {
-                cell.setSpeakingState(isSpeaking: speaking)
+                cell.setSpeakingState(isSpeaking: isSpeaking)
             }
         }
     }
@@ -149,7 +147,6 @@ extension VoiceRoomViewController: RCVoiceRoomDelegate {
     }
     
     func kickSeatDidReceive(_ seatIndex: UInt) {
-        self.roomState.isCloseSelfMic = false
         SVProgressHUD.showSuccess(withStatus: "您已被抱下麦")
         if !(currentUserRole() == .creator) {
             self.roomState.connectState = .request

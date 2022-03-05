@@ -61,8 +61,10 @@ class HomeViewController: UIViewController {
         buildLayout()
         NotificationNameLogin.addObserver(self, selector: #selector(onLogin))
         NotificationNameLogout.addObserver(self, selector: #selector(onLogout))
+        NotificationNameShuMeiKickOut.addObserver(self, selector: #selector(onLogout))
         NotificationNameUserInfoUpdated.addObserver(self, selector: #selector(userInfoUpdated(_:)))
         RCIM.shared().connectionStatusDelegate = self
+        RCCoreClient.shared().add(self)
         checkVersion()
     }
     
@@ -77,9 +79,11 @@ class HomeViewController: UIViewController {
         RCMusicEngine.shareInstance().delegate = DelegateImpl.instance
         RCMusicEngine.shareInstance().player = PlayerImpl.instance
         RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
+        RCCoreClient.shared().messageBlockDelegate = self;
         userButton.kf.setImage(with: URL(string: Environment.currentUser?.portraitUrl ?? ""),
                                for: .normal,
                                placeholder: R.image.default_avatar())
+        FraudProtectionTips.showFraudProtectionTips(self)
     }
     
     @objc private func onLogout() {
@@ -250,6 +254,35 @@ extension HomeViewController: RCIMConnectionStatusDelegate {
             onLogout()
         default: ()
         }
+    }
+}
+
+
+extension HomeViewController: RCIMClientReceiveMessageDelegate {
+    func onReceived(_ message: RCMessage, left: Int32, object: Any) {
+        if let loginDeviceMessage = message.content as? RCLoginDeviceMessage,
+           let content = loginDeviceMessage.content,
+           content.platform != "mobile" {
+            SVProgressHUD.showInfo(withStatus: "您已下线，请重新登录")
+            UserDefaults.standard.clearLoginStatus()
+            RCCoreClient.shared().disconnect(true)
+            DispatchQueue.main.async {
+                self.onLogout()
+            }
+        } else if let _ = message.content as? RCShuMeiMessage {
+            ShuMeiMessageHandler.handleMessage(message: message, object: nil)
+        }
+    }
+}
+
+extension HomeViewController: RCMessageBlockDelegate {
+
+    func messageDidBlock(_ info: RCBlockedMessageInfo) {
+        let string = "发送的消息(消息类型:\(info.type) 会话id:\(info.targetId) 消息id:\(info.blockedMsgUId) 拦截原因:\(info.blockType) 附加信息:\(info.extra))遇到敏感词被拦截"
+        let controller = UIAlertController(title: "提示", message: string, preferredStyle: .alert)
+        let action = UIAlertAction(title: "确定", style: .default, handler: nil)
+        controller.addAction(action)
+        present(controller, animated: true)
     }
 }
 

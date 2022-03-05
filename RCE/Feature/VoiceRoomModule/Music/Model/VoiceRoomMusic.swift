@@ -10,7 +10,7 @@ import Foundation
 struct VoiceRoomMusic: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
-    let author: String
+    let author: String?
     let roomId: String
     let type: Int
     let url: String

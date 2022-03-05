@@ -11,7 +11,7 @@ class MusicEmptyView: UIView {
     private lazy var tipsLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 13)
-        instance.textColor = .white.withAlphaComponent(0.4)
+        instance.textColor = UIColor.white.withAlphaComponent(0.4)
         instance.text = "暂无歌曲，快去添加吧~"
         return instance
     }()

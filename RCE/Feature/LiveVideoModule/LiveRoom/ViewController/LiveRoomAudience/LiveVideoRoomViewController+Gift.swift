@@ -18,11 +18,17 @@ extension LiveVideoRoomViewController {
     
     @objc func handleGiftButtonClick() {
         SceneRoomManager.updateLiveSeatList()
-        var users: [String] = SceneRoomManager.shared.seatlist
-            .compactMap { $0.userId }
-            .filter { $0.count > 0 }
-        users.removeAll(where: { $0 == room.userId })
-        users.insert(room.userId, at: 0)
+        let users: [String] = {
+            if RCLiveVideoEngine.shared().pkInfo != nil {
+                return [room.userId]
+            }
+            var users: [String] = SceneRoomManager.shared.seatlist
+                .compactMap { $0.userId }
+                .filter { $0.count > 0 }
+            users.removeAll(where: { $0 == room.userId })
+            users.insert(room.userId, at: 0)
+            return users
+        }()
         let dependency = VoiceRoomGiftDependency(room: room,
                                                  seats: SceneRoomManager.shared.seatlist,
                                                  userIds: users)

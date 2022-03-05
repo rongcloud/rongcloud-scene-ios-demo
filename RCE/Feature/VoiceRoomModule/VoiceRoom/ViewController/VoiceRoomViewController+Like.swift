@@ -48,12 +48,9 @@ extension VoiceRoomViewController {
     
     @objc func onLikeClicked(_ gesture: UITapGestureRecognizer) {
         let point = gesture.location(in: view)
-        let like = RCChatroomLike()
         showTapIcon(point)
         showLikeIcons()
-        RCChatroomMessageCenter
-            .sendChatMessage(voiceRoomInfo.roomId, content: like)
-                { mId in } error: { eCode, mId in }
+        ChatroomSendMessage(RCChatroomLike())
     }
     
     @_dynamicReplacement(for: handleReceivedMessage(_:))
@@ -86,7 +83,8 @@ extension VoiceRoomViewController {
         let layer = VoiceRoomLikeIconLayer("like")
         view.layer.addSublayer(layer)
         
-        let tempFrame = view.convert(toolBarView.rightMostViewFrame, from: toolBarView)
+        let tmpView: UIView = voiceRoomInfo.isOwner ? settingButton : messageButton
+        let tempFrame = view.convert(tmpView.frame, from: tmpView.superview)
         let width = tempFrame.width
         let height = tempFrame.height
         let x = tempFrame.midX - width * 0.5

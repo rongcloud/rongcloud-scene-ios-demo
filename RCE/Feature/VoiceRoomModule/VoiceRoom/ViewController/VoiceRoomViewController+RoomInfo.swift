@@ -5,7 +5,7 @@
 //  Created by shaoshuai on 2021/6/21.
 //
 
-import UIKit
+import SVProgressHUD
 
 extension VoiceRoomViewController {
     @_dynamicReplacement(for: setupModules)
@@ -39,20 +39,20 @@ extension VoiceRoomViewController {
 
 extension VoiceRoomViewController: RoomInfoViewClickProtocol {
     func didFollowRoomUser(_ follow: Bool) {
-        let roomId = voiceRoomInfo.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: voiceRoomInfo.userId) { followUser in
             guard follow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                self?.messageView.add(message)
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
+                ChatroomSendMessage(message) { result in
+                    switch result {
+                    case .success:
+                        self?.messageView.addMessage(message)
+                    case .failure(let error):
+                        SVProgressHUD.showError(withStatus: error.localizedDescription)
+                    }
                 }
-                
             }
         }
     }

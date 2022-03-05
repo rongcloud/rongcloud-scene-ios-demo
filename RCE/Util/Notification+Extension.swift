@@ -12,6 +12,7 @@ let NotificationNameLogout = Notification.Name("NotificationNameLogout")
 let NotificationNameDidFollowUser = Notification.Name("NotificationNameDidFollowUser")
 let NotificationNameUserInfoUpdated = Notification.Name("NotificationNameUserInfoUpdated")
 let NotificationNameRoomBackgroundUpdated = Notification.Name("NotificationNameRoomBackgroundUpdated")
+let NotificationNameShuMeiKickOut = Notification.Name("NotificationNameShuMeiKickOut")
 
 extension Notification.Name {
     func addObserver(_ observer: Any,

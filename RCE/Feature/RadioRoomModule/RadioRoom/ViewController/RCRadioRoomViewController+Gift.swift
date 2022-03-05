@@ -12,7 +12,6 @@ extension RCRadioRoomViewController {
     private func gift_viewDidLoad() {
         m_viewDidLoad()
         fetchGiftInfo()
-        roomToolBarView.add(gift: self, action: #selector(handleGiftButtonClick))
     }
 }
 
@@ -69,7 +68,9 @@ extension RCRadioRoomViewController {
 
 extension RCRadioRoomViewController: VoiceRoomGiftViewControllerDelegate {
     func didSendGift(message: RCMessageContent) {
-        messageView.add(message)
+        if let message = message as? RCChatroomSceneMessageProtocol {
+            messageView.addMessage(message)
+        }
         handleGiftMessage(message)
         fetchGiftInfo()
     }

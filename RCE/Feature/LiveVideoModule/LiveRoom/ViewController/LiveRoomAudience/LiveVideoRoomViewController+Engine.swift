@@ -34,13 +34,11 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
         
         let message = "当前直播已结束"
         let controller = UIAlertController(title: "提示", message: message, preferredStyle: .alert)
-        let sureAction = UIAlertAction(title: "确定", style: .default) { _ in
-            RCLiveVideoEngine.shared().leaveRoom { [weak self] _ in
-                guard let self = self, isFloating == false else { return }
-                self.navigationController?.popViewController(animated: true)
-                DataSourceImpl.instance.clear()
-                PlayerImpl.instance.clear()
-            }
+        let sureAction = UIAlertAction(title: "确定", style: .default) { [unowned self] _ in
+            guard isFloating == false else { return }
+            navigationController?.popViewController(animated: true)
+            DataSourceImpl.instance.clear()
+            PlayerImpl.instance.clear()
         }
         controller.addAction(sureAction)
         UIApplication.shared.keyWindow()?
@@ -121,7 +119,7 @@ extension LiveVideoRoomViewController: RCLiveVideoDelegate {
         roomUserView.updateNetworkDelay(false)
     }
     
-    func liveVideoDidFinish(_ reason: RCLivevideoFinishReason) {
+    func liveVideoDidFinish(_ reason: RCLiveVideoFinishReason) {
         switch reason {
         case .leave:
             SVProgressHUD.showSuccess(withStatus: "连麦结束")
@@ -203,6 +201,7 @@ extension LiveVideoRoomViewController: RCLiveVideoMixDataSource {
 
 extension LiveVideoRoomViewController: RCLiveVideoMixDelegate {
     func liveVideoDidLayout(_ seat: RCLiveVideoSeat, withFrame frame: CGRect) {
+        if RCLiveVideoEngine.shared().pkInfo != nil { return }
         let tag = seat.index + 10000
         seatView.viewWithTag(tag)?.removeFromSuperview()
         if RCLiveVideoEngine.shared().currentMixType == .oneToOne {

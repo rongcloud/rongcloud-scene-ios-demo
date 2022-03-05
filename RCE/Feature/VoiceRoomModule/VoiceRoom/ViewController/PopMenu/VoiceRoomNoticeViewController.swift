@@ -9,7 +9,7 @@ import UIKit
 import IQKeyboardManager
 
 protocol VoiceRoomNoticeDelegate: AnyObject {
-    func noticeDidModfied(notice: String)
+    func noticeDidModified(notice: String)
 }
 
 class VoiceRoomNoticeViewController: UIViewController {
@@ -149,7 +149,7 @@ class VoiceRoomNoticeViewController: UIViewController {
     }
     
     @objc private func handleConfirm() {
-        delegate?.noticeDidModfied(notice: textView.text)
+        delegate?.noticeDidModified(notice: textView.text)
         dismissCurrent()
     }
 }

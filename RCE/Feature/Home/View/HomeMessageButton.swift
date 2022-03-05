@@ -43,8 +43,8 @@ final class HomeMessageButton: UIButton {
 }
 
 extension HomeMessageButton: RCIMClientReceiveMessageDelegate {
-    func onReceived(_ message: RCMessage!, left nLeft: Int32, object: Any!) {
-        guard message.conversationType == .ConversationType_PRIVATE else {
+    func onReceived(_ message: RCMessage?, left nLeft: Int32, object: Any!) {
+        guard let msg = message,msg.conversationType == .ConversationType_PRIVATE else {
             return
         }
         DispatchQueue.main.async {

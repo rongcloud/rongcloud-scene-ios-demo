@@ -35,8 +35,11 @@ extension VoiceRoomViewController: VoiceRoomMasterViewProtocol {
         guard let index = seatIndex(), index == 0 else {
             return enterSeat(index: 0)
         }
-        let isMute = seatlist.first?.isMuted ?? false
-        let navigation = RCNavigation.masterSeatOperation(Environment.currentUserId, isMute, self)
+        var disableRecording = false
+        if let seatInfo = seatlist.first {
+            disableRecording = seatInfo.disableRecording
+        }
+        let navigation = RCNavigation.masterSeatOperation(Environment.currentUserId, disableRecording, self)
         navigator(navigation)
     }
 }
@@ -44,7 +47,11 @@ extension VoiceRoomViewController: VoiceRoomMasterViewProtocol {
 // MARK: - Owenr Seat Pop View Delegate
 extension VoiceRoomViewController: VoiceRoomMasterSeatOperationProtocol {
     func didMasterSeatMuteButtonClicked(_ isMute: Bool) {
-        muteSeat(isMute: isMute, seatIndex: 0)
+        RCVoiceRoomEngine.sharedInstance().disableAudioRecording(isMute)
+        let seatInfo = RoomSeatInfoExtra(disableRecording: isMute)
+        if let jsonString = seatInfo.toJsonString() {
+            RCVoiceRoomEngine.sharedInstance().updateSeatInfo(0, withExtra: jsonString) {} error: { _, _ in }
+        }
     }
     
     func didMasterLeaveButtonClicked() {
@@ -126,7 +133,6 @@ extension VoiceRoomViewController: VoiceRoomUserOperationProtocol {
     }
     /// 踢出房间
     func kickoutRoom(userId: String) {
-        let roomId = voiceRoomInfo.roomId
         RCVoiceRoomEngine.sharedInstance().kickUser(fromRoom: userId) {
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
                 UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { targetUser in
@@ -135,9 +141,7 @@ extension VoiceRoomViewController: VoiceRoomUserOperationProtocol {
                     event.userName = user.userName
                     event.targetId = targetUser.userId
                     event.targetName = targetUser.userName
-                    RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] _ in
-                        self?.messageView.add(event)
-                    } error: { _, _ in }
+                    ChatroomSendMessage(event, messageView: self.messageView)
                 }
             }
         } error: { code, msg in }
@@ -146,17 +150,12 @@ extension VoiceRoomViewController: VoiceRoomUserOperationProtocol {
     
     func didSetManager(userId: String, isManager: Bool) {
         fetchManagerList()
-        let roomId = voiceRoomInfo.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { user in
             let event = RCChatroomAdmin()
             event.userId = user.userId
             event.userName = user.userName
             event.isAdmin = isManager
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                guard let self = self else { return }
-                self.messageView.add(event)
-            } error: { errorCode, mId in
-            }
+            ChatroomSendMessage(event, messageView: self.messageView)
         }
         VoiceRoomNotification.mangerlistNeedRefresh.send(content: "")
         if isManager {
@@ -196,20 +195,13 @@ extension VoiceRoomViewController: VoiceRoomUserOperationProtocol {
     }
     
     func didFollow(userId: String, isFollow: Bool) {
-        let roomId = voiceRoomInfo.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: userId) { followUser in
             guard isFollow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                self?.messageView.add(message)
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
-                }
-                
+                ChatroomSendMessage(message, messageView: self?.messageView)
             }
         }
     }

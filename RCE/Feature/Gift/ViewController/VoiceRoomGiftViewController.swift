@@ -144,10 +144,9 @@ final class VoiceRoomGiftViewController: UIViewController {
         guard seats.count > 0 else { return }
         guard sendView.count > 0 else { return }
         let room = dependency.room
-        let roomId = dependency.roomId
         let count = sendView.count
         let isAll = seats.count > 1 && seats.count >= dependency.userIds.count
-        UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
+        UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
             if isAll {
                 let event = RCChatroomGiftAll()
                 event.userId = user.userId
@@ -156,15 +155,16 @@ final class VoiceRoomGiftViewController: UIViewController {
                 event.giftName = gift.name
                 event.number = count
                 event.price = gift.price
-                RCChatroomMessageCenter
-                    .sendChatMessage(roomId, content: event, success: { [weak self] _ in
-                        self?.delegate?.didSendGift(message: event)
-                    }, error: { errorCode, mId in
-                    })
+                ChatroomSendMessage(event) { result in
+                    switch result {
+                    case .success: self?.delegate?.didSendGift(message: event)
+                    case .failure: ()
+                    }
+                }
                 RCGiftBroadcastMessage.sendMessageAllIfNeeded(event, room: room)
             } else {
                 for seat in seats {
-                    UserInfoDownloaded.shared.fetchUserInfo(userId: seat.userId) { target in
+                    UserInfoDownloaded.shared.fetchUserInfo(userId: seat.userId) { [weak self] target in
                         let event = RCChatroomGift()
                         event.userId = user.userId
                         event.userName = user.userName
@@ -174,11 +174,12 @@ final class VoiceRoomGiftViewController: UIViewController {
                         event.giftName = gift.name
                         event.number = count
                         event.price = gift.price
-                        RCChatroomMessageCenter
-                            .sendChatMessage(roomId, content: event, success: { [weak self] _ in
-                                self?.delegate?.didSendGift(message: event)
-                            }, error: { errorCode, mId in
-                            })
+                        ChatroomSendMessage(event) { result in
+                            switch result {
+                            case .success: self?.delegate?.didSendGift(message: event)
+                            case .failure: ()
+                            }
+                        }
                         RCGiftBroadcastMessage.sendMessageIfNeeded(event, room: room)
                     }
                 }

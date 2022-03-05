@@ -13,6 +13,7 @@ class VoiceRoomPKGiftUserView: UIView {
         instance.contentMode = .scaleAspectFill
         instance.layer.cornerRadius = 13
         instance.layer.borderWidth = 1.0
+        instance.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
         instance.image = R.image.pk_seat_default_sofa()
         instance.clipsToBounds = true
         return instance
@@ -26,14 +27,16 @@ class VoiceRoomPKGiftUserView: UIView {
     private lazy var rankBgImageView: UIImageView = {
         let instance = UIImageView()
         instance.contentMode = .scaleAspectFit
-        instance.image = R.image.left_rank_bg()
-        instance.isHidden = true
         return instance
     }()
     
-    override init(frame: CGRect) {
+    
+    init(isLeft: Bool, rank: Int, frame: CGRect = .zero) {
         super.init(frame: frame)
         buildLayout()
+        rankBgImageView.image = isLeft ? R.image.left_rank_bg() : R.image.right_rank_bg()
+        avatarImageView.layer.borderColor = isLeft ? PKViewConstants.leftColor.cgColor : PKViewConstants.rightColor.cgColor
+        rankLabel.text = "\(rank)"
     }
     
     required init?(coder: NSCoder) {
@@ -59,23 +62,12 @@ class VoiceRoomPKGiftUserView: UIView {
         }
     }
     
-    func updateColor(_ color: UIColor) {
-        avatarImageView.layer.borderColor = color.cgColor
-    }
-    
-    func updateUser(user: PKSendGiftUser?, rank: Int, isLeft: Bool) {
-        if let user = user {
-            avatarImageView.kf.setImage(with: URL.potraitURL(portrait: user.portrait), placeholder: R.image.default_avatar())
-            if isLeft {
-                rankBgImageView.image = R.image.left_rank_bg()
-            } else {
-                rankBgImageView.image = R.image.right_rank_bg()
-            }
-            rankBgImageView.isHidden = false
-            rankLabel.text = "\(rank)"
-        } else {
+    func updateUser(user: PKSendGiftUser?) {
+        guard let user = user else {
+            avatarImageView.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
             avatarImageView.image = R.image.pk_seat_default_sofa()
-            rankBgImageView.isHidden = true
+            return
         }
+        avatarImageView.kf.setImage(with: URL.potraitURL(portrait: user.portrait), placeholder: R.image.default_avatar())
     }
 }

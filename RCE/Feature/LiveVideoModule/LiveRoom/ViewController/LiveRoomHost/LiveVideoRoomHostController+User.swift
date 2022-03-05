@@ -81,10 +81,6 @@ extension LiveVideoRoomHostController: RCLVMicViewControllerDelegate {
     }
     
     func didSwitchMixType(_ type: RCLiveVideoMixType) {
-        if type != RCLiveVideoEngine.shared().currentMixType {
-            roomMixTypeDidChange(type)
-        }
-//        let mixType: RCLiveVideoMixType = type == .gridThree ? .custom : type
         RCLiveVideoEngine.shared().setMixType(type) { [weak self] code in
             switch code {
             case .success:
@@ -95,7 +91,10 @@ extension LiveVideoRoomHostController: RCLVMicViewControllerDelegate {
                     self?.chatroomView.messageView.addMessage(message)
                 }
             case .mixSame: ()
-            default: SVProgressHUD.showError(withStatus: "切换布局失败")
+            case .pKing:
+                SVProgressHUD.showError(withStatus: "当前 PK 中，无法进行此操作")
+            default:
+                SVProgressHUD.showError(withStatus: "切换布局失败")
             }
         }
     }
@@ -125,21 +124,24 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
     }
     
     func didSetManager(userId: String, isManager: Bool) {
-        let roomId = room.roomId
         UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { user in
             let event = RCChatroomAdmin()
             event.userId = user.userId
             event.userName = user.userName
             event.isAdmin = isManager
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: event) { [weak self] mId in
-                guard let self = self else { return }
-                self.messageView.addMessage(event)
-                if isManager {
-                    self.managers.append(user)
-                } else {
-                    self.managers.removeAll(where: { $0.userId == userId })
+            ChatroomSendMessage(event) { result in
+                switch result {
+                case .success:
+                    self.messageView.addMessage(event)
+                    if isManager {
+                        self.managers.append(user)
+                    } else {
+                        self.managers.removeAll(where: { $0.userId == userId })
+                    }
+                case .failure(let error):
+                    SVProgressHUD.showError(withStatus: error.localizedDescription)
                 }
-            } error: { errorCode, mId in }
+            }
         }
         if isManager {
             SVProgressHUD.showSuccess(withStatus: "已设为管理员")
@@ -175,19 +177,20 @@ extension LiveVideoRoomHostController: VoiceRoomUserOperationProtocol {
     }
     
     func didFollow(userId: String, isFollow: Bool) {
-        let roomId = room.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: userId) { followUser in
             guard isFollow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
+                ChatroomSendMessage(message) { result in
+                    switch result {
+                    case .success:
+                        self?.messageView.addMessage(message)
+                    case .failure(let error):
+                        SVProgressHUD.showError(withStatus: error.localizedDescription)
+                    }
                 }
-                self?.messageView.addMessage(message)
             }
         }
     }

@@ -25,7 +25,7 @@ extension LiveVideoRoomHostController {
         chatroomView.toolBar.delegate = self
         let config = RCChatroomSceneToolBarConfig.default()
         config.commonActions = [micButton]
-        config.actions = [giftButton, messageButton, settingButton]
+        config.actions = [pkButton, giftButton, messageButton, settingButton]
         config.recordButtonEnable = false
         chatroomView.toolBar.setConfig(config)
     }
@@ -71,16 +71,19 @@ extension LiveVideoRoomHostController: RCChatroomSceneToolBarDelegate {
     }
     
     private func sendMessage(_ URLString: String, time: Int) {
-        let roomId = room.roomId
-        UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
+        UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
             let message = RCVRVoiceMessage()
             message.userId = user.userId
             message.userName = user.userName
             message.path = URLString
             message.duration = UInt(time)
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { [weak self] mId in
-                self?.messageView.addMessage(message)
-            } error: { eCode, mId in
+            ChatroomSendMessage(message) { result in
+                switch result {
+                case .success:
+                    self?.messageView.addMessage(message)
+                case .failure(let error):
+                    SVProgressHUD.showError(withStatus: error.localizedDescription)
+                }
             }
         }
     }

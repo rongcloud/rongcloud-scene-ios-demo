@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //    UIViewController.swizzIt()
         dependency.configManagers(launchOptions)
         dependency.configureSDKs(launchOptions)
-        dependency.configureAppearence()
+        dependency.configureAppearance()
         window = dependency.window()
         appRouter.setRoot(for: window!)
         window?.makeKeyAndVisible()

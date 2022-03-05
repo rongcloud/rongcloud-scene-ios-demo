@@ -84,6 +84,7 @@ class VoiceRoomSeatedOperationViewController: UIViewController {
         }
         let title = isMute ? "打开麦克风" : "关闭麦克风"
         muteButton.setTitle(title, for: .normal)
+        muteButton.isHidden = isSeatMute
     }
     
     override func viewDidLayoutSubviews() {

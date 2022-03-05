@@ -22,7 +22,7 @@ class LiveVideoRoomCreationView: UIView {
         instance.addTarget(self, action: #selector(start), for: .touchUpInside)
         return instance
     }()
-    private lazy var beautyView = RCMHBeautyView(manager)
+    private lazy var beautyView = RCMHBeautyView()
     private lazy var backButton: UIButton = {
         let instance = UIButton()
         instance.addTarget(self, action: #selector(back), for: .touchUpInside)
@@ -32,9 +32,9 @@ class LiveVideoRoomCreationView: UIView {
     
     private lazy var viewModel = LiveVideoViewModel()
     
-    private let manager: MHBeautyManager
-    init(_ manager: MHBeautyManager) {
-        self.manager = manager
+    private let plugin: RCBeautyPlugin
+    init(_ plugin: RCBeautyPlugin) {
+        self.plugin = plugin
         super.init(frame: .zero)
         setupUI()
     }
@@ -71,7 +71,7 @@ class LiveVideoRoomCreationView: UIView {
                         delegate.didCreate(room)
                     }
                 } else {
-                    SVProgressHUD.showError(withStatus: "创建失败")
+                    SVProgressHUD.showError(withStatus: wrapper.msg ?? "创建失败")
                 }
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
@@ -134,22 +134,16 @@ extension LiveVideoRoomCreationView: CreateLiveVideoHeaderProtocol {
 
 extension LiveVideoRoomCreationView: RCMHBeautyViewDelegate {
     func didClickBeautyAction(_ action: RCMHBeautyAction) {
-        guard let controller = controller as? LiveVideoRoomHostController else { return }
         switch action {
         case .switchCamera:
             RCRTCEngine.sharedInstance().defaultVideoStream.switchCamera()
-            let postion = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
-            let needMirror = postion == .captureDeviceFront
+            let position = RCRTCEngine.sharedInstance().defaultVideoStream.cameraPosition
+            let needMirror = position == .captureDeviceFront
             RCRTCEngine.sharedInstance().defaultVideoStream.isEncoderMirror = needMirror
-            RCRTCEngine.sharedInstance().defaultVideoStream.isPreviewMirror = needMirror
-        case .sticker:
-            controller.present(controller.sticker, animated: true)
-        case .retouch:
-            controller.present(controller.retouch, animated: true)
-        case .makeup:
-            controller.present(controller.makeup, animated: true)
-        case .effect:
-            controller.present(controller.effect, animated: true)
+        case .sticker: plugin.didClick(.sticker)
+        case .retouch: plugin.didClick(.retouch)
+        case .makeup: plugin.didClick(.makeup)
+        case .effect: plugin.didClick(.effect)
         }
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import SVProgressHUD
-import RCVoiceRoomMessage
 
 extension LiveVideoRoomViewController {
     @_dynamicReplacement(for: m_viewWillAppear(_:))
@@ -88,19 +87,20 @@ extension LiveVideoRoomViewController: VoiceRoomUserOperationProtocol {
     }
     
     func didFollow(userId: String, isFollow: Bool) {
-        let roomId = room.roomId
         UserInfoDownloaded.shared.refreshUserInfo(userId: userId) { followUser in
             guard isFollow else { return }
             UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { [weak self] user in
                 let message = RCChatroomFollow()
                 message.userInfo = user.rcUser
                 message.targetUserInfo = followUser.rcUser
-                RCChatroomMessageCenter.sendChatMessage(roomId, content: message) { mId in
-                    print("send message seccuss: \(mId)")
-                } error: { eCode, mId in
-                    print("send message fail: \(mId), code: \(eCode.rawValue)")
+                ChatroomSendMessage(message) { result in
+                    switch result {
+                    case .success:
+                        self?.messageView.addMessage(message)
+                    case .failure(let error):
+                        SVProgressHUD.showError(withStatus: error.localizedDescription)
+                    }
                 }
-                self?.messageView.addMessage(message)
             }
         }
         NotificationNameDidFollowUser.post()

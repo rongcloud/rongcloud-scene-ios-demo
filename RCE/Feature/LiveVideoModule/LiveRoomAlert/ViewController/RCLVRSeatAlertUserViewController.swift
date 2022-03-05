@@ -44,7 +44,7 @@ class RCLVRSeatAlertUserViewController: RCLVRAlertViewController {
         let instance = UIButton(type: .custom)
         instance.setTitle("送礼物", for: .normal)
         instance.setTitleColor(.white, for: .normal)
-        instance.setTitleColor(.white.withAlphaComponent(0.7), for: .highlighted)
+        instance.setTitleColor(UIColor.white.withAlphaComponent(0.7), for: .highlighted)
         instance.titleLabel?.font = .systemFont(ofSize: 14.resize, weight: .medium)
         instance.setBackgroundImage(sendGiftButtonBackgroundImage(), for: .normal)
         instance.addTarget(self, action: #selector(sendGiftButtonClicked), for: .touchUpInside)

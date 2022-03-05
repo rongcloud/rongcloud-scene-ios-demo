@@ -9,9 +9,10 @@ import UIKit
 
 protocol VoiceRoomPKViewDelegate: AnyObject {
     func silenceButtonDidClick()
+    func generatePkResult(twoSides: (PKResult, PKResult))
 }
 
-private struct Constants {
+struct PKViewConstants {
     static let countdown = 180
     static let leftColor = UIColor(hexString: "#E92B88")
     static let rightColor = UIColor(hexString: "#505DFF")
@@ -36,14 +37,14 @@ class VoiceRoomPKView: UIView {
     private lazy var countdownLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 17, weight: .medium)
-        instance.textColor = .white.withAlphaComponent(0.6)
+        instance.textColor = UIColor.white.withAlphaComponent(0.6)
         instance.text = "02:30"
         return instance
     }()
     private lazy var punishCountdownLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 14, weight: .medium)
-        instance.textColor = .white.withAlphaComponent(0.6)
+        instance.textColor = UIColor.white.withAlphaComponent(0.6)
         instance.text = "惩罚时间 03:00"
         instance.isHidden = true
         return instance
@@ -86,7 +87,7 @@ class VoiceRoomPKView: UIView {
         return instance
     }()
     private lazy var leftStackView: UIStackView = {
-        let viewlist = (0...2).map { _ in VoiceRoomPKGiftUserView() }
+        let viewlist = (0...2).map { i in VoiceRoomPKGiftUserView(isLeft: true, rank: [3,2,1][i]) }
         let instance = UIStackView(arrangedSubviews: viewlist)
         instance.axis = .horizontal
         instance.spacing = 12
@@ -95,7 +96,7 @@ class VoiceRoomPKView: UIView {
         return instance
     }()
     private lazy var rightStackView: UIStackView = {
-        let viewlist = (0...2).map { _ in VoiceRoomPKGiftUserView() }
+        let viewlist = (0...2).map { i in VoiceRoomPKGiftUserView(isLeft: false, rank: i + 1) }
         let instance = UIStackView(arrangedSubviews: viewlist)
         instance.axis = .horizontal
         instance.spacing = 12
@@ -127,7 +128,7 @@ class VoiceRoomPKView: UIView {
     private func buildLayout() {
         layer.cornerRadius = 16
         clipsToBounds = false
-        backgroundColor = .black.withAlphaComponent(0.4)
+        backgroundColor = UIColor.black.withAlphaComponent(0.4)
         addSubview(leftMasterView)
         addSubview(rightMasterView)
         rightMasterView.addSubview(muteButton)
@@ -225,16 +226,16 @@ class VoiceRoomPKView: UIView {
             muteButton.isHidden = true
         }
         let passedTime = timeDiff
-        self.countdownSec = Constants.countdown - passedTime
+        self.countdownSec = PKViewConstants.countdown - passedTime
         self.startCountdown(remainSeconds: self.countdownSec, state: .pkOngoing)
     }
     
-    func beginPunishment(passedSeconds: Int, info: VoiceRoomPKInfo? = nil, currentRoomId: String? = nil) {
-        if let info = info, let roomId = currentRoomId {
-            updateUserInfo(info: info, currentRoomOwnerId: roomId)
+    func beginPunishment(passedSeconds: Int, info: VoiceRoomPKInfo? = nil, currentRoomOwnerId: String? = nil) {
+        if let info = info, let roomOwnerId = currentRoomOwnerId {
+            updateUserInfo(info: info, currentRoomOwnerId: roomOwnerId)
         }
         setupPKResult()
-        startCountdown(remainSeconds: Constants.countdown - passedSeconds, state: .punishOngoing)
+        startCountdown(remainSeconds: PKViewConstants.countdown - passedSeconds, state: .punishOngoing)
     }
     
     private func startCountdown(remainSeconds: Int, state: PKCountdownState) {
@@ -270,20 +271,7 @@ class VoiceRoomPKView: UIView {
         RunLoop.current.add(countDownTimer!, forMode: .common)
         countDownTimer?.fire()
     }
-    
-    private func pkResult() -> PKResult {
-        let result: (PKResult, PKResult) = {
-            if score.0 > score.1 {
-                return (.win, .lose)
-            } else if score.0 < score.1 {
-                return (.lose, .win)
-            } else {
-                return (.tie, .tie)
-            }
-        }()
-        return result.0
-    }
-    
+
     private func updateUserInfo(info: VoiceRoomPKInfo, currentRoomOwnerId: String) {
         self.pkInfo = info
         UserInfoDownloaded.shared.fetch([info.inviterId, info.inviteeId]) { userlist in
@@ -310,33 +298,42 @@ class VoiceRoomPKView: UIView {
                 score.1 = room.score
             }
             if score.0 + score.1 > 0 {
-                let leftScale = CGFloat(score.0)/CGFloat(score.0 + score.1)
+                var leftScale = CGFloat(score.0) / CGFloat(score.0 + score.1)
+                let positionTextOffset = 0.18
+                if score.0 == 0 { // 自己房间无礼物, 给我方预留显示我方礼物值的区域
+                    leftScale = positionTextOffset
+                }
+                if score.1 == 0 { // 对面房间无礼物，给对面预留显示对面礼物值的区域
+                    leftScale = 1.0 - positionTextOffset
+                }
+                let rightScale = 1 - leftScale
                 leftProgressView.snp.remakeConstraints { make in
                     make.left.top.bottom.equalToSuperview()
                     make.width.equalToSuperview().multipliedBy(leftScale)
                 }
                 rightProgressView.snp.remakeConstraints { make in
                     make.right.top.bottom.equalToSuperview()
-                    make.width.equalToSuperview().multipliedBy(1 - leftScale)
+                    make.width.equalToSuperview().multipliedBy(rightScale)
+                }
+                flashImageView.snp.remakeConstraints { make in
+                    make.centerY.equalToSuperview()
+                    make.centerX.equalTo(leftProgressView.snp.right)
                 }
             }
             let label = isLeft ? leftScoreLabel : rightScoreLabel
-            let stackView = isLeft ? leftStackView : rightStackView
             let postition = isLeft ? "我方 " : "对方 "
             label.text = postition + "\(room.score)"
-            if room.userInfoList.count > 0 {
-                for i in (0..<stackView.arrangedSubviews.count) {
-                    let arrangedViews = isLeft ? stackView.arrangedSubviews.reversed() : stackView.arrangedSubviews
-                    guard let giftView = arrangedViews[i] as? VoiceRoomPKGiftUserView else {
-                        return
-                    }
-                    if i < room.userInfoList.count {
-                        giftView.updateColor(Constants.leftColor)
-                        giftView.updateUser(user: room.userInfoList[i], rank: i + 1, isLeft: isLeft)
-                    } else {
-                        giftView.updateColor(.clear)
-                        giftView.updateUser(user: nil, rank: i + 1, isLeft: isLeft)
-                    }
+            
+            if room.userInfoList.count == 0 { continue }
+            let views = isLeft
+            ? leftStackView.arrangedSubviews.reversed()
+            : rightStackView.arrangedSubviews
+            for i in (0..<views.count) {
+                guard let giftView = views[i] as? VoiceRoomPKGiftUserView else { return }
+                if i < room.userInfoList.count {
+                    giftView.updateUser(user: room.userInfoList[i])
+                } else {
+                    giftView.updateUser(user: nil)
                 }
             }
             UIView.animate(withDuration: 0.3) {
@@ -347,17 +344,17 @@ class VoiceRoomPKView: UIView {
     }
     
     private func setupPKResult() {
+        var result: (PKResult, PKResult) = (.tie, .tie)
         if score.0 > score.1 {
-            leftMasterView.updatePKResult(result: .win)
-            rightMasterView.updatePKResult(result: .lose)
-        } else if (score.0 == score.1) {
-            leftMasterView.updatePKResult(result: .tie)
-            rightMasterView.updatePKResult(result: .tie)
+            result = (.win, .lose)
+        } else if score.0 == score.1 {
             middleImageView.image = R.image.pk_tie_icon()
-        } else {
-            leftMasterView.updatePKResult(result: .lose)
-            rightMasterView.updatePKResult(result: .win)
+        } else if score.0 < score.1 {
+            result = (.lose, .win)
         }
+        leftMasterView.updatePKResult(result: result.0)
+        rightMasterView.updatePKResult(result: result.1)
+        delegate?.generatePkResult(twoSides: result)
     }
     
     func setupMuteState(isMute: Bool) {
@@ -366,13 +363,17 @@ class VoiceRoomPKView: UIView {
     }
     
     func resetGiftViews() {
-        leftStackView.removeAllArrangedSubviews()
-        rightStackView.removeAllArrangedSubviews()
-        (0...2).forEach { _ in
-            let leftGiftView = VoiceRoomPKGiftUserView()
-            let rightGiftView = VoiceRoomPKGiftUserView()
-            leftStackView.addArrangedSubview(leftGiftView)
-            rightStackView.addArrangedSubview(rightGiftView)
+        let updateClosure = { (view: UIView) in
+            guard let giftView = view as? VoiceRoomPKGiftUserView else {
+                return
+            }
+            giftView.updateUser(user: nil)
+        }
+        leftStackView.arrangedSubviews.forEach { view in
+            updateClosure(view)
+        }
+        rightStackView.arrangedSubviews.forEach { view in
+            updateClosure(view)
         }
     }
     

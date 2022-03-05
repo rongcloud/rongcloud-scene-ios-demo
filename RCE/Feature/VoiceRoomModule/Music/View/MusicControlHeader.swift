@@ -52,7 +52,7 @@ class MusicControlHeader: UIView {
         super.init(frame: frame)
         addSubview(stackView)
         addSubview(effectControlButton)
-        backgroundColor = .black.withAlphaComponent(0.17)
+        backgroundColor = UIColor.black.withAlphaComponent(0.17)
         stackView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(23)
             make.centerY.equalToSuperview()

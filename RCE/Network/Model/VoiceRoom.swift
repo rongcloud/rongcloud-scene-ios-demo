@@ -20,6 +20,7 @@ struct VoiceRoomList: Codable {
 
 struct CreateVoiceRoomWrapper: Codable {
     let code: Int
+    let msg: String?
     let data: VoiceRoom?
     
     func isCreated() -> Bool {

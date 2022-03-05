@@ -103,20 +103,6 @@ struct RoomSettingState {
         isSeatModeLess = state.setSeatNumber < 9
     }
     
-    func settinglist() -> [RoomSettingItem] {
-        return [.lockRoom(isPrivate),
-                .roomTitle,
-                .notice,
-                .roomBackground,
-                .isFreeEnterSeat(isFreeEnterSeat),
-                .muteAllSeat(isMuteAll),
-                .lockAllSeat(isLockAll),
-                .muteSelf(isSilence),
-                .lessSeatMode(isSeatModeLess),
-                .forbidden,
-                .music]
-    }
-    
     func isPKOngoing() -> Bool {
         return currentPKInfo != nil
     }

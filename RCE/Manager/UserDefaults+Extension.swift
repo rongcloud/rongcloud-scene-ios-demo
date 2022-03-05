@@ -7,11 +7,12 @@
 
 import Foundation
 
-private let RCRongCloudTokenKey = "RCRongCloudTokenKey"
-private let RCAuthorizationKey = "RCAuthorizationKey"
-private let RCLoginUserKey = "RCLoginUserKey"
-private let RCFeedbackCountDown = "RCFeedbackCountDown"
-private let RCFeedbackCompletion = "RCFeedbackCompletion"
+private let RCRongCloudTokenKey             = "RCRongCloudTokenKey"
+private let RCAuthorizationKey              = "RCAuthorizationKey"
+private let RCLoginUserKey                  = "RCLoginUserKey"
+private let RCFeedbackCountDown             = "RCFeedbackCountDown"
+private let RCFeedbackCompletion            = "RCFeedbackCompletion"
+private let RCFraudProtectionTriggerDateKey = "RCFraudProtectionTriggerDateKey"
 
 extension UserDefaults {
     func rongToken() -> String? {
@@ -66,5 +67,13 @@ extension UserDefaults {
   
     func clearCountDown() {
         UserDefaults.standard.setValue(0, forKey: RCFeedbackCountDown)
+    }
+    
+    func set(fraudProtectionTriggerDate:Date) {
+        UserDefaults.standard.setValue(fraudProtectionTriggerDate, forKey: RCFraudProtectionTriggerDateKey)
+    }
+    
+    func fraudProtectionTriggerDate() -> Date? {
+        return UserDefaults.standard.value(forKey: RCFraudProtectionTriggerDateKey) as? Date
     }
  }

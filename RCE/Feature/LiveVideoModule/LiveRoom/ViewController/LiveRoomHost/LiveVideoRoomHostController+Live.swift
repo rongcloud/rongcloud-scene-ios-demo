@@ -16,9 +16,10 @@ extension LiveVideoRoomHostController {
     private func setupPreviewLayout(_ mixType: RCLiveVideoMixType) {
         let preview = RCLiveVideoEngine.shared().previewView()
         switch mixType {
-        case .oneToOne:
+        case .default, .oneToOne:
             preview.snp.remakeConstraints { make in
-                make.edges.equalToSuperview()
+                make.top.bottom.right.equalToSuperview()
+                make.width.equalTo(preview.snp.height).multipliedBy(9.0 / 16)
             }
         case .oneToSix:
             preview.snp.remakeConstraints { make in

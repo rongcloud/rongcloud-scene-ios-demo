@@ -1,0 +1,40 @@
+PODS:
+  - RCSceneMessage (0.0.1):
+    - RongCloudIM/IMLib
+  - RongCloudIM/ChatRoom (5.1.7.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/CustomerService (5.1.7.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/Discussion (5.1.7.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/IMLib (5.1.7.1):
+    - RongCloudIM/ChatRoom
+    - RongCloudIM/CustomerService
+    - RongCloudIM/Discussion
+    - RongCloudIM/IMLibCore
+    - RongCloudIM/Location
+    - RongCloudIM/PublicService
+  - RongCloudIM/IMLibCore (5.1.7.1)
+  - RongCloudIM/Location (5.1.7.1):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/PublicService (5.1.7.1):
+    - RongCloudIM/IMLibCore
+
+DEPENDENCIES:
+  - RCSceneMessage (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - RongCloudIM
+
+EXTERNAL SOURCES:
+  RCSceneMessage:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  RCSceneMessage: bdd53cdd58baf0cf31e0bcd0f353dbc109d35c44
+  RongCloudIM: 728913e755fb5e4c618ac283bab7896f11cb4249
+
+PODFILE CHECKSUM: e94ffdabe83e86bcff3e20e3930db6df7f8da94e
+
+COCOAPODS: 1.11.2

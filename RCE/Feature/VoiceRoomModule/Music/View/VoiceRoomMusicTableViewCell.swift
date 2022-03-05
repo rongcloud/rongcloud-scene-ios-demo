@@ -47,13 +47,13 @@ class VoiceRoomMusicTableViewCell: UITableViewCell, Reusable {
     private lazy var musicAuthorLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 12)
-        instance.textColor = .white.withAlphaComponent(0.7)
+        instance.textColor = UIColor.white.withAlphaComponent(0.7)
         return instance
     }()
     private lazy var musicSizeLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 9)
-        instance.textColor = .white.withAlphaComponent(0.7)
+        instance.textColor = UIColor.white.withAlphaComponent(0.7)
         return instance
     }()
     fileprivate lazy var stateButton: UIButton = {
@@ -62,7 +62,7 @@ class VoiceRoomMusicTableViewCell: UITableViewCell, Reusable {
     }()
     fileprivate lazy var separatorline: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .white.withAlphaComponent(0.1)
+        instance.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         return instance
     }()
     fileprivate var currentState: MusicListState!

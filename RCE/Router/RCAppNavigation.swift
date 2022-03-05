@@ -12,7 +12,6 @@ enum RCNavigation: Navigation {
     case createRoom(imagelist: [String])
     case login
     case userInfoEdit
-    case roomSetting([RoomSettingItem], VoiceRoomSettingProtocol)
     case requestOrInvite(roomId: String, delegate: HandleRequestSeatProtocol, showPage: Int, onSeatUserIds:[String])
     case masterSeatOperation(String, Bool, VoiceRoomMasterSeatOperationProtocol)
     case userSeatPop(seatIndex: UInt, isUserMute: Bool, isSeatMute: Bool, delegate: VoiceRoomSeatedOperationProtocol)
@@ -46,7 +45,6 @@ struct RCAppNavigation: AppNavigation {
             case .createRoom,
                  .login,
                  .userInfoEdit,
-                 .roomSetting,
                  .requestOrInvite,
                  .masterSeatOperation,
                  .userSeatPop,
@@ -96,11 +94,6 @@ struct RCAppNavigation: AppNavigation {
             let vc = UserInfoEditViewController()
             vc.modalTransitionStyle = .crossDissolve
             vc.modalPresentationStyle = .overFullScreen
-            return vc
-        case let .roomSetting(items, delegate):
-            let vc = VoiceRoomSettingViewController(items: items, delegate: delegate)
-            vc.modalTransitionStyle = .coverVertical
-            vc.modalPresentationStyle = .popover
             return vc
         case let .requestOrInvite(roomId, delegate, page, list):
             return RequestOrInviteViewController(roomId: roomId, delegate: delegate, showPage: page, onSeatUserIds: list)

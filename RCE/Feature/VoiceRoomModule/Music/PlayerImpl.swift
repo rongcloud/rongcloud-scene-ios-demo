@@ -17,6 +17,9 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
     
     static let instance = PlayerImpl()
     
+    //用户耳返开关状态
+    private var openEarMonitoring = false
+    
     var type: PlayerRoomType = .voice
     
     //当前正在播放的音乐
@@ -29,6 +32,15 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
     private override init() {
         super.init()
         RCRTCAudioMixer.sharedInstance().delegate = self
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(onRouteChanged(_:)),
+                         name: AVAudioSession.routeChangeNotification,
+                         object: nil)
+    }
+    
+    func initializedEarMonitoring() {
+        setEarOpenMonitoring(openEarMonitoring)
     }
     
     func localVolume() -> Int {
@@ -56,7 +68,9 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
     }
     
     func setEarOpenMonitoring(_ on: Bool) {
-        RCRTCEngine.sharedInstance().audioEffectManager.enable(inEarMonitoring: on)
+        openEarMonitoring = on && isHeadsetPluggedIn()
+        RCMusicEngine.shareInstance().openEarMonitoring = openEarMonitoring
+        RCRTCEngine.sharedInstance().audioEffectManager.enable(inEarMonitoring:openEarMonitoring)
     }
     
     func startMixing(with info: RCMusicInfo) -> Bool {
@@ -68,7 +82,7 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
             return RCRTCAudioMixer.sharedInstance().resume()
         }
         
-        guard let fileName = info.musicId, let musicDir = RCMusicDataPath.musicsDir(RCMusicDataPath.document()) else {
+        guard let fileName = info.musicId, let musicDir = DataSourceImpl.musicDir() else {
             log.debug("startMixing info fileName must be nonnull");
             return false
         }
@@ -119,10 +133,13 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
         currentPlayState = mixingReason == .mixingReasonPausedByUser ? .mixingStatePause : mixingState
     
         handleState(currentPlayState)
-        
-        sendCommandMessage()
-        
-        syncRoomPlayingMusicInfo()
+                
+        syncRoomPlayingMusicInfo { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.sendCommandMessage()
+        }
         
         RCMusicEngine.shareInstance().asyncMixingState(RCMusicMixingState(rawValue: UInt(mixingState.rawValue)) ?? .playing)
 
@@ -174,20 +191,20 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
                 log.debug(" voice 同步歌曲信息消息发送失败 code: \(code) msg: \(msg)");
             }
         } else if (PlayerImpl.instance.type == .radio || PlayerImpl.instance.type == .live) {
-            guard let roomId = DelegateImpl.instance.roomId else {
-                return
-            }
-            RCChatroomMessageCenter.sendChatMessage(roomId, content: commandMessage) {_ in
-                log.debug("radio 同步歌曲信息消息发送成功");
-            } error: { eCode, mId in
-                log.debug(" radio 同步歌曲信息消息发送失败 code: \(eCode) mId: \(mId)");
+            ChatroomSendMessage(commandMessage) { result in
+                switch result {
+                case .success:
+                    log.debug("radio 同步歌曲信息消息发送成功");
+                case .failure(let error):
+                    log.debug(" radio 同步歌曲信息消息发送失败: \(error.localizedDescription)");
+                }
             }
         }
     }
     
-    func syncRoomPlayingMusicInfo() {
+    func syncRoomPlayingMusicInfo(_ completion: @escaping () -> Void) {
         let info = currentPlayingMusic as? MusicInfo
-        DelegateImpl.instance.syncPlayingMusicInfo(info)
+        DelegateImpl.instance.syncPlayingMusicInfo(info,completion)
     }
     
     func clear() {
@@ -197,5 +214,24 @@ class PlayerImpl: NSObject, RCMusicPlayer, RCRTCAudioMixerAudioPlayDelegate {
         if (tmp != nil) {
             let _ = stopMixing(with: nil)
         }
+    }
+    
+    private func isHeadsetPluggedIn() -> Bool {
+        let route = AVAudioSession.sharedInstance().currentRoute
+        let isHeadsetPluggedIn = route.outputs.contains { desc in
+            switch desc.portType {
+            case .bluetoothLE,
+                 .bluetoothHFP,
+                 .bluetoothA2DP,
+                 .headphones:
+                return true
+            default: return false
+            }
+        }
+        return isHeadsetPluggedIn
+    }
+    
+    @objc private func onRouteChanged(_ notification: Notification) {
+        setEarOpenMonitoring(openEarMonitoring)
     }
 }

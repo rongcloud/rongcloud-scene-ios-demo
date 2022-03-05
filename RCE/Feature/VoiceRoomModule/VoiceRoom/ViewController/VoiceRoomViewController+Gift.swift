@@ -14,7 +14,6 @@ extension VoiceRoomViewController {
     private func setupLikeModule() {
         setupModules()
         fetchGiftInfo()
-        toolBarView.add(gift: self, action: #selector(handleGiftButtonClick))
     }
     
     private func fetchGiftInfo() {
@@ -82,7 +81,9 @@ extension VoiceRoomViewController {
 
 extension VoiceRoomViewController: VoiceRoomGiftViewControllerDelegate {
     func didSendGift(message: RCMessageContent) {
-        messageView.add(message)
+        if let message = message as? RCChatroomSceneMessageProtocol {
+            messageView.addMessage(message)
+        }
         handleGiftMessage(message)
         fetchGiftInfo()
     }

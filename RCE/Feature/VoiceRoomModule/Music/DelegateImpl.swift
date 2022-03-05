@@ -29,7 +29,7 @@ class DelegateImpl: NSObject, RCMusicEngineDelegate {
         
         //如果当前下载的音乐和即将下载的音乐相同时过滤掉
         if (DelegateImpl.instance.downloadingMusicId == musicId || DataSourceImpl.instance.ids.contains(musicId)) {
-            return
+            return completion(false)
         }
         
         DelegateImpl.instance.downloadingMusicId = musicId
@@ -44,8 +44,7 @@ class DelegateImpl: NSObject, RCMusicEngineDelegate {
             if (wait == .success) {
                 MusicDownloader.shared.hifiveDownload(music: music) { success in
                     guard let filePath = music.fullPath() else {
-                        downloadFailed()
-                        return
+                        return downloadFailed()
                     }
                     if (success) {
                         do {
@@ -149,7 +148,7 @@ class DelegateImpl: NSObject, RCMusicEngineDelegate {
     
     //开始播放 同步状态时 info != nil
     //暂停播放 同步状态时 info == nil
-    func syncPlayingMusicInfo(_ info: MusicInfo?) {
+    func syncPlayingMusicInfo(_ info: MusicInfo?,_ completion: @escaping () -> Void) {
         guard let roomId = roomId else {
             log.debug("同步音乐信息失败，房间ID不能为空")
             return
@@ -166,6 +165,7 @@ class DelegateImpl: NSObject, RCMusicEngineDelegate {
             switch result.map(AppResponse.self) {
             case .success:
                 log.debug("同步音乐信息成功")
+                completion()
             case .failure:
                 log.debug("同步音乐信息失败")
             }

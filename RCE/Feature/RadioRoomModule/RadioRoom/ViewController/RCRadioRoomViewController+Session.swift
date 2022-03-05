@@ -43,12 +43,13 @@ extension RCRadioRoomViewController: RCRoomCycleProtocol {
             switch result {
             case .success:
                 SVProgressHUD.dismiss(withDelay: 0.3)
-                sendJoinRoomMessage()
                 if roomInfo.isOwner {
                     enterSeat { _ in }
                 } else {
                     listenToTheRadio { _ in }
                 }
+                SceneRoomManager.shared.currentRoom = roomInfo
+                sendJoinRoomMessage()
                 RCRTCEngine.sharedInstance().defaultAudioStream.setAudioQuality(.music, scenario: .musicChatRoom)
             case let .failure(error):
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
@@ -65,6 +66,7 @@ extension RCRadioRoomViewController: RCRoomCycleProtocol {
             DataSourceImpl.instance.clear()
             PlayerImpl.instance.clear()
             RCCall.shared().canIncomingCall = true
+            SceneRoomManager.shared.currentRoom = nil
         }
     }
     

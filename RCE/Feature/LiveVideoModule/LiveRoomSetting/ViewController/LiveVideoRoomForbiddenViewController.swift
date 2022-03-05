@@ -48,7 +48,7 @@ class LiveVideoRoomForbiddenViewController: UIViewController {
     }()
     private lazy var separatorLine: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .white.withAlphaComponent(0.2)
+        instance.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         return instance
     }()
     private lazy var forbiddenTitleLabel: UILabel = {
@@ -61,7 +61,7 @@ class LiveVideoRoomForbiddenViewController: UIViewController {
     private lazy var forbiddenDescLabel: UILabel = {
         let instance = UILabel()
         instance.font = .systemFont(ofSize: 12)
-        instance.textColor = .white.withAlphaComponent(0.65)
+        instance.textColor = UIColor.white.withAlphaComponent(0.65)
         instance.text = "包含屏蔽词的发言将不会被其他用户看到"
         return instance
     }()

@@ -122,13 +122,15 @@ extension UserInfoEditReactor {
                 networkProvider.request(.updateUserInfo(userName: name, portrait: portrait)) { result in
                     switch result {
                     case let .success(response):
-                        guard
-                            let res = try? JSONDecoder().decode(AppResponse.self, from: response.data),
-                            res.validate()
-                        else {
+                        guard let res = try? JSONDecoder().decode(AppResponse.self, from: response.data) else {
                             completion(.failure(ReactorError("更新失败")))
                             return
                         }
+                        
+                        if (!res.validate()) {
+                            return completion(.failure(ReactorError(res.msg ?? "更新失败")))
+                        }
+                        
                         let user = VoiceRoomUser(userId: userId, userName: name, portrait: portrait, status: 0)
                         completion(.success(user))
                     case let .failure(error):

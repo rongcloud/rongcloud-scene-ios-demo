@@ -33,7 +33,7 @@ class VoiceRoomMusicControlTableViewCell: UITableViewCell, Reusable {
     }()
     private lazy var separatorline: UIView = {
         let instance = UIView()
-        instance.backgroundColor = .black.withAlphaComponent(0.1)
+        instance.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         return instance
     }()
     private lazy var openEarSwitch: UISwitch = {

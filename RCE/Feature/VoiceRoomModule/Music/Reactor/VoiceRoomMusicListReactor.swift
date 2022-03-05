@@ -82,7 +82,7 @@ final class VoiceRoomMusicListReactor: Reactor {
                     return Observable<Mutation>.just(.setRoomMusic(items: items))
                 }
                 .catchAndReturn(.setRoomMusic(items: []))
-            let addMusic = networkProvider.rx.request(.addMusic(roomId: currentState.roomId, musicName: item.name, author: item.author, type: 2, url: item.url, backgroundUrl: "", thirdMusicId: "", size: 0)).asObservable().filterSuccessfulStatusCodes().map(AppResponse.self).flatMap {
+            let addMusic = networkProvider.rx.request(.addMusic(roomId: currentState.roomId, musicName: item.name, author: item.author ?? "", type: 2, url: item.url, backgroundUrl: "", thirdMusicId: "", size: 0)).asObservable().filterSuccessfulStatusCodes().map(AppResponse.self).flatMap {
                 _ -> Observable<Mutation> in
                 return .just(.setSuccess(ReactorSuccess("添加成功"))).do { _ in
                     let notification = Notification.Name(rawValue: MusicNotification.appendNewMusic.rawValue)

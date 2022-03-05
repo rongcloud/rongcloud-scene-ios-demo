@@ -17,14 +17,29 @@ extension VoiceRoomViewController {
     @_dynamicReplacement(for: setupModules)
     private func setupSettingModule() {
         setupModules()
-        toolBarView.add(users: self, action: #selector(handleMicOrderClick))
-        toolBarView.add(requset: self, action: #selector(handleRequestSeat))
+        micButton.micState = voiceRoomInfo.isOwner ? .user : .request
         roomState.connectStateChanged = {
            [weak self] state in
-            self?.toolBarView.requestMicroButton.setImage(state.image, for: .normal)
+            if let room = self?.voiceRoomInfo, room.isOwner {
+                self?.micButton.micState = .user
+            } else {
+                switch state {
+                case .request: self?.micButton.micState = .request
+                case .waiting: self?.micButton.micState = .waiting
+                case .connecting: self?.micButton.micState = .connecting
+                }
+            }
             if state == .connecting {
                 RCVoiceRoomEngine.sharedInstance().cancelRequestSeat {} error: { code, msg in }
             }
+        }
+    }
+    
+    @objc func handleMicButtonClick() {
+        if voiceRoomInfo.isOwner {
+            handleMicOrderClick()
+        } else {
+            handleRequestSeat()
         }
     }
     
@@ -50,8 +65,11 @@ extension VoiceRoomViewController {
             requestSeat()
         case .waiting:
             navigator(.requestSeatPop(delegate: self))
-        default:
-            ()
+        case .connecting:
+            let tmpIndex = seatlist.firstIndex { $0.userId == Environment.currentUserId }
+            guard let seatIndex = tmpIndex else { return }
+            let seatInfo = seatlist[seatIndex]
+            navigator(.userSeatPop(seatIndex: UInt(seatIndex), isUserMute: roomState.isCloseSelfMic, isSeatMute: seatInfo.isMuted, delegate: self))
         }
     }
     
@@ -65,7 +83,7 @@ extension VoiceRoomViewController {
                 guard let self = self else { return }
                 DispatchQueue.main.async {
                     if self.currentUserRole() == .creator  {
-                        self.toolBarView.update(users: userlist.count)
+                        self.micButton.setBadgeCount(userlist.count)
                     } else  {
                         if userlist.contains(Environment.currentUserId) {
                             self.roomState.connectState = .waiting

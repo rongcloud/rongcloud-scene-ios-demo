@@ -11,14 +11,14 @@ struct PKStatusContent: Codable {
   let stopPkRoomId: String?
   let statusMsg: Int
   let timeDiff: Int
-//    var seconds: Int {
-//        return timeDiff/1000
-//    }
+    var seconds: Int {
+        return timeDiff/1000
+    }
   let roomScores: [PKRoomScore]
 }
 
 struct PKRoomScore: Codable {
-  let userId: String
+  let userId: String?
   let roomId: String
   let score: Int
 }
