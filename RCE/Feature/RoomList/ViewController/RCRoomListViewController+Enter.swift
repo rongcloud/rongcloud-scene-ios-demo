@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RCSceneService
 
 extension RCRoomListViewController {
     func enter(_ room: VoiceRoom) {
@@ -13,6 +14,8 @@ extension RCRoomListViewController {
     }
     
     func enter(_ rooms: [VoiceRoom], index: Int) {
+        /// 隐藏浮窗
+        RCRoomFloatingManager.shared.hide()
         let controller = RCRoomContainerViewController(rooms, index: index, dataSource: self)
         navigationController?.pushViewController(controller, animated: true)
     }

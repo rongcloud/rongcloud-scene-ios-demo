@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import RCSceneFoundation
 
 /// 如果不希望在Console中打印网络请求相关的log可以在把plugins参数移除。
 let networkProvider = MoyaProvider<RCNetworkAPI>(plugins: [networkLogPlugin])

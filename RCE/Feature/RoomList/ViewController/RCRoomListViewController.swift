@@ -8,14 +8,18 @@
 import MJRefresh
 import SVProgressHUD
 import UIKit
-
-var enableCDN: Bool = true
+import RCSceneVoiceRoom
+import RCSceneService
+import RCSceneFoundation
+import RCSceneVideoRoom
+import XCoordinator
 
 final class RCRoomListViewController: UIViewController {
     
     private lazy var refreshHeader = UIRefreshControl()
     private lazy var refreshFooter = MJRefreshBackNormalFooter(refreshingTarget: self,
                                                                refreshingAction: #selector(more))
+
     private lazy var tableView: UITableView = {
         let instance = UITableView(frame: .zero, style: .plain)
         instance.register(cellType: RoomListTableViewCell.self)
@@ -48,11 +52,22 @@ final class RCRoomListViewController: UIViewController {
         }
     }
     
+    private var router: UnownedRouter<RCSeneRoomEntranceRoute>?
+    
+    init(router: UnownedRouter<RCSeneRoomEntranceRoute>? = nil) {
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         buildLayout()
         checkRoomInfo()
-        
+
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressedHandler(_:)))
         tableView.addGestureRecognizer(gesture)
     }
@@ -109,9 +124,7 @@ final class RCRoomListViewController: UIViewController {
                 SVProgressHUD.dismiss()
                 if let room = wrapper.data {
                     self?.userDidCreateRoom(room) {
-                        let controller = RCRoomContainerViewController([room], index: 0, dataSource: self)
-                        guard let nav = self?.navigationController else { return }
-                        nav.pushViewController(controller, animated: true)
+                        self?.enterUserCreation(room)
                     }
                 } else {
                     self?.createRoom()
@@ -120,6 +133,29 @@ final class RCRoomListViewController: UIViewController {
                 SVProgressHUD.showError(withStatus: error.localizedDescription)
             }
         }
+    }
+    
+    private func enterUserCreation(_ room: VoiceRoom) {
+        guard let currentRoom = SceneRoomManager.shared.currentRoom else {
+            return enter(room)
+        }
+        
+        guard RCRoomFloatingManager.shared.showing else {
+            return enter(room)
+        }
+        
+        guard let controller = RCRoomFloatingManager.shared.controller else {
+            return enter(room)
+        }
+        
+        if currentRoom.roomId == room.roomId {
+            RCRoomFloatingManager.shared.hide()
+            return show(controller, sender: self)
+        }
+        
+        controller.controller.leaveRoom({ [weak self] result in
+            self?.enter(room)
+        })
     }
     
     private func createRoom() {
@@ -131,17 +167,16 @@ final class RCRoomListViewController: UIViewController {
                 RCRoomFloatingManager.shared.controller?.controller.leaveRoom { [unowned self] _ in
                     SVProgressHUD.dismiss(withDelay: 0.3)
                     RCRoomFloatingManager.shared.hide()
-                    let controller = LiveVideoRoomHostController()
+                    let controller = RCVideoRoomController(beautyPlugin: RCBeautyPlugin())
                     navigationController?.pushViewController(controller, animated: true)
                 }
             } else {
-                let controller = LiveVideoRoomHostController()
+                let controller = RCVideoRoomController(beautyPlugin: RCBeautyPlugin())
                 navigationController?.pushViewController(controller, animated: true)
             }
             
         case .audioRoom, .radioRoom:
-            let controller = navigator(.createRoom(imagelist: SceneRoomManager.shared.backgroundlist)) as! CreateVoiceRoomViewController
-            controller.onRoomCreated = { [unowned self] roomWrapper in
+            self.router?.trigger(.createRoom(imagelist: SceneRoomManager.shared.backgroundlist, onRoomCreate: { [unowned self] roomWrapper in
                 guard let room = roomWrapper.data else { return }
                 if roomWrapper.isCreated() {
                     return showCreatedAlert(voiceRoom: room)
@@ -155,7 +190,7 @@ final class RCRoomListViewController: UIViewController {
                     RCRoomFloatingManager.shared.hide()
                     didCreatedRoom(room)
                 }
-            }
+            }))
         default: ()
         }
     }
@@ -229,7 +264,11 @@ extension RCRoomListViewController: UITableViewDataSource {
     }
 }
 
-extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordProtocol {
+extension RCRoomListViewController: UITableViewDelegate, InputPasswordProtocol {
+    func passwordDidEnter(password: String) {
+
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelect(indexPath)
     }
@@ -256,7 +295,7 @@ extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordP
     private func enterRoomIfNeeded(_ rooms: [VoiceRoom], index: Int) {
         let room = rooms[index]
         if room.isOwner { return enter(room) }
-        if isAppStoreAccount {
+        if RCSceneFoundation.isAppStoreAccount {
             let filter: (VoiceRoom) -> Bool = { !$0.isOwner }
             let rooms = items.filter(filter)
             let index = rooms.firstIndex(of: room) ?? 0
@@ -268,10 +307,10 @@ extension RCRoomListViewController: UITableViewDelegate, VoiceRoomInputPasswordP
             let index = rooms.firstIndex(of: room) ?? 0
             return enter(rooms, index: index)
         }
-        navigator(.inputPassword(type: .verify(room), delegate: self))
+        self.router?.trigger(.inputPassword(type: .verify(room), delegate: self))
     }
     
-    func passwordDidVarify(_ room: VoiceRoom) {
+    func passwordDidVerify(_ room: VoiceRoom) {
         enter(room)
     }
 }
@@ -282,11 +321,11 @@ extension RCRoomListViewController {
         guard let indexPath = tableView.indexPathForRow(at: point) else { return }
         let controller = UIAlertController(title: "提示", message: "请选择进入方式，之后都以此方式观看", preferredStyle: .actionSheet)
         let CDNAction = UIAlertAction(title: "CDN", style: .default) { _ in
-            enableCDN = true
+            kVideoRoomEnableCDN = true
             self.didSelect(indexPath)
         }
         let RTCAction = UIAlertAction(title: "RTC", style: .default) { _ in
-            enableCDN = false
+            kVideoRoomEnableCDN = false
             self.didSelect(indexPath)
         }
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)

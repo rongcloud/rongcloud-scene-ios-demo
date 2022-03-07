@@ -26,11 +26,11 @@ Pod::Spec.new do |s|
   s.author           = { 'a1252425' => 'shaoshuai@rongcloud.cn' }
   s.source           = { :git => 'https://github.com/a1252425/RCVoiceRoomCallKit.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
   
   s.pod_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-    'VALID_ARCHS' => 'arm64 x86_64 armv7',
+    'VALID_ARCHS' => 'arm64 x86_64',
     'ENABLE_BITCODE' => 'NO'
   }
 
@@ -41,6 +41,6 @@ Pod::Spec.new do |s|
   s.resources = 'RCVoiceRoomCallKit/Assets/Resources/*.bundle', 'RCVoiceRoomCallKit/Assets/Resources/*.lproj/*'
 
   s.dependency 'RongCloudRTC/RongCallLib', '~> 5.1.3'
-  s.dependency 'RongCloudIM/IMLib', '~> 5.1.3'
+  s.dependency 'RongCloudIM/IMKit', '~> 5.1.3'
   
 end

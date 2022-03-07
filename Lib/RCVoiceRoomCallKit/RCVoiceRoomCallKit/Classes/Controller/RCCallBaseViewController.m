@@ -1418,6 +1418,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
                            callStatus:self.callSession.callStatus];
                     [self showToast:@"对方已切换到语音通话"];
                 }
+            } else if (mediaType == RCCallMediaAudio && self.callSession.mediaType == RCCallMediaAudio) {
+                [self remoteUserDidDisableCamera:YES byUser:userId];
             }
         } else if (self.callSession.mediaType == mediaType && mediaType == RCCallMediaVideo) {
             [self remoteUserDidDisableCamera:NO byUser:userId];

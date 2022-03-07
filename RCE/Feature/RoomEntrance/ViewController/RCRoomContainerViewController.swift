@@ -7,6 +7,10 @@
 
 import SVProgressHUD
 import MJRefresh
+import RCSceneVoiceRoom
+import RCSceneService
+import UIKit
+import RCVoiceRoomCallKit
 
 protocol RCRoomContainerDataSource: AnyObject {
     func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([VoiceRoom], Bool) -> Void)
@@ -39,10 +43,11 @@ final class RCRoomContainerViewController: UIViewController {
             collectionView.descendantViews = controller.descendantViews()
         }
     }
-    private(set) var currentIndex: Int {
+    var currentIndex: Int {
         didSet {
             if currentIndex == oldValue { return }
             switchRoom()
+            kSceneServiceCurrentRoomId = roomList[currentIndex].roomId
         }
     }
     
@@ -57,22 +62,26 @@ final class RCRoomContainerViewController: UIViewController {
         }
     }
     
-    private var roomList: [VoiceRoom]
+    public var roomList: [VoiceRoom]
     private weak var dataSource: RCRoomContainerDataSource?
     init(create room: VoiceRoom, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = [room]
         self.currentIndex = 0
-        self.controller = room.controller(true)
         self.dataSource = dataSource
+        self.controller = room.controller(true)
         super.init(nibName: nil, bundle: nil)
+        self.controller.setRoomContainerAction(action: self)
+        self.controller.setRoomFloatingAction(action: RCRoomFloatingManager.shared)
     }
     
     init(_ roomList: [VoiceRoom], index: Int, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = roomList
         self.currentIndex = index
-        self.controller = roomList[index].controller()
         self.dataSource = dataSource
+        self.controller = roomList[index].controller()
         super.init(nibName: nil, bundle: nil)
+        self.controller.setRoomContainerAction(action: self)
+        self.controller.setRoomFloatingAction(action: RCRoomFloatingManager.shared)
     }
     
     required init?(coder: NSCoder) {
@@ -99,6 +108,8 @@ final class RCRoomContainerViewController: UIViewController {
         }
         
         navigationController?.delegate = self
+        
+        RCCall.shared().canIncomingCall = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,7 +140,7 @@ final class RCRoomContainerViewController: UIViewController {
             .setup(controller.view)
     }
     
-    private func switchRoom() {
+    public func switchRoom() {
         controller.view.removeFromSuperview()
         controller.removeFromParent()
         controller.leaveRoom { [weak self] result in
@@ -152,36 +163,12 @@ final class RCRoomContainerViewController: UIViewController {
             .setup(controller.view)
         addChild(controller)
         controller.didMove(toParent: self)
-    }
-}
-
-extension RCRoomContainerViewController {
-    func enableSwitchRoom() {
-        collectionView.scrollable = roomList[currentIndex].switchable
+        controller.setRoomContainerAction(action: self)
+        controller.setRoomFloatingAction(action: RCRoomFloatingManager.shared)
     }
     
-    func disableSwitchRoom() {
-        collectionView.scrollable = false
-    }
-    
-    func switchRoom(_ room: VoiceRoom) {
-        if roomList[currentIndex].roomType == room.roomType {
-            if let index = roomList.firstIndex(where: { $0.roomId == room.roomId }) {
-                roomList[index] = room
-                collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
-                                            at: .centeredVertically,
-                                            animated: true)
-                return
-            }
-        }
-        roomList = [room]
-        collectionView.reloadData()
-        if currentIndex == 0 {
-            switchRoom()
-        } else {
-            currentIndex = 0
-        }
-        collectionView.scrollable = roomList[currentIndex].switchable
+    deinit {
+        RCCall.shared().canIncomingCall = true
     }
 }
 
@@ -317,7 +304,7 @@ fileprivate extension RCErrorCode {
 
 extension RCRoomContainerViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        guard let _ = navigationController.visibleViewController as? RCRoomEntraceViewController else {
+        guard let _ = navigationController.visibleViewController as? RCRoomEntranceViewController else {
             return
         }
         guard let coordinator = navigationController.topViewController?.transitionCoordinator else {
@@ -325,7 +312,7 @@ extension RCRoomContainerViewController: UINavigationControllerDelegate {
         }
         coordinator.notifyWhenInteractionChanges { context in
             if !context.isCancelled {
-                RCRoomFloatingManager.shared.show(self, animated: false)
+                RCRoomFloatingManager.shared.show(self, superView: self.view, animated: false)
             }
         }
     }

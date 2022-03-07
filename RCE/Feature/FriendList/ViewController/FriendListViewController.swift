@@ -7,6 +7,8 @@
 
 import SVProgressHUD
 import MJRefresh
+import RCSceneService
+import RCSceneVoiceRoom
 
 enum FriendType: Int {
     case follow = 1
@@ -73,8 +75,7 @@ final class FriendListViewController: UIViewController {
     
     @objc func refreshList() {
         currentPage = 1
-        let api = RCNetworkAPI.followList(page: currentPage, type: type.rawValue)
-        networkProvider.request(api) { [weak self] result in
+        friendListNetService.followList(page: currentPage, type: type.rawValue) { [weak self] result in
             self?.header.endRefreshing()
             switch result.map(FriendListWrapper.self) {
             case let .success(wrapper):
@@ -95,8 +96,7 @@ final class FriendListViewController: UIViewController {
     }
     
     @objc private func loadMore() {
-        let api = RCNetworkAPI.followList(page: currentPage, type: type.rawValue)
-        networkProvider.request(api) { [weak self] result in
+        friendListNetService.followList(page: currentPage, type: type.rawValue) { [weak self] result in
             self?.footer.endRefreshing()
             switch result.map(FriendListWrapper.self) {
             case let .success(wrapper):
@@ -159,9 +159,8 @@ extension FriendListViewController: FriendCellDelegate {
     
     /// 回关
     func didClickFollow(_ user: VoiceRoomUser, value: Int) {
-        let api = RCNetworkAPI.follow(userId: user.userId)
         SVProgressHUD.show()
-        networkProvider.request(api) { [weak self] result in
+        friendListNetService.follow(userId: user.userId) { [weak self] result in
             switch result.map(AppResponse.self) {
             case let .success(res):
                 if res.validate() {

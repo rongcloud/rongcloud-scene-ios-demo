@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RCSceneService
 
 struct FriendListWrapper: Codable {
     let code: Int

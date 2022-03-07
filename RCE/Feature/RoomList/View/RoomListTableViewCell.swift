@@ -7,6 +7,7 @@
 
 import UIKit
 import Reusable
+import RCSceneService
 
 class RoomListTableViewCell: UITableViewCell, Reusable {
     private lazy var shadowView: UIView = {
@@ -135,7 +136,7 @@ class RoomListTableViewCell: UITableViewCell, Reusable {
     }
     
     public func updateCell(room: VoiceRoom) -> RoomListTableViewCell {
-        roomAvatarImageView.kf.setImage(with: URL(string: room.themePictureUrl), placeholder: room.defaultAvatarImage())
+        roomAvatarImageView.kf.setImage(with: URL(string: room.themePictureUrl), placeholder: R.image.room_background_image1())
         roomNameLabel.text = room.roomName
         lockImageView.isHidden = (room.isPrivate == 0)
         userNameLabel.text = room.createUser?.userName

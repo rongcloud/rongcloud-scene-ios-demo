@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import RCSceneVideoRoom
+import RCSceneFoundation
 
-class RCRoomFloatingManager {
+class RCRoomFloatingManager: RCSceneRoomFloatingProtocol {
     static let shared = RCRoomFloatingManager()
     
     private(set) var controller: RCRoomContainerViewController?
@@ -34,7 +36,8 @@ class RCRoomFloatingManager {
         return controller?.parent == nil
     }
     
-    func show(_ controller: RCRoomContainerViewController, animated: Bool = true) {
+    func show(_ controller: UIViewController, superView: UIView?, animated: Bool = true) {
+        guard let controller = controller as? RCRoomContainerViewController else { return }
         self.controller = controller
         if controller.currentRoom.roomType == 3 {
             let width: CGFloat = UIScreen.main.bounds.width * 0.3
@@ -43,7 +46,7 @@ class RCRoomFloatingManager {
                                         y: UIScreen.main.bounds.height - 128 - height,
                                         width: width,
                                         height: height)
-            guard let videoView = RCLiveVideoEngine.shared().previewView().superview else { return }
+            guard let videoView = superView else { return }
             floatingView.insertSubview(videoView, belowSubview: floatingView.controlView)
             videoView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
             videoView.snp.makeConstraints { make in
@@ -76,9 +79,8 @@ class RCRoomFloatingManager {
         })
     }
     
-    func setSpeakingState(isSpeaking: Bool, seatInfo: RCVoiceSeatInfo?) {
-        let isMuted = seatInfo?.isMuted ?? true
-        guard isSpeaking, seatInfo?.status == .using, !isMuted else {
+    func setSpeakingState(isSpeaking: Bool) {
+        guard isSpeaking else {
             floatingView.radarView.stop()
             return
         }
@@ -140,14 +142,16 @@ extension RCRoomFloatingManager: VoiceRoomFloatingViewDelegate {
         defer { hide() }
         guard
             let vc = UIApplication.shared.topMostViewController(),
-            let nav = vc as? UINavigationController,
+            let tab = vc as? UITabBarController,
             let controller = controller
         else { return }
-        if controller.currentRoom.roomType == 3 {
-            if let liveController = controller.controller as? LiveVideoRoomViewController {
-                liveController.floatingBack()
-            }
+//        if controller.currentRoom.roomType == 3 {
+//            if let liveController = controller.controller as? LiveVideoRoomViewController {
+//                liveController.floatingBack()
+//            }
+//        }
+        if let nav = tab.selectedViewController as? UINavigationController {
+            nav.pushViewController(controller, animated: true)
         }
-        nav.pushViewController(controller, animated: true)
     }
 }

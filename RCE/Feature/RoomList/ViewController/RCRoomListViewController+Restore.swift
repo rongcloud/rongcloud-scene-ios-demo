@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RCSceneService
 
 extension RCRoomListViewController {
     func checkRoomInfo() {

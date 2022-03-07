@@ -65,6 +65,9 @@ extension WebViewController {
     static func show(_ controller: UIViewController, title: String, path: String) {
         let web = WebViewController(path, title: title)
         let nav = UINavigationController(rootViewController: web)
+        nav.navigationBar.isTranslucent = false
+        nav.navigationBar.barTintColor = .white
+        nav.navigationBar.backgroundColor = .white
         nav.modalTransitionStyle = .coverVertical
         nav.modalPresentationStyle = .overFullScreen
         controller.present(nav, animated: true)

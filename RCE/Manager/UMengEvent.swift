@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RCSceneFoundation
 
 enum UMengEvent: String {
     case AppraisalBanner

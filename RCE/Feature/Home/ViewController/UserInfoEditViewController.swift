@@ -5,9 +5,13 @@
 //  Created by shaoshuai on 2021/6/2.
 //
 
+import UIKit
 import ReactorKit
 import SVProgressHUD
 import RxViewController
+import RCSceneService
+import RCSceneFoundation
+import RCSceneVoiceRoom
 
 final class UserInfoEditViewController: UIViewController, View {
     
@@ -247,13 +251,3 @@ extension UserInfoEditViewController {
     }
 }
 
-extension User {
-    func update(name: String, portrait: String) -> User {
-        return User(userId: userId,
-                    userName: name,
-                    portrait: portrait,
-                    imToken: imToken,
-                    authorization: authorization,
-                    type: type)
-    }
-}

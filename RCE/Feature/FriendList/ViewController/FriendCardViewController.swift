@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import RCSceneFoundation
+import RCSceneService
+import RCSceneVoiceRoom
 
 final class FriendCardViewController: UIViewController {
     

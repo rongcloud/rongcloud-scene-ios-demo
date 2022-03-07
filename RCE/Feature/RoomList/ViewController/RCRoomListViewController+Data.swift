@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RCSceneService
+import RCSceneVoiceRoom
 
 private var RCRoomListPageKey = 1
 

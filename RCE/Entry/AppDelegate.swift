@@ -7,10 +7,13 @@
 
 import UIKit
 import XCoordinator
+import RCSceneVoiceRoom
+import RCSceneService
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let appRouter = HomeCoordinator().strongRouter
+    private let appRouter = AppCoordinator().strongRouter
+//    private let appRouter = HomeCoordinator().strongRouter
     var window: UIWindow?
     private let dependency = CompositionRoot.resolve()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

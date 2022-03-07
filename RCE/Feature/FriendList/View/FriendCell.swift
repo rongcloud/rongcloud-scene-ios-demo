@@ -7,6 +7,7 @@
 
 import Reusable
 import Kingfisher
+import RCSceneService
 
 protocol FriendCellDelegate: AnyObject {
     func didClickAvatar(_ user: VoiceRoomUser)

@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import SVProgressHUD
+import RCSceneService
 
 class FeelingFeedbackViewController: UIViewController {
     private var disposeBag = DisposeBag()

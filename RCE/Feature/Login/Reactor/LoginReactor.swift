@@ -7,6 +7,8 @@
 
 import Foundation
 import ReactorKit
+import RCSceneService
+import RCSceneFoundation
 
 struct LoginReactorError: Error {
     let message: String
@@ -61,7 +63,7 @@ final class LoginReactor: Reactor {
             guard !currentState.verifyCode.isEmpty else {
                 return Observable<Mutation>.just(.setError(ReactorError("验证码不能为空")))
             }
-            isAppStoreAccount = currentState.phoneNumber == "18800000000"
+            RCSceneFoundation.isAppStoreAccount = currentState.phoneNumber == "18800000000"
             let begin = Observable<Mutation>.just(.setLoginNetworkState(.begin))
             let login = login()
             let end = Observable<Mutation>.just(.setLoginNetworkState(.idle))

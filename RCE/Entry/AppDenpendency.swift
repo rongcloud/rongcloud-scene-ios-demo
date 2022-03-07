@@ -11,8 +11,12 @@ import SVProgressHUD
 import IQKeyboardManager
 import SwiftyBeaver
 import SwiftUI
-
-public let log = SwiftyBeaver.self
+import RCSceneVoiceRoom
+import RCSceneFoundation
+import RCSceneGift
+import RCSceneService
+import RCSceneMusic
+import RCSceneVideoRoom
 
 struct AppDependency {
     let window: () -> UIWindow
@@ -137,7 +141,7 @@ final class CompositionRoot: NSObject {
         
         // SwiftBeaver 添加输出到 console
         let console = ConsoleDestination()
-        log.addDestination(console)
+        RCRTCLog.addDestination(console)
 
         // 把 imlog 写入文件
 //        RCIMClient.shared().logLevel = .log_Level_Verbose
@@ -152,5 +156,13 @@ final class CompositionRoot: NSObject {
         
         RCBeautyPlugin.active()
         RCNetworkReach.active()
+    }
+}
+
+import RCSceneService
+
+extension VoiceRoomUser {
+    public var rcUser: RCUserInfo {
+        return RCUserInfo(userId: userId, name: userName, portrait: portraitUrl)
     }
 }

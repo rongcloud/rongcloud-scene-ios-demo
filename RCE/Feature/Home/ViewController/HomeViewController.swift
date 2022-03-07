@@ -5,45 +5,48 @@
 //  Created by 叶孤城 on 2021/4/19.
 //
 
+import UIKit
 import XCoordinator
 import SVProgressHUD
-import UIKit
-
-private struct Constants {
-    static let itemPadding: CGFloat = 16.resize
-    static let contentInset: CGFloat = 20.resize
-    static let itemSize: CGFloat = (UIScreen.main.bounds.width - itemPadding - contentInset * 2)/2
-    static let edge = UIEdgeInsets(top: contentInset,
-                                   left: contentInset,
-                                   bottom: contentInset,
-                                   right: contentInset)
-}
+import RCSceneFoundation
+import RCSceneVoiceRoom
+import RCSceneService
 
 class HomeViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = Constants.itemPadding
-        layout.minimumInteritemSpacing = Constants.itemPadding
-        let instance = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let instance = UICollectionView(frame: .zero, collectionViewLayout: HomeLayout())
         instance.register(cellType: HomeCollectionViewCell.self)
         instance.showsVerticalScrollIndicator = false
         instance.showsHorizontalScrollIndicator = false
         instance.contentInsetAdjustmentBehavior = .never
         instance.backgroundColor = .clear
-        instance.contentInset = Constants.edge
         instance.dataSource = self
         instance.delegate = self
         return instance
     }()
-    private lazy var userButton: UIButton = {
-        let instance = UIButton()
-        instance.frame = CGRect(origin: .zero, size: CGSize(width: 32, height: 32))
-        instance.layer.cornerRadius = 16
-        instance.clipsToBounds = true
-        instance.imageView?.contentMode = .scaleAspectFill
+    private lazy var logoView: UIView = {
+        let instance = UIView()
+        
+        let imageView = UIImageView(image: R.image.logo())
+        instance.addSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.left.top.bottom.equalToSuperview()
+            make.width.equalTo(imageView.snp.height)
+        }
+        
+        let label = UILabel()
+        label.text = "融云 RTC"
+        label.textColor = UIColor(byteRed: 14, green: 24, blue: 43)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        instance.addSubview(label)
+        label.snp.makeConstraints { make in
+            make.centerY.right.equalToSuperview()
+            make.left.equalTo(imageView.snp.right).offset(8)
+        }
+        
         return instance
     }()
-    private lazy var messageButton = HomeMessageButton()
+    private(set) lazy var messageButton = HomeMessageButton()
     private var items = HomeItem.allCases
     private let router: UnownedRouter<HomeRouter>
     
@@ -62,17 +65,9 @@ class HomeViewController: UIViewController {
         NotificationNameLogin.addObserver(self, selector: #selector(onLogin))
         NotificationNameLogout.addObserver(self, selector: #selector(onLogout))
         NotificationNameShuMeiKickOut.addObserver(self, selector: #selector(onLogout))
-        NotificationNameUserInfoUpdated.addObserver(self, selector: #selector(userInfoUpdated(_:)))
         RCIM.shared().connectionStatusDelegate = self
         RCCoreClient.shared().add(self)
         checkVersion()
-    }
-    
-    @objc private func userInfoUpdated(_ notification: Notification) {
-        guard let user = notification.object as? User else { return }
-        userButton.kf.setImage(with: URL(string: user.portraitUrl),
-                               for: .normal,
-                               placeholder: R.image.default_avatar())
     }
     
     @objc private func onLogin() {
@@ -80,9 +75,6 @@ class HomeViewController: UIViewController {
         RCMusicEngine.shareInstance().player = PlayerImpl.instance
         RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
         RCCoreClient.shared().messageBlockDelegate = self;
-        userButton.kf.setImage(with: URL(string: Environment.currentUser?.portraitUrl ?? ""),
-                               for: .normal,
-                               placeholder: R.image.default_avatar())
         FraudProtectionTips.showFraudProtectionTips(self)
     }
     
@@ -90,14 +82,13 @@ class HomeViewController: UIViewController {
         if let presented = presentedViewController {
             return presented.dismiss(animated: false) { [unowned self] in onLogout() }
         }
-        navigationController?.popToRootViewController(animated: true)
+        navigationController?.popToRootViewController(animated: false)
         navigator(.login)
-        SceneRoomManager.shared.leave { _ in }
+//        SceneRoomManager.shared.voice_leave { _ in }
     }
     
     private func buildLayout() {
-        title = "融云RTC"
-        view.backgroundColor = UIColor(hexInt: 0xF6F8F9)
+        view.backgroundColor = UIColor(hexInt: 0xE6F0F3)
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -106,12 +97,9 @@ class HomeViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: userButton)
-        userButton.addTarget(self, action: #selector(userButtonClicked), for: .touchUpInside)
-        userButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        userButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        userButton.kf.setImage(with: URL(string: Environment.currentUser?.portraitUrl ?? ""),
-                               for: .normal, placeholder: R.image.default_avatar())
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoView)
+        logoView.widthAnchor.constraint(equalToConstant: 144).isActive = true
+        logoView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: messageButton)
         messageButton.addTarget(self, action: #selector(messageButtonClicked), for: .touchUpInside)
@@ -119,76 +107,8 @@ class HomeViewController: UIViewController {
         messageButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        judgeLogin()
-    }
-    
-    private func judgeLogin() {
-        if Environment.businessToken.count == 0 {
-            showBusinessToken()
-        } else if UserDefaults.standard.authorizationKey() == nil {
-            navigator(.login)
-        }
-        messageButton.updateDot()
-    }
-    
-    private func checkVersion() {
-        let api = RCNetworkAPI.checkVersion(platform: "iOS")
-        networkProvider.request(api) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case let .success(value):
-                let info = try? JSONSerialization.jsonObject(with: value.data, options: .allowFragments) as? [String: Any]
-                guard let dataMap = info?["data"] as? [String: Any] else {
-                    return self.judgeLogin()
-                }
-                let bundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? NSString
-                let latestVersion = dataMap["version"] as? String
-                let downloadUrl = dataMap["downloadUrl"] as? String
-                let forceUpgrade = dataMap["forceUpgrade"] as? Bool
-                let releaseNote = dataMap["releaseNote"] as? String
-                guard
-                    let latestVersion = latestVersion,
-                    let bundleVersion = bundleVersion,
-                    let downloadUrl = downloadUrl else {
-                        return self.judgeLogin()
-                    }
-                
-                // 2.0.0 to 3.0.0 is ascending order, so ask user to update
-                let versionCompare = bundleVersion.compare(latestVersion, options: .numeric)
-                guard versionCompare == .orderedAscending else {
-                    return self.judgeLogin()
-                }
-                let force = forceUpgrade ?? false
-                let cancelAction = UIAlertAction(title: "取消", style: .cancel) { action in
-                    self.judgeLogin()
-                }
-                let updateAction = UIAlertAction(title: "更新", style: .default) { action in
-                    self.judgeLogin()
-                    if let updateUrl = URL(string: downloadUrl) {
-                        UIApplication.shared.open(updateUrl)
-                    }
-                }
-                let alerVc = UIAlertController(title: "发现新的版本", message: releaseNote, preferredStyle: .alert)
-                if !force {
-                    alerVc.addAction(cancelAction)
-                }
-                alerVc.addAction(updateAction)
-                self.present(alerVc, animated: true)
-            case let .failure(error):
-                print(error.localizedDescription)
-                self.judgeLogin()
-            }
-        }
-    }
-    
     @objc private func messageButtonClicked() {
-        navigator(.messagelist)
-    }
-    
-    @objc private func userButtonClicked() {
-        router.trigger(.promotionDetail)
+        router.trigger(.chatList)
     }
 }
 
@@ -230,19 +150,19 @@ extension HomeViewController: UICollectionViewDelegate {
     }
 }
 
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let item = items[indexPath.item]
-        switch item {
-        case .audioRoom:
-            let cellWidth = collectionView.bounds.width - Constants.contentInset * 2
-            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 333 * 157))
-        case .audioCall, .videoCall, .radioRoom, .liveVideo:
-            let cellWidth = (collectionView.bounds.width - Constants.contentInset * 2 - Constants.itemPadding)/2
-            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 158 * 195))
-        }
-    }
-}
+//extension HomeViewController: UICollectionViewDelegateFlowLayout {
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let item = items[indexPath.item]
+//        switch item {
+//        case .audioRoom:
+//            let cellWidth = collectionView.bounds.width - Constants.contentInset * 2
+//            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 333 * 157))
+//        case .audioCall, .videoCall, .radioRoom, .liveVideo:
+//            let cellWidth = (collectionView.bounds.width - Constants.contentInset * 2 - Constants.itemPadding)/2
+//            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 158 * 195))
+//        }
+//    }
+//}
 
 extension HomeViewController: RCIMConnectionStatusDelegate {
     func onRCIMConnectionStatusChanged(_ status: RCConnectionStatus) {
@@ -281,16 +201,6 @@ extension HomeViewController: RCMessageBlockDelegate {
         let string = "发送的消息(消息类型:\(info.type) 会话id:\(info.targetId) 消息id:\(info.blockedMsgUId) 拦截原因:\(info.blockType) 附加信息:\(info.extra))遇到敏感词被拦截"
         let controller = UIAlertController(title: "提示", message: string, preferredStyle: .alert)
         let action = UIAlertAction(title: "确定", style: .default, handler: nil)
-        controller.addAction(action)
-        present(controller, animated: true)
-    }
-}
-
-/// BusinessToken
-extension HomeViewController {
-    private func showBusinessToken() {
-        let controller = UIAlertController(title: "提示", message: "您需要配置的 BusinessToken，请全局搜索 BusinessToken，可以找到 BusinessToken 获取方式。", preferredStyle: .alert)
-        let action = UIAlertAction(title: "确定", style: .default) { _ in  exit(10) }
         controller.addAction(action)
         present(controller, animated: true)
     }

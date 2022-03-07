@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "open_remote_audio_icon.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
