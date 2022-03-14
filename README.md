@@ -19,9 +19,6 @@
 融云 RTC 的模块结构：
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24ely1h09hsslebwj213k0u0ad1.jpg)
-<div align=center>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h09hsslebwj213k0u0ad1.jpg" width="800px" height="auto" />
-</div>
 
 ### 基础功能模块
 
