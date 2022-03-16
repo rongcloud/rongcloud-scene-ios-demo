@@ -117,9 +117,7 @@ target 'RCSceneCall' do
   pod 'R.swift'
   pod 'Kingfisher'
   pod 'Moya'
-  pod 'RCVoiceRoomCallKit',
-#    :git => 'ssh://gerrit.rongcloud.net:29418/rcvoiceroomcallkit-ios'
-    :path => 'Lib/RCVoiceRoomCallKit'
+  pod 'RCVoiceRoomCallKit', :path => 'Lib/RCVoiceRoomCallKit'
 end
 
 target 'RCSceneVideoRoom' do
@@ -170,8 +168,7 @@ target 'RCSceneVoiceRoom' do
   pod 'RCMusicControlKit'
   pod 'RCChatroomSceneKit'
   
-  pod 'RCVoiceRoomLib',
-    :git => 'ssh://gerrit.rongcloud.net:29418/rcvoiceroomlib-ios'
+  pod 'RCVoiceRoomLib'
     
 end
 
@@ -202,8 +199,7 @@ target 'RCSceneRadioRoom' do
   
   pod 'RongCloudRTC/RongRTCPlayer'
   
-  pod 'RCVoiceRoomLib',
-    :git => 'ssh://gerrit.rongcloud.net:29418/rcvoiceroomlib-ios'
+  pod 'RCVoiceRoomLib'
   
 end
 
