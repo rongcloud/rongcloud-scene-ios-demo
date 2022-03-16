@@ -40,3 +40,5 @@
 #import <RCSceneMessage/RCSceneMessage.h>
 /// 音视频通话
 #import <RCVoiceRoomCallKit/RCVoiceRoomCallKit.h>
+
+#import <RCVoiceRoomLib/RCVoiceRoomLib.h>

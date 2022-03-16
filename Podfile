@@ -34,7 +34,7 @@ def commonPods
   pod 'RongCloudRTC/RongRTCPlayer'
   
   # Local Pod
-  
+  pod 'RCVoiceRoomLib'
 end
 
 target 'RCE' do
