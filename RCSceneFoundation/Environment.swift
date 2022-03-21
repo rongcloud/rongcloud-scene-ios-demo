@@ -59,4 +59,19 @@ public extension Environment {
     static var businessToken: String {
         return ""
     }
+    
+    //hiFive appId
+    static var hiFiveAppId: String {
+        return ""
+    }
+    
+    //hiFive server code
+    static var hiFiveServerCode: String {
+        return ""
+    }
+    
+    //hiFive server api version
+    static var hiFiveServerVersion: String {
+        return "V4.1.2"
+    }
 }
