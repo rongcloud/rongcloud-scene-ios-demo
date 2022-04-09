@@ -135,8 +135,8 @@ private var roomInfo_kvRoomInfo: RCVoiceRoomInfo? {
 ## 如何运行？
 
 1. 申请 BusinessToken：https://rcrtc-api.rongcloud.net/code
-2. 搜索 `Environment` 文件，替换 BusinessToken
+2. 搜索 `AppConfigs` 文件，替换 BusinessToken
 3. 替换 `bundleId` 和开发者证书，每个 target 都需要替换
-4. 在项目根目录执行 `pod install`
+4. 在项目根目录执行 `pod update`
 5. 打开 `RCE.xcworkspace`
 6. 连手机运行（demo 目前不支持模拟器）

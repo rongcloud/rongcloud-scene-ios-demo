@@ -42,6 +42,7 @@ class AppConfigs {
         Environment.hiFiveServerVersion = ""
     }
     
+    /// 申请 BusinessToken：https://rcrtc-api.rongcloud.net/code
     static func configBusinessToken() {
         Environment.businessToken = ""
     }
