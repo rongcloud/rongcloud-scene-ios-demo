@@ -6,16 +6,13 @@
 //
 
 import UIKit
-import RCSceneGift
 import RCSceneCall
-import RCSceneChat
-import RCSceneFoundation
 
 enum RCNavigation: Navigation {
     case createRoom(imagelist: [String])
     case login
     case userInfoEdit
-    case inputPassword(type: PasswordViewType, delegate: InputPasswordProtocol?)
+    case inputPassword(type: RCSceneRoomPasswordType, delegate: RCSceneRoomPasswordProtocol?)
     case messagelist
     case privateChat(userId: String)
     case dial(type: CallType)

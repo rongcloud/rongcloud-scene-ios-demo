@@ -8,7 +8,7 @@
 import Reusable
 import Kingfisher
 import SVProgressHUD
-import RCSceneService
+
 
 final class VoiceRoomContainerCell: UICollectionViewCell, Reusable {
     private(set) lazy var backgroundImageView: AnimatedImageView = {
@@ -19,7 +19,7 @@ final class VoiceRoomContainerCell: UICollectionViewCell, Reusable {
         return instance
     }()
     
-    private var voiceRoom: VoiceRoom?
+    private var voiceRoom: RCSceneRoom?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +35,7 @@ final class VoiceRoomContainerCell: UICollectionViewCell, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(_ voiceRoom: VoiceRoom) -> Self {
+    func update(_ voiceRoom: RCSceneRoom) -> Self {
         backgroundColor = .black
         self.voiceRoom = voiceRoom
         let imageURL = URL(string: voiceRoom.backgroundUrl ?? "")

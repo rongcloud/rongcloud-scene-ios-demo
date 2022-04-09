@@ -18,7 +18,7 @@ class SelectVoiceRoomBgImageCollectionViewCell: UICollectionViewCell, Reusable {
         instance.layer.cornerRadius = 16
         return instance
     }()
-    private lazy var selecteStateImageView: UIImageView = {
+    private lazy var selectedStateImageView: UIImageView = {
         let instance = UIImageView()
         instance.contentMode = .scaleAspectFit
         instance.image = nil
@@ -37,14 +37,14 @@ class SelectVoiceRoomBgImageCollectionViewCell: UICollectionViewCell, Reusable {
     
     override var isSelected: Bool {
         didSet {
-            selecteStateImageView.image = (isSelected ? R.image.background_selected_icon() : nil)
+            selectedStateImageView.image = (isSelected ? R.image.background_selected_icon() : nil)
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(backgroundImageView)
-        contentView.addSubview(selecteStateImageView)
+        contentView.addSubview(selectedStateImageView)
         contentView.addSubview(gifLabel)
         
         backgroundImageView.snp.makeConstraints {
@@ -52,7 +52,7 @@ class SelectVoiceRoomBgImageCollectionViewCell: UICollectionViewCell, Reusable {
             $0.size.equalTo(CGSize(width: 60.resize, height: 60.resize))
         }
         
-        selecteStateImageView.snp.makeConstraints {
+        selectedStateImageView.snp.makeConstraints {
             $0.right.top.equalToSuperview().inset(4)
             $0.size.equalTo(CGSize(width: 16, height: 16))
         }

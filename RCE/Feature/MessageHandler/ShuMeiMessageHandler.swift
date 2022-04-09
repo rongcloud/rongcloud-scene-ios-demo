@@ -7,18 +7,17 @@
 
 import Foundation
 import SVProgressHUD
-import RCSceneFoundation
-import RCSceneMessage
 
-public class ShuMeiMessageHandler: RoomMessageHandlerProtocol {
-    public static func handleMessage(message: AnyObject?, object: AnyObject?) {
-        guard let message = message as? RCMessage,
-            message.objectName == ShuMeiMessageHandlerName,
-              let shumeiMessage = message.content as? RCShuMeiMessage,
-              let content = shumeiMessage.content else {
-                  RCRTCLog.warning("System Message Data invalid <ShuMei>")
-                  return
-              }
+import RCSceneCallKit
+
+class ShuMeiMessageHandler {
+    static func handleMessage(message: RCMessage?, object: AnyObject?) {
+        guard
+            let tmp = message?.content as? RCShuMeiMessage,
+            let content = tmp.content
+        else {
+            return RCRTCLog.warning("System Message Data invalid <ShuMei>")
+        }
         
         if (content.status == 2) {
             let tmpSession: RCCallSession? = RCCall.shared().currentCallSession

@@ -31,14 +31,9 @@
 #import "RCMusicChannelResponse.h"
 #import "RCMusicDetail.h"
 
+@import RCSceneRoom;
 @import RCSceneVoiceRoom;
 @import RCSceneRadioRoom;
 
 #import <RongIMKit/RongIMKit.h>
 #import <RongRTCLib/RongRTCLib.h>
-
-#import <RCSceneMessage/RCSceneMessage.h>
-/// 音视频通话
-#import <RCVoiceRoomCallKit/RCVoiceRoomCallKit.h>
-
-#import <RCVoiceRoomLib/RCVoiceRoomLib.h>

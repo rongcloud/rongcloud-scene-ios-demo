@@ -7,7 +7,7 @@
 
 import UIKit
 import RCSceneVideoRoom
-import RCSceneFoundation
+
 
 class RCRoomFloatingManager: RCSceneRoomFloatingProtocol {
     static let shared = RCRoomFloatingManager()

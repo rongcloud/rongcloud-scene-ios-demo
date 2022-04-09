@@ -6,14 +6,14 @@
 //
 
 import ReactorKit
-import RCSceneService
+
 import RCSceneVoiceRoom
 
 
 enum UserInfoEditNetworkState {
     case idle
     case request
-    case success(VoiceRoomUser)
+    case success(RCSceneRoomUser)
     case failure(ReactorError)
 }
 
@@ -32,7 +32,7 @@ final class UserInfoEditReactor: Reactor {
     }
     
     enum Mutation {
-        case setUser(VoiceRoomUser)
+        case setUser(RCSceneRoomUser)
         case setHeader(UIImage?)
         case setName(String?)
         case setUpdateState(UserInfoEditNetworkState)
@@ -40,7 +40,7 @@ final class UserInfoEditReactor: Reactor {
     
     struct State {
         let userId: String
-        var user: VoiceRoomUser?
+        var user: RCSceneRoomUser?
         var header: UIImage?
         var name: String?
         var updateState: UserInfoEditNetworkState = .idle
@@ -49,7 +49,7 @@ final class UserInfoEditReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .fetch:
-            return UserInfoDownloaded
+            return RCSceneUserManager
                 .fetch([initialState.userId])
                 .asObservable()
                 .compactMap { $0.first }
@@ -117,7 +117,7 @@ extension UserInfoEditReactor {
                 }
             }
 
-            func update(_ name: String?, _ portrait: String?, completion: @escaping (Result<VoiceRoomUser, ReactorError>) -> Void) {
+            func update(_ name: String?, _ portrait: String?, completion: @escaping (Result<RCSceneRoomUser, ReactorError>) -> Void) {
                 guard let name = name, name.count > 0 else {
                     return completion(.failure(ReactorError("请输入姓名")))
                 }
@@ -125,7 +125,7 @@ extension UserInfoEditReactor {
                 networkProvider.request(.updateUserInfo(userName: name, portrait: portrait)) { result in
                     switch result {
                     case let .success(response):
-                        guard let res = try? JSONDecoder().decode(AppResponse.self, from: response.data) else {
+                        guard let res = try? JSONDecoder().decode(RCSceneResponse.self, from: response.data) else {
                             completion(.failure(ReactorError("更新失败")))
                             return
                         }
@@ -134,7 +134,7 @@ extension UserInfoEditReactor {
                             return completion(.failure(ReactorError(res.msg ?? "更新失败")))
                         }
                         
-                        let user = VoiceRoomUser(userId: userId, userName: name, portrait: portrait, status: 0)
+                        let user = RCSceneRoomUser(userId: userId, userName: name, portrait: portrait, status: 0)
                         completion(.success(user))
                     case let .failure(error):
                         completion(.failure(ReactorError(error.localizedDescription)))

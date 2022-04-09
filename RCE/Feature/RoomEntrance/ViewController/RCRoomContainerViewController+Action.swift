@@ -5,9 +5,9 @@
 //  Created by hanxiaoqing on 2022/2/21.
 //
 
-import RCSceneModular
-import RCSceneService
-import RCSceneFoundation
+import RCSceneRoom
+
+
 
 extension RCRoomContainerViewController: RCRoomContainerAction {
     
@@ -21,29 +21,23 @@ extension RCRoomContainerViewController: RCRoomContainerAction {
         self.collectionView.scrollable = false
     }
     
-    func switchRoom(_ room: VoiceRoom) {
-        var roomList = self.roomList
-        let currentIndex = self.currentIndex
+    func switchRoom(_ room: RCSceneRoom) {
         if roomList[currentIndex].roomType == room.roomType {
             if let index = roomList.firstIndex(where: { $0.roomId == room.roomId }) {
                 roomList[index] = room
-                self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
+                collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
                                             at: .centeredVertically,
-                                            animated: true)
+                                            animated: false)
+                currentIndex = index
                 return
             }
         }
         roomList = [room]
-        self.collectionView.reloadData()
-        if currentIndex == 0 {
-            self.switchRoom()
-        } else {
-            self.currentIndex = 0
-        }
-        self.collectionView.scrollable = roomList[currentIndex].switchable
+        collectionView.reloadData()
+        currentIndex = 0
+        collectionView.scrollable = room.switchable
+        switchRoom()
     }
-    
-    
 }
 
 extension RCRoomContainerViewController {
@@ -56,7 +50,7 @@ extension RCRoomContainerViewController {
         collectionView.scrollable = false
     }
    
-    func switchRoom(_ room: VoiceRoom) {
+    func switchRoom(_ room: RCSceneRoom) {
         if roomList[currentIndex].roomType == room.roomType {
             if let index = roomList.firstIndex(where: { $0.roomId == room.roomId }) {
                 roomList[index] = room

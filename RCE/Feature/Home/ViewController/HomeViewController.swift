@@ -8,9 +8,8 @@
 import UIKit
 import XCoordinator
 import SVProgressHUD
-import RCSceneFoundation
+
 import RCSceneVoiceRoom
-import RCSceneService
 
 class HomeViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
@@ -149,20 +148,6 @@ extension HomeViewController: UICollectionViewDelegate {
         }
     }
 }
-
-//extension HomeViewController: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let item = items[indexPath.item]
-//        switch item {
-//        case .audioRoom:
-//            let cellWidth = collectionView.bounds.width - Constants.contentInset * 2
-//            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 333 * 157))
-//        case .audioCall, .videoCall, .radioRoom, .liveVideo:
-//            let cellWidth = (collectionView.bounds.width - Constants.contentInset * 2 - Constants.itemPadding)/2
-//            return CGSize(width: floor(cellWidth), height: floor(cellWidth / 158 * 195))
-//        }
-//    }
-//}
 
 extension HomeViewController: RCIMConnectionStatusDelegate {
     func onRCIMConnectionStatusChanged(_ status: RCConnectionStatus) {

@@ -5,17 +5,11 @@
 //  Created by 叶孤城 on 2021/4/19.
 //
 
-import Foundation
-import UIKit
+import SwiftyBeaver
 import SVProgressHUD
 import IQKeyboardManager
-import SwiftyBeaver
-import SwiftUI
+
 import RCSceneVoiceRoom
-import RCSceneFoundation
-import RCSceneGift
-import RCSceneService
-import RCSceneMusic
 import RCSceneVideoRoom
 
 struct AppDependency {
@@ -35,12 +29,11 @@ final class CompositionRoot: NSObject {
     }
     
     static func configWindow() -> UIWindow {
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        return window
+        return UIWindow(frame: UIScreen.main.bounds)
     }
     
     static func configManagers(_ options: [UIApplication.LaunchOptionsKey: Any]?) {
-        
+        AppConfigs.config()
     }
     
     static func configAppearance() {
@@ -55,20 +48,17 @@ final class CompositionRoot: NSObject {
             "参考:"
             "https://developer.umeng.com/docs/147377/detail/213789"
             """)
-        UMConfigure.initWithAppkey(Environment.current.umengKey, channel: "App Store")
+        UMConfigure.initWithAppkey(Environment.umengKey, channel: "App Store")
         MobClick.setAutoPageEnabled(true)
         UMConfigure.setLogEnabled(true)
         
         /// 初始化语聊房
-        RCIM.shared().initWithAppKey(Environment.current.rcKey)
+        RCIM.shared().initWithAppKey(Environment.rcKey)
         RCIM.shared().registerMessageType(RCGiftBroadcastMessage.self)
         RCIM.shared().registerMessageType(RCPKGiftMessage.self)
         RCIM.shared().registerMessageType(RCPKStatusMessage.self)
         RCIM.shared().registerMessageType(RCShuMeiMessage.self)
         RCIM.shared().registerMessageType(RCLoginDeviceMessage.self)
-        
-        ///MessageHandlerManager 注册handler
-        RoomMessageHandlerManager.registerMessageHandler(SyncMusicInfoMessageHandler.self);
         
         if let rongToken = UserDefaults.standard.rongToken() {
             RCIM.shared().connect(withToken: rongToken) { code in
@@ -82,7 +72,7 @@ final class CompositionRoot: NSObject {
                         print(error.localizedDescription)
                     }
                 }
-                UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
+                RCSceneUserManager.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
                     RCIM.shared().currentUserInfo = user.rcUser
                 }
             } error: { code in
@@ -114,7 +104,7 @@ final class CompositionRoot: NSObject {
         /// Style
         AppStyle.defaultApperance()
         // Bugly
-        Bugly.start(withAppId: Environment.current.buglyKey)
+        Bugly.start(withAppId: Environment.buglyKey)
         
         UNUserNotificationCenter.current()
             .getNotificationSettings { (settings) in
@@ -159,9 +149,7 @@ final class CompositionRoot: NSObject {
     }
 }
 
-import RCSceneService
-
-extension VoiceRoomUser {
+extension RCSceneRoomUser {
     public var rcUser: RCUserInfo {
         return RCUserInfo(userId: userId, name: userName, portrait: portraitUrl)
     }

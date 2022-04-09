@@ -7,17 +7,17 @@
 
 import Reusable
 import Kingfisher
-import RCSceneService
+
 
 protocol FriendCellDelegate: AnyObject {
-    func didClickAvatar(_ user: VoiceRoomUser)
-    func didClickFollow(_ user: VoiceRoomUser, value: Int)
+    func didClickAvatar(_ user: RCSceneRoomUser)
+    func didClickFollow(_ user: RCSceneRoomUser, value: Int)
 }
 
 final class FriendCell: UITableViewCell, Reusable {
     
     private weak var delegate: FriendCellDelegate?
-    private var user: VoiceRoomUser?
+    private var user: RCSceneRoomUser?
     private var currentType = FriendType.fans
     
     private lazy var avatarButton: UIButton = {
@@ -92,7 +92,7 @@ final class FriendCell: UITableViewCell, Reusable {
         delegate?.didClickFollow(user, value: value)
     }
     
-    func update(_ user: VoiceRoomUser, type: FriendType, delegate: FriendCellDelegate) -> Self {
+    func update(_ user: RCSceneRoomUser, type: FriendType, delegate: FriendCellDelegate) -> Self {
         self.delegate = delegate
         self.currentType = type
         self.user = user
@@ -102,7 +102,7 @@ final class FriendCell: UITableViewCell, Reusable {
         return self
     }
     
-    private func updateFriend(_ user: VoiceRoomUser, type: FriendType) {
+    private func updateFriend(_ user: RCSceneRoomUser, type: FriendType) {
         let status = user.relation
         let size = CGSize(width: 84, height: 32)
         let image = UIGraphicsImageRenderer(size: size)

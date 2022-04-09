@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 import SVProgressHUD
-import RCSceneService
+
 
 class FeelingFeedbackViewController: UIViewController {
     private var disposeBag = DisposeBag()
@@ -46,7 +46,7 @@ class FeelingFeedbackViewController: UIViewController {
     }
     
     private func upload(reason: String?, isGood: Bool) {
-        networkProvider.rx.request(.feedback(isGoodFeedback: isGood, reason: reason)).filterSuccessfulStatusCodes().asObservable().map(AppResponse.self).subscribe(onNext: {
+        networkProvider.rx.request(.feedback(isGoodFeedback: isGood, reason: reason)).filterSuccessfulStatusCodes().asObservable().map(RCSceneResponse.self).subscribe(onNext: {
             [weak self] value in
             guard let self = self else { return }
             if value.validate() {

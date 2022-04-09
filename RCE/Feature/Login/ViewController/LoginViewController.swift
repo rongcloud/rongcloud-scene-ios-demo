@@ -8,17 +8,16 @@
 import UIKit
 import ReactorKit
 import SVProgressHUD
-import RCSceneFoundation
+
+
 import RCSceneVoiceRoom
-import RxGesture
-import RCSceneService
 
 final class LoginViewController: UIViewController, View {
     var disposeBag: DisposeBag = DisposeBag()
     private lazy var logoImageView: UIImageView = {
         let instance = UIImageView()
         instance.contentMode = .scaleAspectFit
-        instance.image = R.image.login_logo()
+        instance.image = R.image.rc_logo()
         return instance
     }()
     
@@ -132,6 +131,13 @@ final class LoginViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         buildLayout()
+        
+        let privacyTap = UITapGestureRecognizer(target: self, action: #selector(handlePrivateLabelTap(_:)))
+        privacyLabel.isUserInteractionEnabled = true
+        privacyLabel.addGestureRecognizer(privacyTap)
+        
+        let viewTap = UITapGestureRecognizer(target: self, action: #selector(handleViewTap(_:)))
+        view.addGestureRecognizer(viewTap)
     }
     
     private func attributedText(color: UIColor, text: String) -> NSAttributedString {
@@ -180,9 +186,9 @@ final class LoginViewController: UIViewController, View {
         view.addSubview(logoImageView)
         
         inputComponent.addArrangedSubview(countryCodeLabel)
-        if Environment.current == .overseas {
-            inputComponent.addArrangedSubview(countrySelectBtn)
-        }
+#if OVERSEA
+        inputComponent.addArrangedSubview(countrySelectBtn)
+#endif
         inputComponent.addArrangedSubview(phoneTextField)
         container1.addSubview(inputComponent);
         
@@ -384,7 +390,7 @@ final class LoginViewController: UIViewController, View {
                     SVProgressHUD.dismiss()
                     self?.dismiss(animated: true, completion: nil)
                     NotificationNameLogin.post()
-                    UserInfoDownloaded.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
+                    RCSceneUserManager.shared.fetchUserInfo(userId: Environment.currentUserId) { user in
                         RCIM.shared().currentUserInfo = user.rcUser
                     }
                 case let .failure(error):
@@ -392,26 +398,25 @@ final class LoginViewController: UIViewController, View {
                 }
             })
             .disposed(by: disposeBag)
-        
-        privacyLabel.rx.tapGesture().when(.recognized)
-            .subscribe(onNext: { [weak self] tap in
-                guard let self = self else { return }
-                guard let view = tap.view else { return }
-                let point = tap.location(in: view)
-                self.showRegisterPri(view, point: point)
-                self.showProvacyPri(view, point: point)
-            })
-            .disposed(by: disposeBag)
-        
-        view.rx.tapGesture().when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                self?.view.endEditing(true)
-            })
-            .disposed(by: disposeBag)
     }
     private func verification(phone: String) -> Bool {
-        Environment.current == .overseas ? phone.count >= 6 : phone.count == 11
+#if OVERSEA
+        phone.count >= 6
+#else
+        phone.count == 11
+#endif
     }
+    
+    @objc private func handlePrivateLabelTap(_ gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: privacyLabel)
+        self.showRegisterPri(privacyLabel, point: point)
+        self.showProvacyPri(privacyLabel, point: point)
+    }
+    
+    @objc private func handleViewTap(_ gesture: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
     private func showRegisterPri(_ view: UIView, point: CGPoint) {
         let area = CGRect(x: view.bounds.width / 3,
                           y: view.bounds.height / 3,

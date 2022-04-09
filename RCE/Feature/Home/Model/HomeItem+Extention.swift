@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RCSceneModular
+import RCSceneRoom
 
 extension HomeItem {
     var umengEvent: UMengEvent {

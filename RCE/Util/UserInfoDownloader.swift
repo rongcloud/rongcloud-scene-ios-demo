@@ -7,14 +7,14 @@
 
 import Foundation
 import RxSwift
-import RCSceneService
+
 import RCSceneVoiceRoom
 
-extension UserInfoDownloaded {
-    static func fetch(_ userIds: [String]) -> Single<[VoiceRoomUser]> {
+extension RCSceneUserManager {
+    static func fetch(_ userIds: [String]) -> Single<[RCSceneRoomUser]> {
         let api: RCUserService = .usersInfo(id: userIds)
         return userProvider.rx.request(api)
             .filterSuccessfulStatusCodes()
-            .map([VoiceRoomUser].self, atKeyPath: "data", using: JSONDecoder(), failsOnEmptyData: true)
+            .map([RCSceneRoomUser].self, atKeyPath: "data", using: JSONDecoder(), failsOnEmptyData: true)
     }
 }

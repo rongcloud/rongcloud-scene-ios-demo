@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RCSceneFoundation
 
 extension HomeViewController {
     private func judgeLogin() {

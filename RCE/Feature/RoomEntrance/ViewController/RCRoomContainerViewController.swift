@@ -8,13 +8,13 @@
 import SVProgressHUD
 import MJRefresh
 import RCSceneVoiceRoom
-import RCSceneService
+
 import UIKit
-import RCVoiceRoomCallKit
+import RCSceneCallKit
 
 protocol RCRoomContainerDataSource: AnyObject {
-    func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([VoiceRoom], Bool) -> Void)
-    func container(_ controller: RCRoomContainerViewController, more completion: @escaping ([VoiceRoom], Bool) -> Void)
+    func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([RCSceneRoom], Bool) -> Void)
+    func container(_ controller: RCRoomContainerViewController, more completion: @escaping ([RCSceneRoom], Bool) -> Void)
 }
 
 final class RCRoomContainerViewController: UIViewController {
@@ -47,12 +47,11 @@ final class RCRoomContainerViewController: UIViewController {
         didSet {
             if currentIndex == oldValue { return }
             switchRoom()
-            kSceneServiceCurrentRoomId = roomList[currentIndex].roomId
         }
     }
     
     var currentRoomId: String { roomList[currentIndex].roomId }
-    var currentRoom: VoiceRoom { roomList[currentIndex] }
+    var currentRoom: RCSceneRoom { roomList[currentIndex] }
     var currentScene: HomeItem {
         switch roomList[currentIndex].roomType {
         case 1: return .audioRoom
@@ -62,9 +61,9 @@ final class RCRoomContainerViewController: UIViewController {
         }
     }
     
-    public var roomList: [VoiceRoom]
+    public var roomList: [RCSceneRoom]
     private weak var dataSource: RCRoomContainerDataSource?
-    init(create room: VoiceRoom, dataSource: RCRoomContainerDataSource? = nil) {
+    init(create room: RCSceneRoom, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = [room]
         self.currentIndex = 0
         self.dataSource = dataSource
@@ -74,7 +73,7 @@ final class RCRoomContainerViewController: UIViewController {
         self.controller.setRoomFloatingAction(action: RCRoomFloatingManager.shared)
     }
     
-    init(_ roomList: [VoiceRoom], index: Int, dataSource: RCRoomContainerDataSource? = nil) {
+    init(_ roomList: [RCSceneRoom], index: Int, dataSource: RCRoomContainerDataSource? = nil) {
         self.roomList = roomList
         self.currentIndex = index
         self.dataSource = dataSource
@@ -150,7 +149,8 @@ final class RCRoomContainerViewController: UIViewController {
                     self?.joinRoom()
                 }
             case let .failure(error):
-                SVProgressHUD.showError(withStatus: error.localizedDescription)
+                debugPrint(error.localizedDescription)
+//                SVProgressHUD.showError(withStatus: error.localizedDescription)
             }
         }
     }
@@ -211,7 +211,7 @@ extension RCRoomContainerViewController {
     /// 如果index不是0，则上滑
     /// 如果下一个是0，则刷新
     /// 如果下一个不是0，则滚动
-    private func roomListDidRefresh(_ items: [VoiceRoom]) {
+    private func roomListDidRefresh(_ items: [RCSceneRoom]) {
         let items = items.filter { $0.switchable }
         if items.count == 0 {
             navigationController?.popViewController(animated: true)
@@ -245,9 +245,9 @@ extension RCRoomContainerViewController {
     /// 必然不是房主
     /// currentIndex必然是roomList.count - 1
     /// 如果index不是item.count - 1，则下滑
-    private func roomListDidMore(_ items: [VoiceRoom]) {
+    private func roomListDidMore(_ items: [RCSceneRoom]) {
         var tmp: [String: Int] = [:]
-        let items: [VoiceRoom] = items
+        let items: [RCSceneRoom] = items
             .compactMap {
                 if tmp[$0.roomId] != nil { return nil }
                 tmp[$0.roomId] = 1
@@ -282,7 +282,7 @@ extension RCRoomContainerViewController {
         }
     }
     
-    private func isRoomListChange(_ items: [VoiceRoom]) -> Bool {
+    private func isRoomListChange(_ items: [RCSceneRoom]) -> Bool {
         guard items.count == roomList.count else { return true }
         for index in (0..<items.count) {
             if items[index].id == roomList[index].id { continue }

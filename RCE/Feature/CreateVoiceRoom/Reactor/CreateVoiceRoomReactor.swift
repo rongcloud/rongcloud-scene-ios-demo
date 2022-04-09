@@ -7,22 +7,22 @@
 
 import Foundation
 import ReactorKit
-import RCSceneFoundation
-import RCSceneService
+
+
 import RCSceneVoiceRoom
 
-public enum RoomType {
+enum RoomType {
     case privateRoom
     case publicRoom
 }
 
-public final class CreateVoiceRoomReacotor: Reactor {
-    public var initialState: State
+final class CreateVoiceRoomReactor: Reactor {
+    var initialState: State
     
     init(imagelist: [String]) {
         initialState = State(imagelist: imagelist)
     }
-    public enum Action {
+    enum Action {
         case selectThumbImage(UIImage?)
         case inputRoomName(String)
         case selectBackgroundImage(String)
@@ -31,7 +31,7 @@ public final class CreateVoiceRoomReacotor: Reactor {
         case inputPassowrd(String)
     }
     
-    public enum Mutation {
+    enum Mutation {
         case setThumbImage(UIImage?)
         case setRoomName(String)
         case setBacroundImage(String)
@@ -45,7 +45,7 @@ public final class CreateVoiceRoomReacotor: Reactor {
         case setNeedLogin(Bool)
     }
     
-    public struct State {
+    struct State {
         var uploadResponse: UploadfileResponse?
         var thumbImage: UIImage?
         var bgImageUrl: String?
@@ -65,20 +65,20 @@ public final class CreateVoiceRoomReacotor: Reactor {
         }
     }
     
-    public func mutate(action: Action) -> Observable<Mutation> {
+    func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .inputPassowrd(password):
             return Observable.concat([Observable<Mutation>.just(.setPassword(password)), createRoom(password: password)])
         case let .selectThumbImage(image):
             let setImage = Observable<Mutation>.just(.setThumbImage(image))
-              if let data = image?.jpegData(compressionQuality: 0.5) {
-                  let uploadImage = networkProvider.rx.request(.upload(data: data)).filterSuccessfulStatusCodes().asObservable().map(UploadfileResponse.self).flatMap { reponse -> Observable<Mutation> in
-                      return Observable<Mutation>.just(.uploadImage(reponse))
-                  }
-                  return setImage.concat(uploadImage)
-              } else {
-                  return setImage
-              }
+            if let data = image?.jpegData(compressionQuality: 0.5) {
+                let uploadImage = networkProvider.rx.request(.upload(data: data)).filterSuccessfulStatusCodes().asObservable().map(UploadfileResponse.self).flatMap { reponse -> Observable<Mutation> in
+                    return Observable<Mutation>.just(.uploadImage(reponse))
+                }
+                return setImage.concat(uploadImage)
+            } else {
+                return setImage
+            }
         case let .inputRoomName(text):
             return Observable<Mutation>.just(.setRoomName(text))
         case let .selectBackgroundImage(backgroundImage):
@@ -99,7 +99,7 @@ public final class CreateVoiceRoomReacotor: Reactor {
         }
     }
     
-    public func reduce(state: State, mutation: Mutation) -> State {
+    func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
         case let .setThumbImage(image):
@@ -137,33 +137,34 @@ public final class CreateVoiceRoomReacotor: Reactor {
         let imageURL = currentState.uploadResponse?.imageURL() ?? ""
         let backgroundUrl = currentState.bgImageUrl ?? ""
         let api = RCRoomService.createRoom(name: currentState.roomName,
-                                                 themePictureUrl: imageURL,
-                                                 backgroundUrl: backgroundUrl,
-                                                 kv: [],
-                                                 isPrivate: (currentState.type == .privateRoom ? 1 : 0),
-                                                 password: password,
-                                                 roomType: roomType)
-        let createRoom = roomProvider.rx.request(api)
-                    .asObservable()
-                    .filterSuccessfulStatusCodes()
-                    .map(CreateVoiceRoomWrapper.self)
-                    .flatMap { wrapper -> Observable<Mutation> in
-                        guard let _ = wrapper.data else {
-                            if wrapper.needLogin() {
-                                return Observable<Mutation>.just(.setNeedLogin(true))
-                            } else {
-                                let msg = wrapper.msg ?? "创建失败，请稍后重试"
-                                return Observable<Mutation>.just(.setError(ReactorError(msg)))
-                            }
-                        }
-                        if wrapper.isCreated() {
-                            return Observable<Mutation>.just(.createRoomSuccess(wrapper))
-                        }
-                        return Observable<Mutation>.just(.setSuccess(ReactorSuccess("创建成功"))).concat(Observable<Mutation>.just(.createRoomSuccess(wrapper)))
-                    }.catch { error in
-                        debugPrint(error.localizedDescription)
-                        return Observable.just(.setError(ReactorError(error.localizedDescription)))
+                                           themePictureUrl: imageURL,
+                                           backgroundUrl: backgroundUrl,
+                                           kv: [],
+                                           isPrivate: (currentState.type == .privateRoom ? 1 : 0),
+                                           password: password,
+                                           roomType: roomType)
+        let createRoom = roomProvider.rx
+            .request(api)
+            .asObservable()
+            .filterSuccessfulStatusCodes()
+            .map(CreateVoiceRoomWrapper.self)
+            .flatMap { wrapper -> Observable<Mutation> in
+                guard let _ = wrapper.data else {
+                    if wrapper.needLogin() {
+                        return Observable<Mutation>.just(.setNeedLogin(true))
+                    } else {
+                        let msg = wrapper.msg ?? "创建失败，请稍后重试"
+                        return Observable<Mutation>.just(.setError(ReactorError(msg)))
                     }
+                }
+                if wrapper.isCreated() {
+                    return Observable<Mutation>.just(.createRoomSuccess(wrapper))
+                }
+                return Observable<Mutation>.just(.setSuccess(ReactorSuccess("创建成功"))).concat(Observable<Mutation>.just(.createRoomSuccess(wrapper)))
+            }.catch { error in
+                debugPrint(error.localizedDescription)
+                return Observable.just(.setError(ReactorError(error.localizedDescription)))
+            }
         return createRoom
     }
 }

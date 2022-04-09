@@ -6,14 +6,14 @@
 //
 
 import Foundation
-import RCSceneService
-import RCSceneModular
+
+import RCSceneRoom
 import RCSceneRadioRoom
 import RCSceneVideoRoom
 import RCSceneVoiceRoom
-import RCSceneFoundation
 
-extension VoiceRoom {
+
+extension RCSceneRoom {
     func controller(_ isCreate: Bool = false) -> RCRoomCycleProtocol {
         switch roomType {
         case 1:

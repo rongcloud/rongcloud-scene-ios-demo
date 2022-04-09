@@ -7,7 +7,7 @@
 
 import SVProgressHUD
 import MJRefresh
-import RCSceneService
+
 import RCSceneVoiceRoom
 
 enum FriendType: Int {
@@ -35,7 +35,7 @@ final class FriendListViewController: UIViewController {
         instance.mj_footer = footer
         return instance
     }()
-    private var items: [VoiceRoomUser] = [] {
+    private var items: [RCSceneRoomUser] = [] {
         didSet {
             emptyLabel.isHidden = items.count > 0
             tableView.reloadData()
@@ -80,7 +80,7 @@ final class FriendListViewController: UIViewController {
             switch result.map(FriendListWrapper.self) {
             case let .success(wrapper):
                 self?.currentPage += 1
-                var list = [VoiceRoomUser]()
+                var list = [RCSceneRoomUser]()
                 for var user in wrapper.data.list {
                     user.relation = user.status
                     list.append(user)
@@ -101,7 +101,7 @@ final class FriendListViewController: UIViewController {
             switch result.map(FriendListWrapper.self) {
             case let .success(wrapper):
                 self?.currentPage += 1
-                var list = [VoiceRoomUser]()
+                var list = [RCSceneRoomUser]()
                 for var user in wrapper.data.list {
                     user.relation = user.status
                     list.append(user)
@@ -150,7 +150,7 @@ extension FriendListViewController: UITableViewDelegate {
 }
 
 extension FriendListViewController: FriendCellDelegate {
-    func didClickAvatar(_ user: VoiceRoomUser) {
+    func didClickAvatar(_ user: RCSceneRoomUser) {
         let controller = FriendCardViewController(user.userId)
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .overFullScreen
@@ -158,10 +158,10 @@ extension FriendListViewController: FriendCellDelegate {
     }
     
     /// 回关
-    func didClickFollow(_ user: VoiceRoomUser, value: Int) {
+    func didClickFollow(_ user: RCSceneRoomUser, value: Int) {
         SVProgressHUD.show()
         friendListNetService.follow(userId: user.userId) { [weak self] result in
-            switch result.map(AppResponse.self) {
+            switch result.map(RCSceneResponse.self) {
             case let .success(res):
                 if res.validate() {
                     SVProgressHUD.dismiss(withDelay: 0.3)
@@ -175,11 +175,11 @@ extension FriendListViewController: FriendCellDelegate {
         }
     }
     
-    private func onFollow(_ user: VoiceRoomUser, value: Int) {
+    private func onFollow(_ user: RCSceneRoomUser, value: Int) {
         guard let index = items.firstIndex(where: { $0.userId == user.userId }) else {
             return
         }
         items[index].set(value)
-        UserInfoDownloaded.shared.updateLocalCache(items[index])
+        RCSceneUserManager.shared.updateLocalCache(items[index])
     }
 }

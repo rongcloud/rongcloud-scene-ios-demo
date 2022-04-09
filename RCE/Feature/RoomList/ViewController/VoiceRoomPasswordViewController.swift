@@ -10,12 +10,13 @@ import SVProgressHUD
 import ReactorKit
 import RxSwift
 import RxCocoa
-import RCSceneService
-import RCSceneFoundation
+
+
+import RCSceneRoom
 
 class VoiceRoomPasswordViewController: UIViewController {
-    public weak var delegate: InputPasswordProtocol?
-    fileprivate let type: PasswordViewType
+    public weak var delegate: RCSceneRoomPasswordProtocol?
+    fileprivate let type: RCSceneRoomPasswordType
     private lazy var container: UIView = {
         let instance = UIView()
         instance.backgroundColor = UIColor.white
@@ -58,7 +59,7 @@ class VoiceRoomPasswordViewController: UIViewController {
         instance.backgroundColor = .clear
         instance.titleLabel?.font = .systemFont(ofSize: 17)
         instance.setTitle("提交", for: .normal)
-        instance.setTitleColor(R.color.hexEF499A(), for: .normal)
+        instance.setTitleColor(RCSCAsset.Colors.hexEF499A.color, for: .normal)
         instance.addTarget(self, action: #selector(handleInputPassword), for: .touchUpInside)
         return instance
     }()
@@ -86,7 +87,7 @@ class VoiceRoomPasswordViewController: UIViewController {
         return instance
     }()
     
-    public init(type: PasswordViewType, delegate: InputPasswordProtocol?) {
+    public init(type: RCSceneRoomPasswordType, delegate: RCSceneRoomPasswordProtocol?) {
         self.delegate = delegate
         self.type = type
         super.init(nibName: nil, bundle: nil)
@@ -189,9 +190,7 @@ class VoiceRoomPasswordViewController: UIViewController {
                 self?.delegate?.passwordDidEnter(password: text)
             }
         case let .verify(room):
-            guard let room = room as? VoiceRoom,
-                room.password == text
-            else {
+            guard room.password == text else {
                 textField.text = ""
                 for view in passwordViewList {
                     view.update(text: nil)

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RCSceneFoundation
+
 
 enum UMengEvent: String {
     case AppraisalBanner
@@ -25,15 +25,15 @@ enum UMengEvent: String {
 
 extension UMengEvent {
     var name: String {
-        switch Environment.current {
-        case .debug:
-            switch self {
-            case .AppraisalBanner: return "TestEvent001"
-            case .SettingBanner: return "TestEvent002"
-            default: return ""
-            }
-        default: return rawValue
+#if DEBUG
+        switch self {
+        case .AppraisalBanner: return "TestEvent001"
+        case .SettingBanner: return "TestEvent002"
+        default: return ""
         }
+#else
+        return rawValue
+#endif
     }
     
     func trigger() {

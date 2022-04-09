@@ -9,7 +9,6 @@ import UIKit
 import XCoordinator
 
 import RCSceneCall
-import RCSceneChat
 
 enum HomeRouter: Route {
     case home

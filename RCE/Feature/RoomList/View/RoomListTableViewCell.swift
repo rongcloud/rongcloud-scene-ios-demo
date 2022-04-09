@@ -7,7 +7,7 @@
 
 import UIKit
 import Reusable
-import RCSceneService
+
 
 class RoomListTableViewCell: UITableViewCell, Reusable {
     private lazy var shadowView: UIView = {
@@ -135,7 +135,7 @@ class RoomListTableViewCell: UITableViewCell, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateCell(room: VoiceRoom) -> RoomListTableViewCell {
+    public func updateCell(room: RCSceneRoom) -> RoomListTableViewCell {
         roomAvatarImageView.kf.setImage(with: URL(string: room.themePictureUrl), placeholder: R.image.room_background_image1())
         roomNameLabel.text = room.roomName
         lockImageView.isHidden = (room.isPrivate == 0)

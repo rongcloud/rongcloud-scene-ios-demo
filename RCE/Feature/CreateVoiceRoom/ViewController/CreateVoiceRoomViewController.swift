@@ -10,10 +10,10 @@ import Kingfisher
 import ReactorKit
 import RxDataSources
 import SVProgressHUD
-import RxViewController
-import RCSceneFoundation
-import RCSceneService
+
+
 import RCSceneVoiceRoom
+
 
 class CreateVoiceRoomViewController: UIViewController, View {
     var disposeBag: DisposeBag = DisposeBag()
@@ -35,6 +35,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
     private lazy var dismissButton: UIButton = {
         let instance = UIButton()
         instance.setImage(R.image.down_white_arrow(), for: .normal)
+        instance.addTarget(self, action: #selector(dismissButtonDidClick), for: .touchUpInside)
         return instance
     }()
     private lazy var thumbButton: UIButton = {
@@ -146,7 +147,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
     
     init(imagelist: [String]) {
         super.init(nibName: nil, bundle: nil)
-        self.reactor = CreateVoiceRoomReacotor(imagelist: imagelist)
+        self.reactor = CreateVoiceRoomReactor(imagelist: imagelist)
     }
     
     required init?(coder: NSCoder) {
@@ -252,10 +253,11 @@ class CreateVoiceRoomViewController: UIViewController, View {
         heightConstraint.isActive = true
     }
     
-    func bind(reactor: CreateVoiceRoomReacotor) {
-        dismissButton.rx.tap.subscribe { [weak self] (_) in
-            self?.dismiss(animated: true, completion: nil)
-        }.disposed(by: disposeBag)
+    @objc private func dismissButtonDidClick() {
+        dismiss(animated: true)
+    }
+    
+    func bind(reactor: CreateVoiceRoomReactor) {
         
         rx.viewDidLoad
             .map {
@@ -386,7 +388,7 @@ class CreateVoiceRoomViewController: UIViewController, View {
             .flatMapLatest { [weak self] _ in
                 return UIImagePickerController.rx.createWithParent(self) { picker in
                     picker.sourceType = .photoLibrary
-                    picker.allowsEditing = false
+                    picker.allowsEditing = true
                 }
                 .flatMap { $0.rx.didFinishPickingMediaWithInfo }
                 .take(1)
@@ -436,22 +438,10 @@ class CreateVoiceRoomViewController: UIViewController, View {
         guard textField.markedTextRange == nil else {
             return
         }
-        textField.text = String(text.prefix(10))
+        textField.text = String(text.prefix(11))
     }
     
     deinit {
         print("create room deinit")
-    }
-}
-
-extension Reactive where Base == CreateVoiceRoomViewController {
-    var createSuccess: Observable<CreateVoiceRoomWrapper> {
-        return base.reactor!.state
-            .compactMap(\.createdRoom)
-            .take(1)
-            .asObservable()
-            .do { [weak base] _ in
-                base?.dismiss(animated: true, completion: nil)
-            }
     }
 }

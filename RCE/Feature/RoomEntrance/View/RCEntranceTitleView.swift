@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RCSceneModular
+import RCSceneRoom
 import RCSceneVoiceRoom
 
 final class RCEntranceTitleView: UIView {

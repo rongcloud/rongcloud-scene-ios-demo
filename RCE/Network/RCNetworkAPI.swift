@@ -7,7 +7,7 @@
 
 import Foundation
 import Moya
-import RCSceneFoundation
+
 
 /// 如果不希望在Console中打印网络请求相关的log可以在把plugins参数移除。
 let networkProvider = MoyaProvider<RCNetworkAPI>(plugins: [networkLogPlugin])
@@ -57,7 +57,7 @@ enum RCNetworkAPI {
     case deleteForbidden(id: String)
     case follow(userId: String)
     case followList(page: Int, type: Int)
-    case onlineCreator
+    case onlineCreator(type: Int)
     case setPKState(roomId: String, toRoomId: String, status: Int)
     case userUpdateCurrentRoom(roomId: String)
     case suspendRoom(roomId: String)
@@ -67,7 +67,7 @@ enum RCNetworkAPI {
     case pkDetail(roomId: String)
     case checkCurrentRoom
     case isPK(roomId: String)
-    case checkCreatedRoom
+    case checkCreatedRoom(type: Int)
     case resign
     case checkVersion(platform: String)
     case checkText(text: String)
@@ -75,7 +75,7 @@ enum RCNetworkAPI {
 
 extension RCNetworkAPI: TargetType {
     var baseURL: URL {
-        return Environment.current.url
+        return Environment.url
     }
     
     var path: String {
@@ -145,7 +145,7 @@ extension RCNetworkAPI: TargetType {
         case .followList:
             return "user/follow/list"
         case .onlineCreator:
-          return "mic/room/online/created/list"
+          return "mic/room/online/created/list/v1"
         case .userUpdateCurrentRoom:
             return "user/change"
         case .setPKState:
@@ -165,7 +165,7 @@ extension RCNetworkAPI: TargetType {
         case let .isPK(roomId):
             return "/mic/room/pk/\(roomId)/isPk"
         case .checkCreatedRoom:
-            return "/mic/room/create/check"
+            return "/mic/room/create/check/v1"
         case .resign:
             return "/user/resign"
         case .checkVersion:
@@ -382,8 +382,9 @@ extension RCNetworkAPI: TargetType {
             return .requestParameters(parameters: ["roomId": roomId],
                                       encoding: URLEncoding.default)
             
-        case .onlineCreator:
-            return .requestPlain
+        case .onlineCreator(let type):
+            return .requestParameters(parameters: ["roomType": type],
+                                      encoding: URLEncoding.default)
         case let .setPKState(roomId, toRoomId, status):
             return .requestParameters(parameters: ["roomId": roomId, "toRoomId": toRoomId, "status": status],
                                              encoding: JSONEncoding.default)
@@ -400,8 +401,9 @@ extension RCNetworkAPI: TargetType {
             return.requestPlain
         case .isPK:
             return .requestPlain
-        case .checkCreatedRoom:
-            return .requestPlain
+        case .checkCreatedRoom(let type):
+            return .requestParameters(parameters: ["type": type],
+                                      encoding: URLEncoding.default)
         case .resign:
             return .requestPlain
         case let .checkVersion(platform):

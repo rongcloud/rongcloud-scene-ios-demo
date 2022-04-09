@@ -15,30 +15,109 @@ PODS:
   - R.swift (6.1.0):
     - R.swift.Library (~> 5.3.0)
   - R.swift.Library (5.3.0)
-  - RCChatroomSceneKit (0.0.2):
-    - Masonry
-    - RCCoreKit
-    - YYModel
   - RCCoreKit (0.0.1):
     - FCFileManager
     - SSZipArchive
     - YYModel
-  - RCLiveVideoLib (2.1.0.2):
-    - RongCloudIM/IMLib (~> 5.1.7)
+  - RCLiveVideoLib (2.1.0.4):
+    - RongCloudIM/IMLib (~> 5.1.8)
     - RongCloudRTC/RongRTCLib (~> 5.1.16.1)
   - RCMusicControlKit (0.0.2.2):
     - Masonry
     - RCCoreKit
     - SDWebImage
     - YYModel
-  - RCSceneLog (0.0.1.1)
-  - RCVoiceRoomCallKit (0.0.1):
-    - RongCloudIM/IMKit (~> 5.1.3)
-    - RongCloudRTC/RongCallLib (~> 5.1.3)
-  - RCVoiceRoomLib (2.0.8):
+  - RCSceneCall (0.0.2.2):
+    - RCSceneCallKit
+    - RCSceneRoom/RCSceneRoom (~> 0.0.2.4)
+    - ReactorKit
+    - RxDataSources
+  - RCSceneCallKit (0.0.1):
+    - RongCloudIM/IMKit
+    - RongCloudRTC/RongCallLib
+  - RCSceneChatroomKit (0.0.3.1):
+    - Masonry
+    - RCCoreKit
+    - YYModel
+  - RCSceneLog (0.0.1.2)
+  - RCSceneRadioRoom (0.0.2.3):
+    - IQKeyboardManager
+    - Kingfisher
+    - MJRefresh
+    - Pulsator
+    - RCSceneRoom/RCSceneGift
+    - RCSceneRoom/RCSceneMusic
+    - RCSceneRoom/RCSceneRoom
+    - RCSceneRoom/RCSceneRoomSetting
+    - RCVoiceRoomLib
+    - Reusable
+    - SDWebImage
+    - SVProgressHUD
+    - XCoordinator
+  - RCSceneRoom/RCSceneFoundation (0.0.2.6):
+    - SwiftyBeaver
+  - RCSceneRoom/RCSceneGift (0.0.2.6):
+    - Kingfisher
+    - RCSceneRoom/RCSceneMessage
+    - RCSceneRoom/RCSceneService
+    - Reusable
+    - SnapKit
+    - SVProgressHUD
+  - RCSceneRoom/RCSceneMessage (0.0.2.6):
+    - RongCloudIM/IMLib
+  - RCSceneRoom/RCSceneMusic (0.0.2.6):
+    - RCMusicControlKit
+    - RCSceneRoom/RCSceneMessage
+    - RCSceneRoom/RCSceneService
+    - RongCloudRTC/RongRTCLib
+    - SVProgressHUD
+  - RCSceneRoom/RCSceneRoom (0.0.2.6):
+    - Kingfisher
+    - RCSceneChatroomKit
+    - RCSceneRoom/RCSceneFoundation
+    - RCSceneRoom/RCSceneMessage
+    - RCSceneRoom/RCSceneService
+    - Reusable
+    - RongCloudIM/IMKit
+    - SnapKit
+    - SVProgressHUD
+  - RCSceneRoom/RCSceneRoomSetting (0.0.2.6):
+    - RCSceneRoom/RCSceneService
+    - Reusable
+    - SnapKit
+  - RCSceneRoom/RCSceneService (0.0.2.6):
+    - Moya
+    - RCSceneRoom/RCSceneFoundation
+    - ReachabilitySwift
+  - RCSceneVideoRoom (0.0.2.2):
+    - IQKeyboardManager
+    - MJRefresh
+    - Pulsator
+    - RCLiveVideoLib
+    - RCSceneRoom/RCSceneGift
+    - RCSceneRoom/RCSceneMusic
+    - RCSceneRoom/RCSceneRoom
+    - RCSceneRoom/RCSceneRoomSetting
+    - SDWebImage
+    - XCoordinator
+  - RCSceneVoiceRoom (0.0.3):
+    - IQKeyboardManager
+    - Kingfisher
+    - MJRefresh
+    - Pulsator
+    - RCSceneRoom/RCSceneGift
+    - RCSceneRoom/RCSceneMusic
+    - RCSceneRoom/RCSceneRoom
+    - RCSceneRoom/RCSceneRoomSetting
+    - RCVoiceRoomLib
+    - ReactorKit
+    - Reusable
+    - SnapKit
+    - XCoordinator
+  - RCVoiceRoomLib (2.0.8.3):
     - RCSceneLog
-    - RongCloudIM/IMLib (~> 5.1.8)
-    - RongCloudRTC/RongRTCLib (~> 5.1.16.1)
+    - RongCloudIM/IMLib
+    - RongCloudRTC/RongRTCLib
   - ReachabilitySwift (5.0.0)
   - ReactorKit (3.2.0):
     - RxSwift (~> 6.0)
@@ -81,7 +160,7 @@ PODS:
     - Differentiator (~> 5.0)
     - RxCocoa (~> 6.0)
     - RxSwift (~> 6.0)
-  - RxGesture (4.0.3):
+  - RxGesture (4.0.4):
     - RxCocoa (~> 6.0)
     - RxSwift (~> 6.0)
   - RxRelay (6.5.0):
@@ -90,9 +169,9 @@ PODS:
   - RxViewController (2.0.0):
     - RxCocoa (~> 6.0)
     - RxSwift (~> 6.0)
-  - SDWebImage (5.12.3):
-    - SDWebImage/Core (= 5.12.3)
-  - SDWebImage/Core (5.12.3)
+  - SDWebImage (5.12.5):
+    - SDWebImage/Core (= 5.12.5)
+  - SDWebImage/Core (5.12.5)
   - SnapKit (5.0.1)
   - SSZipArchive (2.4.3)
   - SVProgressHUD (2.2.5)
@@ -100,44 +179,28 @@ PODS:
   - UMCommon (7.3.6):
     - UMDevice
   - UMDevice (2.2.1)
-  - ViewAnimator (3.1.0)
   - WeakMapTable (1.2.0)
-  - XCoordinator (2.0.7):
-    - XCoordinator/Core (= 2.0.7)
-  - XCoordinator/Core (2.0.7)
+  - XCoordinator (2.2.0):
+    - XCoordinator/Core (= 2.2.0)
+  - XCoordinator/Core (2.2.0)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - Alamofire
   - Bugly
-  - IQKeyboardManager
-  - Kingfisher
-  - MJRefresh
-  - Moya
-  - Pulsator
   - R.swift
-  - RCChatroomSceneKit
-  - RCLiveVideoLib (= 2.1.0.2)
-  - RCMusicControlKit
-  - RCVoiceRoomCallKit (from `Lib/RCVoiceRoomCallKit`)
-  - RCVoiceRoomLib
-  - ReachabilitySwift
+  - RCSceneCall
+  - RCSceneRadioRoom
+  - RCSceneVideoRoom
+  - RCSceneVoiceRoom
   - ReactorKit
-  - Reusable
-  - RongCloudIM/IMKit
-  - RongCloudIM/IMLib
-  - RongCloudRTC/RongRTCLib
-  - RongCloudRTC/RongRTCPlayer
+  - RongCloudIM/IMKit (= 5.1.8)
+  - RongCloudIM/IMLib (= 5.1.8)
+  - RongCloudRTC/RongRTCLib (= 5.1.16.1)
+  - RongCloudRTC/RongRTCPlayer (= 5.1.16.1)
   - RxDataSources
   - RxGesture
   - RxViewController
-  - SDWebImage
-  - SnapKit
-  - SVProgressHUD
-  - SwiftyBeaver
   - UMCommon
-  - ViewAnimator
-  - XCoordinator
 
 SPEC REPOS:
   trunk:
@@ -153,11 +216,17 @@ SPEC REPOS:
     - Pulsator
     - R.swift
     - R.swift.Library
-    - RCChatroomSceneKit
     - RCCoreKit
     - RCLiveVideoLib
     - RCMusicControlKit
+    - RCSceneCall
+    - RCSceneCallKit
+    - RCSceneChatroomKit
     - RCSceneLog
+    - RCSceneRadioRoom
+    - RCSceneRoom
+    - RCSceneVideoRoom
+    - RCSceneVoiceRoom
     - RCVoiceRoomLib
     - ReachabilitySwift
     - ReactorKit
@@ -177,14 +246,9 @@ SPEC REPOS:
     - SwiftyBeaver
     - UMCommon
     - UMDevice
-    - ViewAnimator
     - WeakMapTable
     - XCoordinator
     - YYModel
-
-EXTERNAL SOURCES:
-  RCVoiceRoomCallKit:
-    :path: Lib/RCVoiceRoomCallKit
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
@@ -199,13 +263,18 @@ SPEC CHECKSUMS:
   Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
   R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
-  RCChatroomSceneKit: 8551a2efa6d07d3c86707c8fee6b97f67fe3381c
   RCCoreKit: 3f143441ac62880b454cca9066f526a27c45d4ce
-  RCLiveVideoLib: 213be37483ca6bbe3792674ca94a7406bafd254d
+  RCLiveVideoLib: b6c4ac4ced5b5f4c487f3d991853eacec070c9f2
   RCMusicControlKit: f6eb6d366be36e14ab8869de970d2acb03bc23f7
-  RCSceneLog: e699010f47737890a3cfab83d830858d16accf6d
-  RCVoiceRoomCallKit: 8f05f3fde786987a2b68fc940706afe722b27006
-  RCVoiceRoomLib: d4ba4b069ed04646eb98f13adb3c90a45b9a2efa
+  RCSceneCall: a2423df9b4105a9ad8984532ca48de61bd2359ba
+  RCSceneCallKit: 71ce014dbd49d71ea7806cf65e0e0de2b5dfadf4
+  RCSceneChatroomKit: 5fa306001c88bc075365a3ed8a76776e151670f2
+  RCSceneLog: c38de10f8ccd4aa65eb9ac7c0a5c6b2042e7579e
+  RCSceneRadioRoom: c971e76ed1f7a6dc4f52c017571d375589ab73c6
+  RCSceneRoom: 715ce95539cc64d903092c385268d7271355bec8
+  RCSceneVideoRoom: 47c18c27a68cd86149c9d3492035d139fdd7aaba
+  RCSceneVoiceRoom: 012e10f01ed64eddd02b7f11ec66065e4bd8deda
+  RCVoiceRoomLib: d5b8a2770f69c865ae1304a5d742358f8295ac30
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
@@ -213,22 +282,21 @@ SPEC CHECKSUMS:
   RongCloudRTC: 39fe65cc3099103d33989b531c9f45a587060316
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
-  RxGesture: abadd243fc36db74df43dfc893829ddde94f1a3d
+  RxGesture: f3efb47ed2d26a8082f7b660d4a59970e275a7f8
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
-  SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
+  SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
   UMCommon: c61df8457c275afd4f8a2fca10c7446d66220ac0
   UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
-  ViewAnimator: a9ceed80266e00fd435ec4fb99b2df64d580d0e4
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
-  XCoordinator: 9ee654fedef1ffede33d5c11677708a555c00542
+  XCoordinator: a5f91e43ee944f508529763921165697d3211629
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: b8243f459dd6759196f4013e11601b07c4ff570d
+PODFILE CHECKSUM: e178f1623b3dbed5c6b8ad6198fa2e670013f3e7
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

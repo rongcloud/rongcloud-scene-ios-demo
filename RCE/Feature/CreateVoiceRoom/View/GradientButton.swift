@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import RCSceneRoom
 
 class GradientButton: UIButton {
     private let gradientLayer = CAGradientLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        gradientLayer.colors = [R.color.hex505DFF()!.cgColor, R.color.hexE92B88()!.cgColor]
+        gradientLayer.colors = [
+            RCSCAsset.Colors.hex505DFF.color.cgColor,
+            RCSCAsset.Colors.hexE92B88.color.cgColor
+        ]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         layer.insertSublayer(gradientLayer, at: 0)

@@ -8,7 +8,7 @@
 import UIKit
 import XCoordinator
 import RCSceneVoiceRoom
-import RCSceneService
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: RCIMUserInfoDataSource {
     func getUserInfo(withUserId userId: String!, completion: ((RCUserInfo?) -> Void)!) {
-        UserInfoDownloaded.shared.fetchUserInfo(userId: userId) { user in
+        RCSceneUserManager.shared.fetchUserInfo(userId: userId) { user in
             let userInfo = RCUserInfo(userId: userId, name: user.userName, portrait: user.portraitUrl)
             completion?(userInfo)
         }

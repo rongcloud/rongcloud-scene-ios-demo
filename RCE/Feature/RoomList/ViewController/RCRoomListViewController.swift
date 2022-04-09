@@ -7,10 +7,8 @@
 
 import MJRefresh
 import SVProgressHUD
-import UIKit
+import RCSceneRoom
 import RCSceneVoiceRoom
-import RCSceneService
-import RCSceneFoundation
 import RCSceneVideoRoom
 import XCoordinator
 
@@ -45,7 +43,7 @@ final class RCRoomListViewController: UIViewController {
     var type: Int {
         return SceneRoomManager.scene.rawValue
     }
-    var items = [VoiceRoom]() {
+    var items = [RCSceneRoom]() {
         didSet {
             tableView.reloadData()
             emptyView.isHidden = items.count > 0
@@ -116,10 +114,10 @@ final class RCRoomListViewController: UIViewController {
     
     @objc private func plusButtonClicked() {
         /// 检测房间是否已经创建
-        let api = RCNetworkAPI.checkCreatedRoom
+        let api = RCNetworkAPI.checkCreatedRoom(type: type)
         SVProgressHUD.show()
         networkProvider.request(api) { [weak self] result in
-            switch result.map(RCNetworkWapper<VoiceRoom>.self) {
+            switch result.map(RCNetworkWrapper<RCSceneRoom>.self) {
             case let .success(wrapper):
                 SVProgressHUD.dismiss()
                 if let room = wrapper.data {
@@ -135,7 +133,7 @@ final class RCRoomListViewController: UIViewController {
         }
     }
     
-    private func enterUserCreation(_ room: VoiceRoom) {
+    private func enterUserCreation(_ room: RCSceneRoom) {
         guard let currentRoom = SceneRoomManager.shared.currentRoom else {
             return enter(room)
         }
@@ -176,7 +174,7 @@ final class RCRoomListViewController: UIViewController {
             }
             
         case .audioRoom, .radioRoom:
-            self.router?.trigger(.createRoom(imagelist: SceneRoomManager.shared.backgroundlist, onRoomCreate: { [unowned self] roomWrapper in
+            self.router?.trigger(.createRoom(imagelist: SceneRoomManager.shared.backgrounds, onRoomCreate: { [unowned self] roomWrapper in
                 guard let room = roomWrapper.data else { return }
                 if roomWrapper.isCreated() {
                     return showCreatedAlert(voiceRoom: room)
@@ -195,12 +193,12 @@ final class RCRoomListViewController: UIViewController {
         }
     }
     
-    private func didCreatedRoom(_ room: VoiceRoom) {
+    private func didCreatedRoom(_ room: RCSceneRoom) {
         let controller = RCRoomContainerViewController(create: room, dataSource: self)
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    private func showCreatedAlert(voiceRoom: VoiceRoom) {
+    private func showCreatedAlert(voiceRoom: RCSceneRoom) {
         if let controller = presentedViewController {
             controller.dismiss(animated: false) { [weak self] in
                 self?.showCreatedAlert(voiceRoom: voiceRoom)
@@ -213,7 +211,7 @@ final class RCRoomListViewController: UIViewController {
         }
     }
     
-    private func userDidCreateRoom(_ room: VoiceRoom, onSure: @escaping () -> Void) {
+    private func userDidCreateRoom(_ room: RCSceneRoom, onSure: @escaping () -> Void) {
         let message = "您已创建过房间，是否现在进入？"
         let controller = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         let sureAction = UIAlertAction(title: "确定", style: .default, handler: { _ in onSure() })
@@ -264,7 +262,7 @@ extension RCRoomListViewController: UITableViewDataSource {
     }
 }
 
-extension RCRoomListViewController: UITableViewDelegate, InputPasswordProtocol {
+extension RCRoomListViewController: UITableViewDelegate, RCSceneRoomPasswordProtocol {
     func passwordDidEnter(password: String) {
 
     }
@@ -292,17 +290,17 @@ extension RCRoomListViewController: UITableViewDelegate, InputPasswordProtocol {
         enterRoomIfNeeded(items, index: indexPath.item)
     }
     
-    private func enterRoomIfNeeded(_ rooms: [VoiceRoom], index: Int) {
+    private func enterRoomIfNeeded(_ rooms: [RCSceneRoom], index: Int) {
         let room = rooms[index]
         if room.isOwner { return enter(room) }
-        if RCSceneFoundation.isAppStoreAccount {
-            let filter: (VoiceRoom) -> Bool = { !$0.isOwner }
+        if isAppStoreAccount {
+            let filter: (RCSceneRoom) -> Bool = { !$0.isOwner }
             let rooms = items.filter(filter)
             let index = rooms.firstIndex(of: room) ?? 0
             return enter(rooms, index: index)
         }
         if room.isPrivate == 0 {
-            let filter: (VoiceRoom) -> Bool = { $0.switchable }
+            let filter: (RCSceneRoom) -> Bool = { $0.switchable }
             let rooms = items.filter(filter)
             let index = rooms.firstIndex(of: room) ?? 0
             return enter(rooms, index: index)
@@ -310,7 +308,7 @@ extension RCRoomListViewController: UITableViewDelegate, InputPasswordProtocol {
         self.router?.trigger(.inputPassword(type: .verify(room), delegate: self))
     }
     
-    func passwordDidVerify(_ room: VoiceRoom) {
+    func passwordDidVerify(_ room: RCSceneRoom) {
         enter(room)
     }
 }

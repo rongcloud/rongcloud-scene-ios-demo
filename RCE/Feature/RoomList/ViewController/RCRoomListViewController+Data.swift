@@ -6,10 +6,30 @@
 //
 
 import UIKit
-import RCSceneService
+
 import RCSceneVoiceRoom
 
 private var RCRoomListPageKey = 1
+
+struct VoiceRoomList: Codable {
+    let totalCount: Int
+    let rooms: [RCSceneRoom]
+    let images: [String]
+}
+
+struct CreateVoiceRoomWrapper: Codable {
+    let code: Int
+    public let msg: String?
+    public let data: RCSceneRoom?
+    
+    public func isCreated() -> Bool {
+        return code == 30016
+    }
+    
+    public func needLogin() -> Bool {
+        return code == 30017
+    }
+}
 
 extension RCRoomListViewController {
     private var currentPage: Int {
@@ -26,11 +46,11 @@ extension RCRoomListViewController {
         let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
         networkProvider.request(api) { [weak self] result in
             guard let self = self else { return }
-            switch result.map(VoiceRoomListWrapper.self) {
+            switch result.map(RCNetworkWrapper<VoiceRoomList>.self) {
             case let .success(wrapper):
                 self.currentPage += 1
                 if let list = wrapper.data {
-                    SceneRoomManager.shared.backgroundlist = list.images
+                    SceneRoomManager.shared.backgrounds = list.images
                     completion(.success(list))
                 } else {
                     completion(.failure(NetError("加载失败")))
@@ -45,7 +65,7 @@ extension RCRoomListViewController {
         let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
         networkProvider.request(api) { [weak self] result in
             guard let self = self else { return }
-            switch result.map(VoiceRoomListWrapper.self) {
+            switch result.map(RCNetworkWrapper<VoiceRoomList>.self) {
             case let .success(wrapper):
                 self.currentPage += 1
                 if let list = wrapper.data {
@@ -61,7 +81,7 @@ extension RCRoomListViewController {
 }
 
 extension RCRoomListViewController: RCRoomContainerDataSource {
-    func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([VoiceRoom], Bool) -> Void) {
+    func container(_ controller: RCRoomContainerViewController, refresh completion: @escaping ([RCSceneRoom], Bool) -> Void) {
         refreshData { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -79,7 +99,7 @@ extension RCRoomListViewController: RCRoomContainerDataSource {
         }
     }
     
-    func container(_ controller: RCRoomContainerViewController, more completion: @escaping ([VoiceRoom], Bool) -> Void) {
+    func container(_ controller: RCRoomContainerViewController, more completion: @escaping ([RCSceneRoom], Bool) -> Void) {
         moreData { [weak self] result in
             guard let self = self else { return }
             switch result {

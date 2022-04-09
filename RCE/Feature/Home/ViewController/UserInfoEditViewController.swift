@@ -6,11 +6,14 @@
 //
 
 import UIKit
+
 import ReactorKit
-import SVProgressHUD
+import RxGesture
 import RxViewController
-import RCSceneService
-import RCSceneFoundation
+import SVProgressHUD
+
+
+
 import RCSceneVoiceRoom
 
 final class UserInfoEditViewController: UIViewController, View {
@@ -75,7 +78,7 @@ final class UserInfoEditViewController: UIViewController, View {
                 case .request:
                     SVProgressHUD.show()
                 case let .success(user):
-                    UserInfoDownloaded.shared.updateLocalCache(user)
+                    RCSceneUserManager.shared.updateLocalCache(user)
                     if let loginUser = UserDefaults.standard.loginUser() {
                         let updatedUser = loginUser.update(name: user.userName, portrait: user.portrait ?? "")
                         UserDefaults.standard.set(user: updatedUser)
@@ -138,7 +141,7 @@ final class UserInfoEditViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func updateInfo(_ user: VoiceRoomUser) {
+    private func updateInfo(_ user: RCSceneRoomUser) {
         userAvatarImageView.kf.setImage(with: URL(string: user.portraitUrl),
                                  placeholder: R.image.default_avatar())
         nameTextField.text = user.userName

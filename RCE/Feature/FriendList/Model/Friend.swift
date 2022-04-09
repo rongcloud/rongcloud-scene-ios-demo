@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RCSceneService
+
 
 struct FriendListWrapper: Codable {
     let code: Int
@@ -15,5 +15,5 @@ struct FriendListWrapper: Codable {
 
 struct FriendList: Codable {
     let total: Int
-    let list: [VoiceRoomUser]
+    let list: [RCSceneRoomUser]
 }

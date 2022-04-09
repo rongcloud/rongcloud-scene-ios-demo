@@ -7,7 +7,7 @@
 
 import UIKit
 import Reusable
-import RCSceneFoundation
+
 import RCSceneVoiceRoom
 
 extension HomeItem {

@@ -9,14 +9,13 @@ import Foundation
 import XCoordinator
 import RCSceneRadioRoom
 import RCSceneVideoRoom
-import RCSceneChat
 
 enum RCSeneRoomEntranceRoute: Route {
     case initial
     case chatList
     case chat(userId: String)
     case back
-    case inputPassword(type: PasswordViewType, delegate: InputPasswordProtocol?)
+    case inputPassword(type: RCSceneRoomPasswordType, delegate: RCSceneRoomPasswordProtocol?)
     case createRoom(imagelist: [String], onRoomCreate: ((CreateVoiceRoomWrapper) -> Void))
 }
 

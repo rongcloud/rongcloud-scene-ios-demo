@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import RCSceneFoundation
-import RCSceneService
+
+
 import RCSceneVoiceRoom
 
 final class FriendCardViewController: UIViewController {
@@ -65,11 +65,11 @@ final class FriendCardViewController: UIViewController {
         
         setupConstraint()
         
-        UserInfoDownloaded.shared
+        RCSceneUserManager.shared
             .fetchUserInfo(userId: userId) { [weak self] user in self?.update(user) }
     }
     
-    private func update(_ user: VoiceRoomUser) {
+    private func update(_ user: RCSceneRoomUser) {
         nameLabel.text = user.userName
         avatarImageView.kf.setImage(with: URL(string: user.portraitUrl),
                                     placeholder: R.image.default_avatar())
