@@ -31,11 +31,24 @@ class RCRoomContainerCollectionView: UICollectionView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hint = super.hitTest(point, with: event)
         isScrollEnabled = scrollable && !descendantViews.contains(where: { [unowned self] view in
-            guard view == hint else { return false }
+            guard let tmp = hint else { return false }
+            guard view.contain(tmp) else { return false }
             var frame = convert(view.frame, from: view.superview)
             frame.size.width = frame.width / 375 * 300
             return frame.contains(point)
         })
         return hint
+    }
+}
+
+extension UIView {
+    fileprivate func contain(_ view: UIView) -> Bool {
+        if self == view { return true }
+        for subview in subviews {
+            if subview.contain(view) {
+                return true
+            }
+        }
+        return false
     }
 }

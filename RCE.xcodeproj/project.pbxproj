@@ -78,6 +78,7 @@
 		D7092047269DAD4C008D0026 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7092046269DAD4C008D0026 /* MineViewController.swift */; };
 		D709204A269E8847008D0026 /* PromotionItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7092049269E8847008D0026 /* PromotionItemsView.swift */; };
 		D709D44F26B7C44400926B5A /* RCEntranceTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709D44E26B7C44400926B5A /* RCEntranceTitleView.swift */; };
+		D70D4D9B280FF2D300F037BB /* RCRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = D70D4D9A280FF2D300F037BB /* RCRefreshStateHeader.m */; };
 		D7163BA127D22A6F00DE6C86 /* HomeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7163BA027D22A6F00DE6C86 /* HomeLayout.swift */; };
 		D728F8092668BBBC00B2AE67 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */; };
 		D7472E1126D4FEBF0022FF3A /* RCRoomFloatingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7472E1026D4FEBF0022FF3A /* RCRoomFloatingManager.swift */; };
@@ -338,6 +339,8 @@
 		D7092046269DAD4C008D0026 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
 		D7092049269E8847008D0026 /* PromotionItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionItemsView.swift; sourceTree = "<group>"; };
 		D709D44E26B7C44400926B5A /* RCEntranceTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCEntranceTitleView.swift; sourceTree = "<group>"; };
+		D70D4D99280FF2D300F037BB /* RCRefreshStateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCRefreshStateHeader.h; sourceTree = "<group>"; };
+		D70D4D9A280FF2D300F037BB /* RCRefreshStateHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCRefreshStateHeader.m; sourceTree = "<group>"; };
 		D7163BA027D22A6F00DE6C86 /* HomeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLayout.swift; sourceTree = "<group>"; };
 		D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		D7472E1026D4FEBF0022FF3A /* RCRoomFloatingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomFloatingManager.swift; sourceTree = "<group>"; };
@@ -882,6 +885,7 @@
 		CBEE2DF0263004C9003F51ED /* ThirdPart */ = {
 			isa = PBXGroup;
 			children = (
+				D70D4D98280FF2A600F037BB /* MJRefresh+Header */,
 				D703412027EF26A20071DA80 /* NSString+Log */,
 				CBB18E5C26845245003C9E21 /* UIViewController+Swizzle */,
 			);
@@ -1040,6 +1044,15 @@
 				D75623CC27CB0C3C00FF7B48 /* VoiceRoomContainerCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		D70D4D98280FF2A600F037BB /* MJRefresh+Header */ = {
+			isa = PBXGroup;
+			children = (
+				D70D4D99280FF2D300F037BB /* RCRefreshStateHeader.h */,
+				D70D4D9A280FF2D300F037BB /* RCRefreshStateHeader.m */,
+			);
+			path = "MJRefresh+Header";
 			sourceTree = "<group>";
 		};
 		D7213B482795250D001AEA34 /* Beauty */ = {
@@ -1687,6 +1700,7 @@
 				D39F280227BF470A008D90A8 /* CreateVoiceRoomNetWorkService.swift in Sources */,
 				D7B9FF3727C50C2700DA4689 /* MineCoordinator.swift in Sources */,
 				D361B33C277035DC00B6C3E6 /* PhoneCodeSearchResultDataSource.swift in Sources */,
+				D70D4D9B280FF2D300F037BB /* RCRefreshStateHeader.m in Sources */,
 				CBEE2D7F262FBF32003F51ED /* LoginReactor.swift in Sources */,
 				D3F6FFA727BCDF0900788180 /* FriendTitleView.swift in Sources */,
 				D7CB1AA127A592C200837D80 /* MHCompleteBeautyView.m in Sources */,

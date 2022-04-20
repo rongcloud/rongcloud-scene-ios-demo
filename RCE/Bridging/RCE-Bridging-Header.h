@@ -22,8 +22,6 @@
 /// 打印 View 层级树
 #import "UIViewController+Swizzled.h"
 
-#import <CommonCrypto/CommonCrypto.h>
-
 #import "HFOpenApiManager.h"
 #import "RCMusicInfo.h"
 #import "RCMusicSheetResponse.h"
@@ -32,8 +30,3 @@
 #import "RCMusicDetail.h"
 
 @import RCSceneRoom;
-@import RCSceneVoiceRoom;
-@import RCSceneRadioRoom;
-
-#import <RongIMKit/RongIMKit.h>
-#import <RongRTCLib/RongRTCLib.h>

@@ -29,7 +29,6 @@ target 'RCE' do
   
   # IM
   pod 'RongCloudIM/IMLib', '5.1.8'
-  pod 'RongCloudIM/IMKit', '5.1.8'
   
   # RTC
   pod 'RongCloudRTC/RongRTCLib', '5.1.16.1'
