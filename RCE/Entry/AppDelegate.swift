@@ -9,15 +9,15 @@ import UIKit
 import XCoordinator
 import RCSceneVoiceRoom
 
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let appRouter = AppCoordinator().strongRouter
-//    private let appRouter = HomeCoordinator().strongRouter
     var window: UIWindow?
+    
+    private let appRouter = AppCoordinator().strongRouter
     private let dependency = CompositionRoot.resolve()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        //    UIViewController.swizzIt()
+        
         dependency.configManagers(launchOptions)
         dependency.configureSDKs(launchOptions)
         dependency.configureAppearance()
@@ -32,11 +32,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.overrideUserInterfaceStyle = .light
         UNUserNotificationCenter.current().delegate = self
         
+        let serverString = Environment.sensorServer
+        RCSensor.start(serverString, launchOptions: launchOptions)
+        
         return true
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         RCIMClient.shared().setDeviceTokenData(deviceToken)
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        SensorsAnalyticsSDK.sharedInstance()?.handleSchemeUrl(url) == true
     }
 }
 

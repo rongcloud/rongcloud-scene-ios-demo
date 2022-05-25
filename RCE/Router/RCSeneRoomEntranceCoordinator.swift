@@ -15,7 +15,7 @@ enum RCSeneRoomEntranceRoute: Route {
     case chatList
     case chat(userId: String)
     case back
-    case inputPassword(type: RCSceneRoomPasswordType, delegate: RCSceneRoomPasswordProtocol?)
+    case inputPassword(RCSRPasswordCompletion)
     case createRoom(imagelist: [String], onRoomCreate: ((CreateVoiceRoomWrapper) -> Void))
 }
 
@@ -24,7 +24,6 @@ class RCSeneRoomEntranceCoordinator: NavigationCoordinator<RCSeneRoomEntranceRou
     init(rootViewController: UINavigationController) {
         super.init(rootViewController: rootViewController, initialRoute: nil)
         addChild(RadioRoomCoordinator(rootViewController: rootViewController))
-        addChild(VideoRoomCoordinator(rootViewController: rootViewController))
     }
     
     override func prepareTransition(for route: RCSeneRoomEntranceRoute) -> NavigationTransition {
@@ -43,10 +42,11 @@ class RCSeneRoomEntranceCoordinator: NavigationCoordinator<RCSeneRoomEntranceRou
             return .push(vc)
         case .back:
             return .pop()
-        case let .inputPassword(type, delegate):
-            let vc = VoiceRoomPasswordViewController(type: type, delegate: delegate)
-            vc.modalTransitionStyle = .crossDissolve
+        case let .inputPassword(completion):
+            let vc = RCSRPasswordViewController()
             vc.modalPresentationStyle = .overFullScreen
+            vc.modalTransitionStyle = .crossDissolve
+            vc.completion = completion
             return .present(vc)
         case let .createRoom(imagelist,onRoomCreate):
             let vc = CreateVoiceRoomViewController(imagelist: imagelist)

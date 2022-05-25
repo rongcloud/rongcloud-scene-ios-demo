@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RCSceneRoom
 
 extension HomeViewController {
     private func judgeLogin() {
@@ -13,6 +14,9 @@ extension HomeViewController {
             showBusinessToken()
         } else if UserDefaults.standard.authorizationKey() == nil {
             navigator(.login)
+        } else {
+            let userId = Environment.currentUserId
+            RCSensor.shared?.login(withKey: "$identity_login_id", loginId: userId)
         }
         messageButton.updateDot()
     }

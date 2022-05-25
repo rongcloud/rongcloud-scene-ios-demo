@@ -32,7 +32,7 @@ class RCBeautyPlugin {
     static func active() {
         if isActive { return }
         isActive = true
-        MHSDK.shareInstance().`init`(Environment.MHBeautyKey)
+        MHSDK.shareInstance().`init`(AppConfigs.MHBeautyKey)
     }
     
     deinit {

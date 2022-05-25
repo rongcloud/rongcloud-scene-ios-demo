@@ -17,8 +17,31 @@ enum HomeRouter: Route {
     case audioCall
     case radioRoom
     case liveVideo
-    
     case chatList
+}
+
+extension RCScene {
+    func trigger(_ router: UnownedRouter<HomeRouter>) {
+        switch self {
+        case .audioRoom: router.trigger(.voiceRoom)
+        case .liveVideo: router.trigger(.liveVideo)
+        case .radioRoom: router.trigger(.radioRoom)
+        case .audioCall, .videoCall:
+            enterCallIfAvailable(self, router: router)
+        default: ()
+        }
+    }
+    
+    private func enterCallIfAvailable(_ item: RCScene, router: UnownedRouter<HomeRouter>) {
+        guard RCRoomFloatingManager.shared.controller == nil else {
+            return SVProgressHUD.showInfo(withStatus: "请先退出房间，再进行通话")
+        }
+        switch item {
+        case .audioCall: router.trigger(.audioCall)
+        case .videoCall: router.trigger(.videoCall)
+        default: ()
+        }
+    }
 }
 
 class HomeCoordinator: NavigationCoordinator<HomeRouter> {

@@ -111,7 +111,7 @@ final class PromotionViewController: UIViewController {
     @objc private func sure() {
         let controller = presentingViewController
         dismiss(animated: true) {
-            guard let controller = controller?.currentVisableViewController() else { return }
+            guard let controller = controller?.topmostController() else { return }
             WebViewController.show(controller,
                                    title: "促销活动",
                                    path: "https://m.rongcloud.cn/activity/rtc20")

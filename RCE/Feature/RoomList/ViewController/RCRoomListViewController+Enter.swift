@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension RCRoomListViewController {
     func enter(_ room: RCSceneRoom) {
         enter([room], index: 0)

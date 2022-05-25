@@ -62,7 +62,7 @@ class FeelingFeedbackViewController: UIViewController {
     private func onLickEventUpdated() {
         let controller = presentingViewController
         dismiss(animated: true) {
-            controller?.currentVisableViewController()?.navigator(.promotion)
+            controller?.topmostController().navigator(.promotion)
         }
     }
 }

@@ -5,11 +5,8 @@
 //  Created by 叶孤城 on 2021/4/19.
 //
 
-import UIKit
 import XCoordinator
 import SVProgressHUD
-
-import RCSceneVoiceRoom
 
 class HomeViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
@@ -46,7 +43,7 @@ class HomeViewController: UIViewController {
         return instance
     }()
     private(set) lazy var messageButton = HomeMessageButton()
-    private var items = HomeItem.allCases
+    private lazy var items: [RCScene] = RCScene.allCases
     private let router: UnownedRouter<HomeRouter>
     
     init(router: UnownedRouter<HomeRouter>) {
@@ -69,21 +66,19 @@ class HomeViewController: UIViewController {
         checkVersion()
     }
     
-    @objc private func onLogin() {
-        RCMusicEngine.shareInstance().delegate = DelegateImpl.instance
-        RCMusicEngine.shareInstance().player = PlayerImpl.instance
-        RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
+    @objc func onLogin() {
+        AppConfigs.configHiFive()
         RCCoreClient.shared().messageBlockDelegate = self;
         FraudProtectionTips.showFraudProtectionTips(self)
     }
     
-    @objc private func onLogout() {
+    @objc func onLogout() {
         if let presented = presentedViewController {
             return presented.dismiss(animated: false) { [unowned self] in onLogout() }
         }
         navigationController?.popToRootViewController(animated: false)
         navigator(.login)
-//        SceneRoomManager.shared.voice_leave { _ in }
+        RCSensor.shared?.unset("mobile")
     }
     
     private func buildLayout() {
@@ -127,66 +122,8 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.item]
         SceneRoomManager.scene = item
-        switch item {
-        case .audioRoom: router.trigger(.voiceRoom)
-        case .radioRoom: router.trigger(.radioRoom)
-        case .audioCall: enterCallIfAvailable(item)
-        case .videoCall: enterCallIfAvailable(item)
-        case .liveVideo: router.trigger(.liveVideo)
-        }
         item.umengEvent.trigger()
-    }
-    
-    private func enterCallIfAvailable(_ item: HomeItem) {
-        guard RCRoomFloatingManager.shared.controller == nil else {
-            return SVProgressHUD.showInfo(withStatus: "请先退出房间，再进行通话")
-        }
-        switch item {
-        case .audioCall: router.trigger(.audioCall)
-        case .videoCall: router.trigger(.videoCall)
-        default: ()
-        }
-    }
-}
-
-extension HomeViewController: RCIMConnectionStatusDelegate {
-    func onRCIMConnectionStatusChanged(_ status: RCConnectionStatus) {
-        print("status: \(status.rawValue)")
-        switch status {
-        case .ConnectionStatus_KICKED_OFFLINE_BY_OTHER_CLIENT:
-            SVProgressHUD.showInfo(withStatus: "您已下线，请重新登录")
-            UserDefaults.standard.clearLoginStatus()
-            onLogout()
-        default: ()
-        }
-    }
-}
-
-
-extension HomeViewController: RCIMClientReceiveMessageDelegate {
-    func onReceived(_ message: RCMessage, left: Int32, object: Any) {
-        if let loginDeviceMessage = message.content as? RCLoginDeviceMessage,
-           let content = loginDeviceMessage.content,
-           content.platform != "mobile" {
-            SVProgressHUD.showInfo(withStatus: "您已下线，请重新登录")
-            UserDefaults.standard.clearLoginStatus()
-            RCCoreClient.shared().disconnect(true)
-            DispatchQueue.main.async {
-                self.onLogout()
-            }
-        } else if let _ = message.content as? RCShuMeiMessage {
-            ShuMeiMessageHandler.handleMessage(message: message, object: nil)
-        }
-    }
-}
-
-extension HomeViewController: RCMessageBlockDelegate {
-
-    func messageDidBlock(_ info: RCBlockedMessageInfo) {
-        let string = "发送的消息(消息类型:\(info.type) 会话id:\(info.targetId) 消息id:\(info.blockedMsgUId) 拦截原因:\(info.blockType) 附加信息:\(info.extra))遇到敏感词被拦截"
-        let controller = UIAlertController(title: "提示", message: string, preferredStyle: .alert)
-        let action = UIAlertAction(title: "确定", style: .default, handler: nil)
-        controller.addAction(action)
-        present(controller, animated: true)
+        item.sensorTrigger()
+        item.trigger(router)
     }
 }

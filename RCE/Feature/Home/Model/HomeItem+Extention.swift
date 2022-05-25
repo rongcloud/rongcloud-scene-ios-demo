@@ -8,7 +8,7 @@
 import Foundation
 import RCSceneRoom
 
-extension HomeItem {
+extension RCScene {
     var umengEvent: UMengEvent {
         switch self {
         case .audioRoom: return .VoiceRoom
@@ -16,6 +16,21 @@ extension HomeItem {
         case .audioCall: return .AudioCall
         case .videoCall: return .VideoCall
         case .liveVideo: return .LiveVideo
+        default: return .LiveVideo
         }
+    }
+    
+    func sensorTrigger() {
+        let name: String = {
+            switch self {
+            case .audioRoom: return "语聊房"
+            case .radioRoom: return "语音电台"
+            case .audioCall: return "音频通话"
+            case .videoCall: return "视频通话"
+            case .liveVideo: return "视频直播"
+            default: return "视频直播"
+            }
+        }()
+        RCSensorAction.functionModuleView(name).trigger()
     }
 }

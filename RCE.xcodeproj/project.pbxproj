@@ -79,6 +79,8 @@
 		D709204A269E8847008D0026 /* PromotionItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7092049269E8847008D0026 /* PromotionItemsView.swift */; };
 		D709D44F26B7C44400926B5A /* RCEntranceTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709D44E26B7C44400926B5A /* RCEntranceTitleView.swift */; };
 		D70D4D9B280FF2D300F037BB /* RCRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = D70D4D9A280FF2D300F037BB /* RCRefreshStateHeader.m */; };
+		D70EE0DF283BAAC3009C30E5 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70EE0DE283BAAC3009C30E5 /* UserDefaults+Extension.swift */; };
+		D70EE0E1283CD278009C30E5 /* RCShuMeiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70EE0E0283CD278009C30E5 /* RCShuMeiMessage.swift */; };
 		D7163BA127D22A6F00DE6C86 /* HomeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7163BA027D22A6F00DE6C86 /* HomeLayout.swift */; };
 		D728F8092668BBBC00B2AE67 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */; };
 		D7472E1126D4FEBF0022FF3A /* RCRoomFloatingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7472E1026D4FEBF0022FF3A /* RCRoomFloatingManager.swift */; };
@@ -94,11 +96,15 @@
 		D75CA05C266DC688005E71BE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75CA05B266DC688005E71BE /* CloudKit.framework */; };
 		D763AAE426DCF34F0048FDA2 /* RCRoomContainerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763AAE326DCF34F0048FDA2 /* RCRoomContainerCollectionView.swift */; };
 		D76E238226F04CE0001CD258 /* RCRoomListViewController+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76E238126F04CE0001CD258 /* RCRoomListViewController+Data.swift */; };
+		D77BBF90282C04F30027A6BF /* ReactorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77BBF8F282C04F30027A6BF /* ReactorError.swift */; };
+		D77BBF9B282C08090027A6BF /* ReactorSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77BBF9A282C08090027A6BF /* ReactorSuccess.swift */; };
 		D78681AE27EC22DD0010B3AC /* AppConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78681AD27EC22DD0010B3AC /* AppConfigs.swift */; };
+		D78B1FF8282B70CB002073EB /* ENV.plist in Resources */ = {isa = PBXBuildFile; fileRef = D78B1FF7282B70CB002073EB /* ENV.plist */; };
 		D78F1B5326C3A07000BF7DB8 /* RCRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F1B5226C3A07000BF7DB8 /* RCRoomListViewController.swift */; };
 		D78F1B5B26C3A4AA00BF7DB8 /* RCRoomEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F1B5A26C3A4AA00BF7DB8 /* RCRoomEntranceViewController.swift */; };
 		D79DF22F2665D14E00A6C5B2 /* HomeMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79DF22E2665D14E00A6C5B2 /* HomeMessageButton.swift */; };
 		D79EDFD027C3BE7500428D3E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79EDFCF27C3BE7500428D3E /* AppCoordinator.swift */; };
+		D7ADF2F9282BBDE0002C2DB3 /* HomeViewController+IM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ADF2F8282BBDDF002C2DB3 /* HomeViewController+IM.swift */; };
 		D7B35DEE268DC050004F9D40 /* RCRoomContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B35DED268DC050004F9D40 /* RCRoomContainerViewController.swift */; };
 		D7B9FF3027C50A3B00DA4689 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B9FF2F27C50A3A00DA4689 /* DiscoverViewController.swift */; };
 		D7B9FF3227C50A4600DA4689 /* DiscoverCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B9FF3127C50A4600DA4689 /* DiscoverCoordinator.swift */; };
@@ -108,8 +114,6 @@
 		D7BCC8C226F0449F00571439 /* RCRoomListViewController+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BCC8C126F0449F00571439 /* RCRoomListViewController+Restore.swift */; };
 		D7BCC8C426F0469E00571439 /* RCRoomListViewController+Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BCC8C326F0469E00571439 /* RCRoomListViewController+Feedback.swift */; };
 		D7BCC8C626F0472100571439 /* RCRoomListViewController+Enter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BCC8C526F0472100571439 /* RCRoomListViewController+Enter.swift */; };
-		D7C1A90027C72819001B09D8 /* VoiceRoomPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C1A8FF27C72819001B09D8 /* VoiceRoomPasswordViewController.swift */; };
-		D7C1A90227C7288D001B09D8 /* PasswordNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C1A90127C7288D001B09D8 /* PasswordNumberView.swift */; };
 		D7CB1A6327A592C200837D80 /* MHBeautySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7CB1A0C27A592C200837D80 /* MHBeautySDK.framework */; };
 		D7CB1A6727A592C200837D80 /* resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D7CB1A0E27A592C200837D80 /* resource.bundle */; };
 		D7CB1A6B27A592C200837D80 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7CB1A1227A592C200837D80 /* InfoPlist.strings */; };
@@ -341,6 +345,8 @@
 		D709D44E26B7C44400926B5A /* RCEntranceTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCEntranceTitleView.swift; sourceTree = "<group>"; };
 		D70D4D99280FF2D300F037BB /* RCRefreshStateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCRefreshStateHeader.h; sourceTree = "<group>"; };
 		D70D4D9A280FF2D300F037BB /* RCRefreshStateHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCRefreshStateHeader.m; sourceTree = "<group>"; };
+		D70EE0DE283BAAC3009C30E5 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		D70EE0E0283CD278009C30E5 /* RCShuMeiMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCShuMeiMessage.swift; sourceTree = "<group>"; };
 		D7163BA027D22A6F00DE6C86 /* HomeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLayout.swift; sourceTree = "<group>"; };
 		D728F8082668BBBC00B2AE67 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		D7472E1026D4FEBF0022FF3A /* RCRoomFloatingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomFloatingManager.swift; sourceTree = "<group>"; };
@@ -358,11 +364,15 @@
 		D763AAE326DCF34F0048FDA2 /* RCRoomContainerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomContainerCollectionView.swift; sourceTree = "<group>"; };
 		D76D698526DF296200411D2F /* RCNetworkLiveAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCNetworkLiveAPI.swift; sourceTree = "<group>"; };
 		D76E238126F04CE0001CD258 /* RCRoomListViewController+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RCRoomListViewController+Data.swift"; sourceTree = "<group>"; };
+		D77BBF8F282C04F30027A6BF /* ReactorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactorError.swift; sourceTree = "<group>"; };
+		D77BBF9A282C08090027A6BF /* ReactorSuccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactorSuccess.swift; sourceTree = "<group>"; };
 		D78681AD27EC22DD0010B3AC /* AppConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigs.swift; sourceTree = "<group>"; };
+		D78B1FF7282B70CB002073EB /* ENV.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ENV.plist; sourceTree = "<group>"; };
 		D78F1B5226C3A07000BF7DB8 /* RCRoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomListViewController.swift; sourceTree = "<group>"; };
 		D78F1B5A26C3A4AA00BF7DB8 /* RCRoomEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomEntranceViewController.swift; sourceTree = "<group>"; };
 		D79DF22E2665D14E00A6C5B2 /* HomeMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMessageButton.swift; sourceTree = "<group>"; };
 		D79EDFCF27C3BE7500428D3E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		D7ADF2F8282BBDDF002C2DB3 /* HomeViewController+IM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+IM.swift"; sourceTree = "<group>"; };
 		D7B35DED268DC050004F9D40 /* RCRoomContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCRoomContainerViewController.swift; sourceTree = "<group>"; };
 		D7B9FF2F27C50A3A00DA4689 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		D7B9FF3127C50A4600DA4689 /* DiscoverCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverCoordinator.swift; sourceTree = "<group>"; };
@@ -372,8 +382,6 @@
 		D7BCC8C126F0449F00571439 /* RCRoomListViewController+Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RCRoomListViewController+Restore.swift"; sourceTree = "<group>"; };
 		D7BCC8C326F0469E00571439 /* RCRoomListViewController+Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RCRoomListViewController+Feedback.swift"; sourceTree = "<group>"; };
 		D7BCC8C526F0472100571439 /* RCRoomListViewController+Enter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RCRoomListViewController+Enter.swift"; sourceTree = "<group>"; };
-		D7C1A8FF27C72819001B09D8 /* VoiceRoomPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRoomPasswordViewController.swift; sourceTree = "<group>"; };
-		D7C1A90127C7288D001B09D8 /* PasswordNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordNumberView.swift; sourceTree = "<group>"; };
 		D7CB1A0C27A592C200837D80 /* MHBeautySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MHBeautySDK.framework; sourceTree = "<group>"; };
 		D7CB1A0D27A592C200837D80 /* FaceLandMark.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FaceLandMark.framework; sourceTree = "<group>"; };
 		D7CB1A0E27A592C200837D80 /* resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = resource.bundle; sourceTree = "<group>"; };
@@ -602,6 +610,7 @@
 				CB359A2D262D69D000B5F5ED /* Resource */,
 				CB359A27262D69B400B5F5ED /* Manager */,
 				CB359A20262D698800B5F5ED /* Entry */,
+				D78B1FF7282B70CB002073EB /* ENV.plist */,
 			);
 			path = RCE;
 			sourceTree = "<group>";
@@ -699,6 +708,7 @@
 			children = (
 				CB359A61262D6BE100B5F5ED /* HomeViewController.swift */,
 				D7B9FF3827C50F7500DA4689 /* HomeViewController+Version.swift */,
+				D7ADF2F8282BBDDF002C2DB3 /* HomeViewController+IM.swift */,
 				D749AC6E266793B70064204D /* UserInfoEditViewController.swift */,
 			);
 			path = ViewController;
@@ -742,6 +752,7 @@
 		CB9C1C51269DA069000591F2 /* FeelingFeature */ = {
 			isa = PBXGroup;
 			children = (
+				D70EE0DD283BAAA5009C30E5 /* Extension */,
 				CB35270D26A660C200715CE7 /* View */,
 				CB9C1C52269DA076000591F2 /* ViewController */,
 			);
@@ -787,6 +798,7 @@
 			isa = PBXGroup;
 			children = (
 				CBEE2CB5262E80D6003F51ED /* RCNetworkAPI.swift */,
+				D77BBF8F282C04F30027A6BF /* ReactorError.swift */,
 				D76D698526DF296200411D2F /* RCNetworkLiveAPI.swift */,
 				D703415527F2E1EF0071DA80 /* RCNetworkState.swift */,
 				D7E6F9342761FBF9006A321C /* RCNetworkReachable.swift */,
@@ -863,6 +875,7 @@
 			isa = PBXGroup;
 			children = (
 				CBEE2D7E262FBF32003F51ED /* LoginReactor.swift */,
+				D77BBF9A282C08090027A6BF /* ReactorSuccess.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -997,6 +1010,7 @@
 			isa = PBXGroup;
 			children = (
 				D3F6FFC227BD09A400788180 /* ShuMeiMessageHandler.swift */,
+				D70EE0E0283CD278009C30E5 /* RCShuMeiMessage.swift */,
 			);
 			path = MessageHandler;
 			sourceTree = "<group>";
@@ -1055,6 +1069,14 @@
 			path = "MJRefresh+Header";
 			sourceTree = "<group>";
 		};
+		D70EE0DD283BAAA5009C30E5 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D70EE0DE283BAAC3009C30E5 /* UserDefaults+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		D7213B482795250D001AEA34 /* Beauty */ = {
 			isa = PBXGroup;
 			children = (
@@ -1083,7 +1105,6 @@
 		D78F1B5126C3A05700BF7DB8 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D7C1A8FF27C72819001B09D8 /* VoiceRoomPasswordViewController.swift */,
 				D78F1B5226C3A07000BF7DB8 /* RCRoomListViewController.swift */,
 				D7BCC8C126F0449F00571439 /* RCRoomListViewController+Restore.swift */,
 				D7BCC8C326F0469E00571439 /* RCRoomListViewController+Feedback.swift */,
@@ -1128,7 +1149,6 @@
 			children = (
 				CB133A2B26576A2F00CF1C11 /* RoomListTableViewCell.swift */,
 				CBD3ED862666198C005782C1 /* VoiceRoomlistEmptyView.swift */,
-				D7C1A90127C7288D001B09D8 /* PasswordNumberView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1536,6 +1556,7 @@
 				CBEE2D63262EE2AC003F51ED /* Localizable.strings in Resources */,
 				D7CB1ABF27A592C200837D80 /* bottom_right_selected.png in Resources */,
 				CBD3EDB02668F110005782C1 /* cheering_effect.mp3 in Resources */,
+				D78B1FF8282B70CB002073EB /* ENV.plist in Resources */,
 				D7CB1A8527A592C200837D80 /* MHMagnifiedEffectParams.plist in Resources */,
 				D7CB1A7327A592C200837D80 /* MHFaceParams.plist in Resources */,
 				CB3599E3262D67B200B5F5ED /* Assets.xcassets in Resources */,
@@ -1726,6 +1747,7 @@
 				D7CB1A7D27A592C200837D80 /* StickerManager.m in Sources */,
 				CB359A38262D6A1800B5F5ED /* AppDenpendency.swift in Sources */,
 				D3F6FFC527BD09A400788180 /* CreateVoiceRoomViewController.swift in Sources */,
+				D70EE0DF283BAAC3009C30E5 /* UserDefaults+Extension.swift in Sources */,
 				D7CB1A9F27A592C200837D80 /* MHBeautySlider.m in Sources */,
 				D7B9FF3027C50A3B00DA4689 /* DiscoverViewController.swift in Sources */,
 				CBEE2D13262ECF0B003F51ED /* SettingViewController.swift in Sources */,
@@ -1734,6 +1756,7 @@
 				D75623F027CBA85E00FF7B48 /* RCBeautyPlugin.swift in Sources */,
 				D3F6FF9A27BCD8F800788180 /* UserInfoDownloader.swift in Sources */,
 				CBA7F3CC26DF2D7400AD716C /* HomeCoordinator.swift in Sources */,
+				D70EE0E1283CD278009C30E5 /* RCShuMeiMessage.swift in Sources */,
 				D31C974127BCA6E20068DDAB /* VoiceRoomFloatingView.swift in Sources */,
 				D7CB1AA927A592C200837D80 /* MHBeautyFaceView.m in Sources */,
 				D361B33E277054B600B6C3E6 /* CountryPhoneCodeProvider.swift in Sources */,
@@ -1753,7 +1776,6 @@
 				D79EDFD027C3BE7500428D3E /* AppCoordinator.swift in Sources */,
 				CB133A362657C4FF00CF1C11 /* HomeCollectionViewCell.swift in Sources */,
 				D7CB1A8927A592C200837D80 /* MHBeautyMenuCell.m in Sources */,
-				D7C1A90227C7288D001B09D8 /* PasswordNumberView.swift in Sources */,
 				CB359A89262D715700B5F5ED /* HomeItem+Extention.swift in Sources */,
 				D75623CF27CB0CE500FF7B48 /* GradientButton.swift in Sources */,
 				D7CB1AA527A592C200837D80 /* MHStickersView.m in Sources */,
@@ -1761,6 +1783,7 @@
 				D7B35DEE268DC050004F9D40 /* RCRoomContainerViewController.swift in Sources */,
 				D7CB1A9927A592C200837D80 /* MHBeautyAssembleView.m in Sources */,
 				CB133A2C26576A2F00CF1C11 /* RoomListTableViewCell.swift in Sources */,
+				D7ADF2F9282BBDE0002C2DB3 /* HomeViewController+IM.swift in Sources */,
 				D7CB1A9727A592C200837D80 /* MHStickerCell.m in Sources */,
 				DC7D34B527C5DFA700C5740A /* CallRoomCoordinator.swift in Sources */,
 				D39F282927C3444A008D90A8 /* RCRoomContainerViewController+Action.swift in Sources */,
@@ -1768,6 +1791,7 @@
 				D7CB1A9527A592C200837D80 /* MHSectionStickersView.m in Sources */,
 				CB35271326A66D1600715CE7 /* FeedbackReasonCollectionViewCell.swift in Sources */,
 				D362B30427A23A4400A5A795 /* RCLoginDeviceMessage.swift in Sources */,
+				D77BBF9B282C08090027A6BF /* ReactorSuccess.swift in Sources */,
 				CB35270F26A660D600715CE7 /* FeedbackView.swift in Sources */,
 				D75623AE27CA6AEE00FF7B48 /* RCSeneRoomEntranceCoordinator.swift in Sources */,
 				D7CB1AD227A699D800837D80 /* MHBeautyManager+Default.m in Sources */,
@@ -1787,6 +1811,7 @@
 				D7CB1AAD27A592C200837D80 /* WNSegmentControl.m in Sources */,
 				D7BCC8C426F0469E00571439 /* RCRoomListViewController+Feedback.swift in Sources */,
 				CB133A332657AAF400CF1C11 /* AppStyle.swift in Sources */,
+				D77BBF90282C04F30027A6BF /* ReactorError.swift in Sources */,
 				D78F1B5B26C3A4AA00BF7DB8 /* RCRoomEntranceViewController.swift in Sources */,
 				D3F6FFAA27BCDF0900788180 /* FriendCardViewController.swift in Sources */,
 				403545F1273CC37F00893591 /* SettingTableViewCell.swift in Sources */,
@@ -1809,7 +1834,6 @@
 				D7CB1AAB27A592C200837D80 /* WNSegmentItem.m in Sources */,
 				D7472E1126D4FEBF0022FF3A /* RCRoomFloatingManager.swift in Sources */,
 				D3F6FFA827BCDF0900788180 /* FriendViewController.swift in Sources */,
-				D7C1A90027C72819001B09D8 /* VoiceRoomPasswordViewController.swift in Sources */,
 				CB35271126A665ED00715CE7 /* FeedbackReasonView.swift in Sources */,
 				D763AAE426DCF34F0048FDA2 /* RCRoomContainerCollectionView.swift in Sources */,
 				D3F6FFA527BCDF0900788180 /* Friend.swift in Sources */,
@@ -1958,7 +1982,7 @@
 				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022040801;
+				CURRENT_PROJECT_VERSION = 2022051601;
 				DEVELOPMENT_TEAM = 9CVMN4UZK4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1971,7 +1995,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.2.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
 				PRODUCT_BUNDLE_DISPLAY_NAME = "融云 RTC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.rongcloud.rcrtc;
@@ -2110,7 +2134,7 @@
 				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022040801;
+				CURRENT_PROJECT_VERSION = 2022051601;
 				DEVELOPMENT_TEAM = 9CVMN4UZK4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2123,7 +2147,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.2.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
 				PRODUCT_BUNDLE_DISPLAY_NAME = "融云 RTC";
@@ -2262,7 +2286,7 @@
 				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022040801;
+				CURRENT_PROJECT_VERSION = 2022051601;
 				DEVELOPMENT_TEAM = 9CVMN4UZK4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2275,7 +2299,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.2.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
 				PRODUCT_BUNDLE_DISPLAY_NAME = "RC RTC";
@@ -2414,7 +2438,7 @@
 				CODE_SIGN_ENTITLEMENTS = RCE/RCE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022040801;
+				CURRENT_PROJECT_VERSION = 2022051601;
 				DEVELOPMENT_TEAM = 9CVMN4UZK4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2427,7 +2451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.2.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -enable-dynamic-replacement-chaining";
 				PRODUCT_BUNDLE_DISPLAY_NAME = "融云 RTC";

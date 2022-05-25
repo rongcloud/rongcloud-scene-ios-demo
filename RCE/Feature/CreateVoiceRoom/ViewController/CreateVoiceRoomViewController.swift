@@ -10,10 +10,7 @@ import Kingfisher
 import ReactorKit
 import RxDataSources
 import SVProgressHUD
-
-
 import RCSceneVoiceRoom
-
 
 class CreateVoiceRoomViewController: UIViewController, View {
     var disposeBag: DisposeBag = DisposeBag()
@@ -336,33 +333,30 @@ class CreateVoiceRoomViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         reactor.state
-            .map(\.showPassoword)
+            .map(\.showPassword)
             .distinctUntilChanged()
-            .filter { isShow in
-                return isShow
-            }
-            .flatMap { [weak self] isShow -> Observable<String> in
-                guard let self = self else { return Observable.empty() }
-                if let vc = self.navigator(.inputPassword(type: .input, delegate: nil)) as? VoiceRoomPasswordViewController {
-                    return vc.rx.password
-                }
-                return Observable.empty()
-            }
-            .filter{ $0.count == 4}
-            .map { password in Reactor.Action.inputPassowrd(password)}
-            .bind(to: reactor.action).disposed(by: disposeBag)
+            .filter { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                self?.navigator(.inputPassword({ password in
+                    Observable
+                        .just(password)
+                        .map { Reactor.Action.inputPassowrd($0) }
+                        .bind(to: reactor.action)
+                        .dispose()
+                }))
+            })
+            .disposed(by: disposeBag)
         
         reactor.state
             .map(\.needLogin)
             .distinctUntilChanged()
-            .filter {
-                $0
-            }
+            .filter { $0 }
             .subscribe(onNext: {
                 [weak self] value in
                 guard let self = self else { return }
                 self.onLogout()
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         privateButton.rx
             .tap
@@ -410,8 +404,12 @@ class CreateVoiceRoomViewController: UIViewController, View {
         reactor.state
             .compactMap(\.createdRoom)
             .take(1)
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] wrapper in
                 self?.dismiss(animated: true, completion: nil)
+                guard let room = wrapper.data else { return }
+                RCSensorAction.createRoom(room,
+                                          enableMic: false,
+                                          enableCamera: false).trigger()
             })
             .subscribe(onNext: { [weak self] wrapper in
                 self?.onRoomCreated?(wrapper)

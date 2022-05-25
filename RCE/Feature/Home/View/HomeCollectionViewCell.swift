@@ -10,7 +10,7 @@ import Reusable
 
 import RCSceneVoiceRoom
 
-extension HomeItem {
+extension RCScene {
     var image: UIImage? {
         switch self {
         case .audioRoom:
@@ -23,6 +23,8 @@ extension HomeItem {
             return R.image.home_icon_radio_room()
         case .liveVideo:
             return R.image.home_icon_video_room()
+        default:
+            return R.image.home_icon_voice_room()
         }
     }
     
@@ -91,7 +93,7 @@ class HomeCollectionViewCell: UICollectionViewCell, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateCell(item: HomeItem) -> HomeCollectionViewCell {
+    func updateCell(item: RCScene) -> HomeCollectionViewCell {
         itemImageView.image = item.image
         markImageView.image = item.markImage
 //        titleLabel.text = item.name

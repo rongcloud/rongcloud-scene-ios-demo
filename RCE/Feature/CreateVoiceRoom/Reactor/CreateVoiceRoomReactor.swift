@@ -7,8 +7,6 @@
 
 import Foundation
 import ReactorKit
-
-
 import RCSceneVoiceRoom
 
 enum RoomType {
@@ -56,7 +54,7 @@ final class CreateVoiceRoomReactor: Reactor {
         var error: ReactorError?
         var success: ReactorSuccess?
         var createdRoom: CreateVoiceRoomWrapper?
-        var showPassoword = false
+        var showPassword = false
         var needLogin = false
         
         init(imagelist: [String]) {
@@ -119,7 +117,7 @@ final class CreateVoiceRoomReactor: Reactor {
         case let .uploadImage(response):
             state.uploadResponse = response
         case let .setShowPassword(isShow):
-            state.showPassoword = isShow
+            state.showPassword = isShow
         case let .setPassword(password):
             state.password = password
         case let .setNeedLogin(isNeed):

@@ -141,17 +141,16 @@ extension RCRoomFloatingManager: VoiceRoomFloatingViewDelegate {
     func floatingViewDidClick() {
         defer { hide() }
         guard
-            let vc = UIApplication.shared.topMostViewController(),
-            let tab = vc as? UITabBarController,
+            let vc = UIApplication.shared.topmostController(),
             let controller = controller
         else { return }
-//        if controller.currentRoom.roomType == 3 {
-//            if let liveController = controller.controller as? LiveVideoRoomViewController {
-//                liveController.floatingBack()
-//            }
-//        }
-        if let nav = tab.selectedViewController as? UINavigationController {
-            nav.pushViewController(controller, animated: true)
+        if vc is UINavigationController {
+            (vc as! UINavigationController).pushViewController(controller, animated: true)
+        } else if let navigation = vc.navigationController {
+            navigation.pushViewController(controller, animated: true)
+        } else {
+            let navigation = UINavigationController(rootViewController: controller)
+            vc.present(navigation, animated: true)
         }
     }
 }

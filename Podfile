@@ -25,14 +25,13 @@ target 'RCE' do
   pod 'RCSceneVoiceRoom'
   pod 'RCSceneVideoRoom'
   pod 'RCSceneRadioRoom'
-#  pod 'RCSceneCommunity'
   
   # IM
   pod 'RongCloudIM/IMLib', '5.1.8'
   
   # RTC
-  pod 'RongCloudRTC/RongRTCLib', '5.1.16.1'
-  pod 'RongCloudRTC/RongRTCPlayer', '5.1.16.1'
+  pod 'RongCloudRTC/RongRTCLib', '5.1.16'
+  pod 'RongCloudRTC/RongRTCPlayer', '5.1.16'
   
   target 'RCETests' do
     inherit! :search_paths

@@ -16,7 +16,7 @@ class ShuMeiMessageHandler {
             let tmp = message?.content as? RCShuMeiMessage,
             let content = tmp.content
         else {
-            return RCRTCLog.warning("System Message Data invalid <ShuMei>")
+            return RCSRLog.warning("System Message Data invalid <ShuMei>")
         }
         
         if (content.status == 2) {

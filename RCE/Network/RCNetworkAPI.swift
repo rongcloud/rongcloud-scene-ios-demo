@@ -8,7 +8,6 @@
 import Foundation
 import Moya
 
-
 /// 如果不希望在Console中打印网络请求相关的log可以在把plugins参数移除。
 let networkProvider = MoyaProvider<RCNetworkAPI>(plugins: [networkLogPlugin])
 
@@ -282,13 +281,21 @@ extension RCNetworkAPI: TargetType {
             return .requestParameters(parameters: ["mobile": number,
                                                    "region": region], encoding: JSONEncoding.default)
         case let .login(mobile, code, userName, portrait, deviceId, region, platform):
-            return .requestParameters(parameters: ["mobile": mobile,
-                                                   "verifyCode":code,
-                                                   "userName": userName,
-                                                   "portrait": portrait,
-                                                   "deviceId": deviceId,
-                                                   "platform": platform,
-                                                   "region": region].compactMapValues { $0 }, encoding: JSONEncoding.default)
+            let params: [String: Any?] = [
+                "mobile": mobile,
+                "verifyCode":code,
+                "userName": userName,
+                "portrait": portrait,
+                "region": region,
+                "deviceId": deviceId,
+                "platform": platform,
+                "platformType": "ios",
+                "version": appVersion,
+                "channel": kAppChannel
+            ]
+            print(params)
+            return .requestParameters(parameters: params.compactMapValues { $0 },
+                                      encoding: JSONEncoding.default)
         case .loginDevice:
             return.requestPlain
         case let .createRoom(name, themePictureUrl, backgroundUrl, kv, isPrivate, password, roomType):
@@ -422,3 +429,24 @@ extension RCNetworkAPI: TargetType {
         return header
     }
 }
+
+//    {
+//        return ""
+//        return "baiduBrand"
+//        return "baiduPay"
+//        return "sogouPay"
+//        return "360Pay"
+//        return "smPay"
+//        return "bdfeed"
+//        return "googleWM"
+//        return "direct"
+//        return "baiduNature"
+//        return "360Nature"
+//        return "sogouNature"
+//        return "outside"
+//        return "google"
+//        return "Wechat"
+//        return "googlepay"
+//        return "userassign"
+//    }
+fileprivate let kAppChannel: String = ""

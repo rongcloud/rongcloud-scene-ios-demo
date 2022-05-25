@@ -117,7 +117,7 @@ final class RCRoomListViewController: UIViewController {
         let api = RCNetworkAPI.checkCreatedRoom(type: type)
         SVProgressHUD.show()
         networkProvider.request(api) { [weak self] result in
-            switch result.map(RCNetworkWrapper<RCSceneRoom>.self) {
+            switch result.map(RCSceneWrapper<RCSceneRoom>.self) {
             case let .success(wrapper):
                 SVProgressHUD.dismiss()
                 if let room = wrapper.data {
@@ -262,10 +262,7 @@ extension RCRoomListViewController: UITableViewDataSource {
     }
 }
 
-extension RCRoomListViewController: UITableViewDelegate, RCSceneRoomPasswordProtocol {
-    func passwordDidEnter(password: String) {
-
-    }
+extension RCRoomListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelect(indexPath)
@@ -305,11 +302,12 @@ extension RCRoomListViewController: UITableViewDelegate, RCSceneRoomPasswordProt
             let index = rooms.firstIndex(of: room) ?? 0
             return enter(rooms, index: index)
         }
-        self.router?.trigger(.inputPassword(type: .verify(room), delegate: self))
-    }
-    
-    func passwordDidVerify(_ room: RCSceneRoom) {
-        enter(room)
+        self.router?.trigger(.inputPassword({ [weak self] password in
+            guard password == room.password else {
+                return SVProgressHUD.showError(withStatus: "密码错误")
+            }
+            self?.enter(room)
+        }))
     }
 }
 

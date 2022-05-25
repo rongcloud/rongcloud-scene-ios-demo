@@ -7,7 +7,6 @@
 
 import SwiftyBeaver
 import SVProgressHUD
-import IQKeyboardManager
 
 import RCSceneVoiceRoom
 import RCSceneVideoRoom
@@ -41,24 +40,15 @@ final class CompositionRoot: NSObject {
     }
     
     static func configSDKs(_ options: [UIApplication.LaunchOptionsKey: Any]?) {
-        /// 友盟初始化
-        #warning("""
-            "友盟提示:"
-            "隐私协议中必须含有友盟说明，初始化必须放到用户同意隐私协议后."
-            "参考:"
-            "https://developer.umeng.com/docs/147377/detail/213789"
-            """)
-        UMConfigure.initWithAppkey(Environment.umengKey, channel: "App Store")
-        MobClick.setAutoPageEnabled(true)
-        UMConfigure.setLogEnabled(true)
-        
         /// 初始化语聊房
-        RCIM.shared().initWithAppKey(Environment.rcKey)
+        RCIM.shared().initWithAppKey(AppConfigs.RCKey)
+        
         RCIM.shared().registerMessageType(RCGiftBroadcastMessage.self)
         RCIM.shared().registerMessageType(RCPKGiftMessage.self)
         RCIM.shared().registerMessageType(RCPKStatusMessage.self)
         RCIM.shared().registerMessageType(RCShuMeiMessage.self)
         RCIM.shared().registerMessageType(RCLoginDeviceMessage.self)
+        RCChatroomMessageCenter.registerMessageTypes()
         
         if let rongToken = UserDefaults.standard.rongToken() {
             RCIM.shared().connect(withToken: rongToken) { code in
@@ -85,7 +75,6 @@ final class CompositionRoot: NSObject {
         RCKitConfig.default().ui.globalConversationPortraitSize = CGSize(width: 48.resize, height: 48.resize)
         RCKitConfig.default().ui.enableDarkMode = true
         
-        RCChatroomMessageCenter.registerMessageTypes()
         /// 设置SVProgress
         SVProgressHUD.setMaximumDismissTimeInterval(2)
         SVProgressHUD.setMinimumDismissTimeInterval(2)
@@ -98,13 +87,8 @@ final class CompositionRoot: NSObject {
         RxImagePickerDelegateProxy.register { RxImagePickerDelegateProxy(imagePicker: $0) }
         /// 禁止constraint log
         UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-        /// Keyboard
-        IQKeyboardManager.shared().isEnabled = true
-        IQKeyboardManager.shared().isEnableAutoToolbar = false
         /// Style
         AppStyle.defaultApperance()
-        // Bugly
-        Bugly.start(withAppId: Environment.buglyKey)
         
         UNUserNotificationCenter.current()
             .getNotificationSettings { (settings) in
@@ -131,18 +115,11 @@ final class CompositionRoot: NSObject {
         
         // SwiftBeaver 添加输出到 console
         let console = ConsoleDestination()
-        RCRTCLog.addDestination(console)
+        RCSRLog.addDestination(console)
 
         // 把 imlog 写入文件
 //        RCIMClient.shared().logLevel = .log_Level_Verbose
 //        NSString.redirectNSlogToDocumentFolder()
-        
-        // HIFIVE
-        if Environment.currentUserId.count > 0 {
-            RCMusicEngine.shareInstance().delegate = DelegateImpl.instance
-            RCMusicEngine.shareInstance().player = PlayerImpl.instance
-            RCMusicEngine.shareInstance().dataSource = DataSourceImpl.instance
-        }
         
         RCBeautyPlugin.active()
         RCNetworkReach.active()

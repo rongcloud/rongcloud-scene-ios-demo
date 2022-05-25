@@ -5,9 +5,45 @@
 //  Created by shaoshuai on 2021/8/2.
 //
 
-import UIKit
-import RCSceneRoom
 import RCSceneVoiceRoom
+
+extension RCScene {
+    var name: String {
+        switch self {
+        case .audioRoom:
+            return "语聊房"
+        case .radioRoom:
+            return "语音电台"
+        case .videoCall:
+            return "视频通话"
+        case .audioCall:
+            return "语音通话"
+        case .liveVideo:
+            return "视频直播"
+        case .gameRoom:
+            return "游戏房"
+        default: return ""
+        }
+    }
+    
+    var desc: String {
+        switch self {
+        case .audioRoom:
+            return "超大聊天室，支持麦位、麦序\n管理，涵盖KTV等多种玩法"
+        case .radioRoom:
+            return "听众端采用CDN链路 支持人数无上限"
+        case .videoCall:
+            return "低延迟、高清晰度视频通话"
+        case .audioCall:
+            return "拥有智能降噪的无差别 电话体验"
+        case .liveVideo:
+            return "视频直播间，支持高级美颜、观众连麦互动"
+        case .gameRoom:
+            return "多种游戏，快速匹配"
+        default: return ""
+        }
+    }
+}
 
 final class RCEntranceTitleView: UIView {
     

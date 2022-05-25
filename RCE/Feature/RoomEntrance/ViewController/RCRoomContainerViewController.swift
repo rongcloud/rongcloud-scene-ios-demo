@@ -52,7 +52,7 @@ final class RCRoomContainerViewController: UIViewController {
     
     var currentRoomId: String { roomList[currentIndex].roomId }
     var currentRoom: RCSceneRoom { roomList[currentIndex] }
-    var currentScene: HomeItem {
+    var currentScene: RCScene {
         switch roomList[currentIndex].roomType {
         case 1: return .audioRoom
         case 2: return .radioRoom
@@ -89,6 +89,8 @@ final class RCRoomContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        RCSceneVoiceRoomEnableSwitchableBackgroundImage = true
 
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.white

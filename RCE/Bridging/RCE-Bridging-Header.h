@@ -10,6 +10,8 @@
 /// 导入UMAnalytics的OC的头文件
 #import <UMCommon/MobClick.h>
 
+#import <SensorsAnalyticsSDK/SensorsAnalyticsSDK.h>
+
 #import <YYModel/YYModel.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 

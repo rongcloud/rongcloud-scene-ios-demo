@@ -13,7 +13,7 @@ extension RCRoomListViewController {
         guard RCRoomFloatingManager.shared.controller == nil else { return }
         let api = RCNetworkAPI.checkCurrentRoom
         networkProvider.request(api) { [weak self] result in
-            switch result.map(RCNetworkWrapper<RCSceneRoom>.self) {
+            switch result.map(RCSceneWrapper<RCSceneRoom>.self) {
             case let .success(wrapper):
                 self?.onUserComeBack(wrapper.data)
             case let .failure(error):

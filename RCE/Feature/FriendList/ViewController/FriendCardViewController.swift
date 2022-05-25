@@ -79,7 +79,7 @@ final class FriendCardViewController: UIViewController {
         let userId = userId
         let controller = presentingViewController
         dismiss(animated: true) {
-            guard let controller = controller?.currentVisableViewController() else { return }
+            guard let controller = controller?.topmostController() else { return }
             controller.navigator(.privateChat(userId: userId))
         }
     }

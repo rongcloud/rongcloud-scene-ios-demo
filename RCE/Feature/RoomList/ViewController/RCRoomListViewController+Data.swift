@@ -46,7 +46,7 @@ extension RCRoomListViewController {
         let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
         networkProvider.request(api) { [weak self] result in
             guard let self = self else { return }
-            switch result.map(RCNetworkWrapper<VoiceRoomList>.self) {
+            switch result.map(RCSceneWrapper<VoiceRoomList>.self) {
             case let .success(wrapper):
                 self.currentPage += 1
                 if let list = wrapper.data {
@@ -65,7 +65,7 @@ extension RCRoomListViewController {
         let api = RCNetworkAPI.roomlist(type: type, page: currentPage, size: 20)
         networkProvider.request(api) { [weak self] result in
             guard let self = self else { return }
-            switch result.map(RCNetworkWrapper<VoiceRoomList>.self) {
+            switch result.map(RCSceneWrapper<VoiceRoomList>.self) {
             case let .success(wrapper):
                 self.currentPage += 1
                 if let list = wrapper.data {

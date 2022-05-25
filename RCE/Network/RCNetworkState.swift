@@ -13,17 +13,3 @@ public enum RCNetworkState: Equatable {
     case success
     case failure(ReactorError)
 }
-
-import Moya
-
-struct NetError: Error, LocalizedError {
-    let msg: String
-    
-    public init(_ msg: String) {
-        self.msg = msg
-    }
-    
-    public var errorDescription: String? {
-        return msg
-    }
-}

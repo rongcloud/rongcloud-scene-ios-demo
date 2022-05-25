@@ -9,7 +9,6 @@ import Reusable
 import Kingfisher
 import SVProgressHUD
 
-
 final class VoiceRoomContainerCell: UICollectionViewCell, Reusable {
     private(set) lazy var backgroundImageView: AnimatedImageView = {
         let instance = AnimatedImageView()

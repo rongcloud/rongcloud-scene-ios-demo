@@ -368,6 +368,15 @@ final class LoginViewController: UIViewController, View {
         
         reactor.state.map(\.sendCodeNetworkState)
             .distinctUntilChanged()
+            .do(onNext: { state in
+                switch state {
+                case .success:
+                    RCSensorAction.code(.success(())).trigger()
+                case let .failure(error):
+                    RCSensorAction.code(.failure(NetError(error.message))).trigger()
+                default: ()
+                }
+            })
             .subscribe(onNext: { state in
                 switch state {
                 case .idle: ()
@@ -382,6 +391,15 @@ final class LoginViewController: UIViewController, View {
         
         reactor.state.map(\.loginNetworkState)
             .distinctUntilChanged()
+            .do(onNext: { state in
+                switch state {
+                case .success:
+                    RCSensorAction.login(.success(())).trigger()
+                case let .failure(error):
+                    RCSensorAction.login(.failure(NetError(error.message))).trigger()
+                default: ()
+                }
+            })
             .subscribe(onNext: { [weak self] state in
                 switch state {
                 case .idle: ()

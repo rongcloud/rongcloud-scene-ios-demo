@@ -102,7 +102,7 @@ final class RCRoomEntranceViewController: UIViewController {
     
     @objc private func info() {
         var URLString = "https://doc.rongcloud.cn/voiceroom/IOS/2.X/overview"
-        if SceneRoomManager.scene == HomeItem.liveVideo {
+        if SceneRoomManager.scene == RCScene.liveVideo {
             URLString = "https://doc.rongcloud.cn/livevideoroom/IOS/2.X/guides/intro"
         }
         UIApplication.shared.open(URL(string: URLString)!)

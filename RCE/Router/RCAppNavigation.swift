@@ -12,7 +12,7 @@ enum RCNavigation: Navigation {
     case createRoom(imagelist: [String])
     case login
     case userInfoEdit
-    case inputPassword(type: RCSceneRoomPasswordType, delegate: RCSceneRoomPasswordProtocol?)
+    case inputPassword(RCSRPasswordCompletion)
     case messagelist
     case privateChat(userId: String)
     case dial(type: CallType)
@@ -59,8 +59,9 @@ struct RCAppNavigation: AppNavigation {
             vc.modalTransitionStyle = .crossDissolve
             vc.modalPresentationStyle = .overFullScreen
             return vc
-        case let .inputPassword(type, delegate):
-            let vc = VoiceRoomPasswordViewController(type: type, delegate: delegate)
+        case let .inputPassword(completion):
+            let vc = RCSRPasswordViewController()
+            vc.completion = completion
             vc.modalTransitionStyle = .crossDissolve
             vc.modalPresentationStyle = .overFullScreen
             return vc

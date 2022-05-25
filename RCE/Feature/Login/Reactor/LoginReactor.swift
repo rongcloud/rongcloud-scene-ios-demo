@@ -8,8 +8,6 @@
 import Foundation
 import ReactorKit
 
-
-
 struct LoginReactorError: Error {
     let message: String
     let user: User
@@ -63,6 +61,7 @@ final class LoginReactor: Reactor {
             guard !currentState.verifyCode.isEmpty else {
                 return Observable<Mutation>.just(.setError(ReactorError("验证码不能为空")))
             }
+            RCSensorAction.loginClick.trigger()
             isAppStoreAccount = currentState.phoneNumber == "18800000000"
             let begin = Observable<Mutation>.just(.setLoginNetworkState(.begin))
             let login = login()
@@ -81,6 +80,7 @@ final class LoginReactor: Reactor {
             guard currentState.phoneNumber.count > 0 else {
                 return .just(.setError(ReactorError("请先输入手机号")))
             }
+            RCSensorAction.codeClick.trigger()
             let begin = Observable<Mutation>.just(.setSendCodeNetworkState(.begin))
             let sendCode = sendCode()
             let end = Observable<Mutation>.just(.setSendCodeNetworkState(.idle))
@@ -111,7 +111,9 @@ final class LoginReactor: Reactor {
             state.countdown = 60
         case let .saveCurrentUser(user):
             state.currentUser = user
+            RCSensor.shared?.set(["mobile": state.phoneNumber])
             UserDefaults.standard.set(user: user)
+            UserDefaults.standard.set(mobile: state.phoneNumber)
             UserDefaults.standard.set(authorization: user.authorization)
             UserDefaults.standard.set(rongCloudToken: user.imToken)
         case let .setSendCodeNetworkState(next):
@@ -191,6 +193,7 @@ extension LoginReactor {
                         RCCoreClient.shared().connect(withToken: user.imToken) { dbErrorCode in
                             debugPrint("db error code \(dbErrorCode)")
                         } success: { userId in
+                            RCSensor.shared?.login(withKey: "$identity_login_id", loginId: userId!)
                             DispatchQueue.main.async {
                                 observer.onNext(.success(user))
                                 observer.onCompleted()
