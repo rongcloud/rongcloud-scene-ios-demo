@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "home_video_call_icon.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
