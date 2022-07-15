@@ -1,0 +1,15 @@
+Pods/
+# Podfile.lock
+R.generated.swift
+xcuserdata/
+.DS_Store
+*.ipa
+*.dSYM.zip
+node_modules/
+*.xcarchive
+FrameworkPod/
+Build/
+Archive/
+fastlane/.env
+fastlane/report.xml
+fastlane/swiftlint_out_files
