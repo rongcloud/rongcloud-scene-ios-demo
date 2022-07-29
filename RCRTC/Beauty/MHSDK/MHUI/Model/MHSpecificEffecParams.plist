@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict><key>type</key><string>0</string><key>value</key><string>0</string><key>imageName</key><string>noSpecific</string><key>name</key><string>无</string></dict>
+    <dict><key>type</key><string>1</string><key>value</key><string>1</string><key>imageName</key><string>chuqiao</string><key>name</key><string>灵魂出窍</string></dict>
+    <dict><key>type</key><string>2</string><key>value</key><string>2</string><key>imageName</key><string>doudong</string><key>name</key><string>抖动</string></dict>
+    <dict><key>type</key><string>3</string><key>value</key><string>3</string><key>imageName</key><string>shanbai</string><key>name</key><string>闪白</string></dict>
+    <dict><key>type</key><string>4</string><key>value</key><string>4</string><key>imageName</key><string>maoci</string><key>name</key><string>毛刺</string></dict>
+    <dict><key>type</key><string>5</string><key>value</key><string>5</string><key>imageName</key><string>huanjue</string><key>name</key><string>幻觉</string></dict>
+    <dict><key>type</key><string>6</string><key>value</key><string>6</string><key>imageName</key><string>mosaic</string><key>name</key><string>马赛克1</string></dict>
+    <dict><key>type</key><string>7</string><key>value</key><string>7</string><key>imageName</key><string>mosaic_circle</string><key>name</key><string>马赛克2</string></dict>
+    <dict><key>type</key><string>8</string><key>value</key><string>8</string><key>imageName</key><string>mosaic_sanjiao</string><key>name</key><string>马赛克3</string></dict>
+    <dict><key>type</key><string>9</string><key>value</key><string>9</string><key>imageName</key><string>mosaic_liubian</string><key>name</key><string>马赛克4</string></dict>
+
+</array>
+</plist>
