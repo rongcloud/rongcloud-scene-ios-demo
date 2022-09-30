@@ -1,0 +1,493 @@
+PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
+  - Alamofire (5.6.2)
+  - Bugly (2.5.93)
+  - Differentiator (5.0.0)
+  - FCFileManager (1.0.20)
+  - FURenderKit (8.3.0)
+  - GrowingTextView (0.7.2)
+  - HXPHPicker/Camera (1.4.3):
+    - HXPHPicker/Core
+  - HXPHPicker/Core (1.4.3)
+  - HXPHPicker/Editor/Lite (1.4.3):
+    - HXPHPicker/Core
+  - HXPHPicker/Lite (1.4.3):
+    - HXPHPicker/Camera
+    - HXPHPicker/Editor/Lite
+    - HXPHPicker/Picker/Lite
+  - HXPHPicker/Picker/Lite (1.4.3):
+    - HXPHPicker/Core
+  - IQKeyboardManager (6.5.10)
+  - ISEmojiView (0.3.3)
+  - JXSegmentedView (1.3.0)
+  - Kingfisher (7.3.2)
+  - KNPhotoBrowser (2.5.9):
+    - SDWebImage
+  - lottie-ios (3.4.3)
+  - Masonry (1.1.0)
+  - MJRefresh (3.7.5)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
+  - PLPlayerKit (3.4.9):
+    - PLPlayerKit/iphoneos (= 3.4.9)
+  - PLPlayerKit/iphoneos (3.4.9)
+  - Pulsator (0.6.0)
+  - R.swift (6.1.0):
+    - R.swift.Library (~> 5.3.0)
+  - R.swift.Library (5.3.0)
+  - RCCoreKit (0.0.1):
+    - FCFileManager
+    - SSZipArchive
+    - YYModel
+  - RCLiveVideoLib (2.1.1.1):
+    - RongCloudIM/ChatRoom
+    - RongCloudRTC/RongRTCLib
+  - RCMusicControlKit (0.0.2.3):
+    - Masonry
+    - RCCoreKit
+    - SDWebImage
+    - YYModel
+  - RCSceneBaseKit (0.1.2):
+    - RCSceneBaseKit/FoundationKit (= 0.1.2)
+    - RCSceneBaseKit/UIKit (= 0.1.2)
+    - RCSceneBaseKit/Utils (= 0.1.2)
+  - RCSceneBaseKit/FoundationKit (0.1.2)
+  - RCSceneBaseKit/UIKit (0.1.2)
+  - RCSceneBaseKit/Utils (0.1.2)
+  - RCSceneCall (0.0.4):
+    - RCSceneCallKit
+    - RCSceneRoom/RCSceneAnalytics
+    - RCSceneRoom/RCSceneRoom
+    - ReactorKit
+    - RxDataSources
+  - RCSceneCallKit (0.0.3):
+    - RongCloudOpenSource/IMKit
+    - RongCloudRTC/RongCallLib
+  - RCSceneChatroomKit (0.0.3.3):
+    - Masonry
+    - RCCoreKit
+    - YYModel
+  - RCSceneCommunity (0.1.5):
+    - Alamofire
+    - GrowingTextView
+    - HXPHPicker/Lite
+    - ISEmojiView
+    - JXSegmentedView
+    - Kingfisher
+    - KNPhotoBrowser
+    - MJRefresh
+    - RongCloudIM/IMLib (>= 5.2.5)
+    - RongCloudOpenSource/IMKit
+    - SDWebImage
+    - SnapKit
+    - SVProgressHUD
+    - TableViewDragger
+  - RCSceneFaceBeautyKit (0.0.1.3):
+    - Masonry
+    - RCSceneBaseKit
+    - RongFUFaceBeautifier (~> 5.2.5)
+    - YYModel
+  - RCSceneGameRoom (0.1.4):
+    - AFNetworking
+    - Pulsator
+    - RCSceneRoom/RCSceneAnalytics
+    - RCSceneRoom/RCSceneGift
+    - RCSceneRoom/RCSceneMusic
+    - RCSceneRoom/RCSceneRoom (>= 0.0.4.5)
+    - RCSceneRoom/RCSceneRoomSetting
+    - RCTinyGameLib
+    - RCVoiceRoomLib
+    - Reusable
+    - SnapKit
+  - RCSceneLoginKit (0.1.4):
+    - Masonry
+    - RCSceneBaseKit
+    - RCSceneLoginKit/Common (= 0.1.4)
+    - RCSceneLoginKit/CountryCode (= 0.1.4)
+    - RCSceneLoginKit/Login (= 0.1.4)
+    - RCSceneLoginKit/Network (= 0.1.4)
+    - RCSceneNetworkKit
+    - RCSceneWebKit
+    - SVProgressHUD
+    - YYModel
+  - RCSceneLoginKit/Common (0.1.4):
+    - Masonry
+    - RCSceneBaseKit
+    - RCSceneNetworkKit
+    - RCSceneWebKit
+    - SVProgressHUD
+    - YYModel
+  - RCSceneLoginKit/CountryCode (0.1.4):
+    - Masonry
+    - RCSceneBaseKit
+    - RCSceneLoginKit/Common
+    - RCSceneLoginKit/Network
+    - RCSceneNetworkKit
+    - RCSceneWebKit
+    - SVProgressHUD
+    - YYModel
+  - RCSceneLoginKit/Login (0.1.4):
+    - Masonry
+    - RCSceneBaseKit
+    - RCSceneLoginKit/Common
+    - RCSceneLoginKit/CountryCode
+    - RCSceneLoginKit/Network
+    - RCSceneNetworkKit
+    - RCSceneWebKit
+    - SVProgressHUD
+    - YYModel
+  - RCSceneLoginKit/Network (0.1.4):
+    - Masonry
+    - RCSceneBaseKit
+    - RCSceneLoginKit/Common
+    - RCSceneNetworkKit
+    - RCSceneWebKit
+    - SVProgressHUD
+    - YYModel
+  - RCSceneNetworkKit (0.1.3):
+    - AFNetworking
+    - RCSceneNetworkKit/Core (= 0.1.3)
+    - YYModel
+  - RCSceneNetworkKit/Core (0.1.3):
+    - AFNetworking
+    - YYModel
+  - RCSceneRadioRoom (0.0.4.5):
+    - Pulsator
+    - RCSceneRoom/RCSceneAnalytics
+    - RCSceneRoom/RCSceneRoom (>= 0.0.4.5)
+    - XCoordinator
+  - RCSceneRoom/RCSceneAnalytics (0.0.4.5):
+    - RCSceneRoom/RCSceneRoomSetting
+    - SensorsAnalyticsSDK
+  - RCSceneRoom/RCSceneGift (0.0.4.5):
+    - Kingfisher
+    - RCSceneRoom/RCSceneMessage
+    - RCSceneRoom/RCSceneService
+    - Reusable
+    - SnapKit
+    - SVProgressHUD
+  - RCSceneRoom/RCSceneMessage (0.0.4.5):
+    - RongCloudIM/IMLib
+  - RCSceneRoom/RCSceneMusic (0.0.4.5):
+    - RCMusicControlKit
+    - RCSceneRoom/RCSceneMessage
+    - RCSceneRoom/RCSceneService
+    - RongCloudRTC/RongRTCLib (>= 5.2.5)
+    - SVProgressHUD
+  - RCSceneRoom/RCSceneRoom (0.0.4.5):
+    - RCSceneChatroomKit
+    - RCSceneRoom/RCSceneGift
+    - RCSceneRoom/RCSceneMusic
+    - RCSceneRoom/RCSceneRoomSetting
+    - RCSceneRoom/RCSRChat
+  - RCSceneRoom/RCSceneRoomSetting (0.0.4.5):
+    - RCSceneRoom/RCSceneService
+    - RCSceneRoom/RCSRPassword
+    - Reusable
+  - RCSceneRoom/RCSceneService (0.0.4.5):
+    - RCSceneRoom/RCSRBase
+    - ReachabilitySwift
+  - RCSceneRoom/RCSRAssets (0.0.4.5)
+  - RCSceneRoom/RCSRBase (0.0.4.5):
+    - Moya
+  - RCSceneRoom/RCSRChat (0.0.4.5):
+    - RCSceneRoom/RCSceneService
+    - RongCloudOpenSource/IMKit
+    - SVProgressHUD
+  - RCSceneRoom/RCSRPassword (0.0.4.5):
+    - RCSceneRoom/RCSRAssets
+    - RCSceneRoom/RCSRBase
+    - SnapKit
+  - RCSceneVideoRoom (0.0.4.6):
+    - MJRefresh
+    - Pulsator
+    - RCLiveVideoLib (>= 2.1.1)
+    - RCSceneRoom/RCSceneAnalytics
+    - RCSceneRoom/RCSceneRoom (>= 0.0.4.5)
+    - SDWebImage
+  - RCSceneVoiceRoom (0.0.4.5):
+    - Pulsator
+    - RCSceneRoom/RCSceneAnalytics
+    - RCSceneRoom/RCSceneRoom (>= 0.0.4.5)
+    - RCVoiceRoomLib
+  - RCSceneWebKit (0.1.1):
+    - Masonry
+    - RCSceneBaseKit
+  - RCTinyGameLib (1.0.2):
+    - AFNetworking
+  - RCVoiceRoomLib (2.1.1):
+    - RongCloudIM/ChatRoom
+    - RongCloudRTC/RongRTCLib
+  - ReachabilitySwift (5.0.0)
+  - ReactorKit (3.2.0):
+    - RxSwift (~> 6.0)
+    - WeakMapTable (~> 1.1)
+  - Reusable (4.1.2):
+    - Reusable/Storyboard (= 4.1.2)
+    - Reusable/View (= 4.1.2)
+  - Reusable/Storyboard (4.1.2)
+  - Reusable/View (4.1.2)
+  - RongCloudIM/ChatRoom (5.2.5):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/CustomerService (5.2.5):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/Discussion (5.2.5):
+    - RongCloudIM/IMLibCore
+  - RongCloudIM/IMLib (5.2.5):
+    - RongCloudIM/ChatRoom
+    - RongCloudIM/CustomerService
+    - RongCloudIM/Discussion
+    - RongCloudIM/IMLibCore
+    - RongCloudIM/PublicService
+  - RongCloudIM/IMLibCore (5.2.5)
+  - RongCloudIM/PublicService (5.2.5):
+    - RongCloudIM/IMLibCore
+  - RongCloudOpenSource/IMKit (5.2.5):
+    - RongCloudIM/IMLib (= 5.2.5)
+  - RongCloudRTC/RongCallLib (5.2.5):
+    - RongCloudRTC/RongRTCLib
+  - RongCloudRTC/RongRTCLib (5.2.5):
+    - RongCloudIM/IMLibCore (>= 5.2.5)
+  - RongCloudRTC/RongRTCPlayer (5.2.5):
+    - RongCloudRTC/RongRTCLib
+  - RongFUFaceBeautifier (5.2.5):
+    - FURenderKit (= 8.3.0)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxDataSources (5.0.0):
+    - Differentiator (~> 5.0)
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxGesture (4.0.4):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
+  - RxViewController (2.0.0):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - SDWebImage (5.13.4):
+    - SDWebImage/Core (= 5.13.4)
+  - SDWebImage/Core (5.13.4)
+  - SensorsAnalyticsSDK (4.4.5):
+    - SensorsAnalyticsSDK/Core (= 4.4.5)
+  - SensorsAnalyticsSDK/__Store (4.4.5)
+  - SensorsAnalyticsSDK/AutoTrack (4.4.5):
+    - SensorsAnalyticsSDK/Common
+  - SensorsAnalyticsSDK/Base (4.4.5):
+    - SensorsAnalyticsSDK/__Store
+  - SensorsAnalyticsSDK/Common (4.4.5):
+    - SensorsAnalyticsSDK/Extension
+  - SensorsAnalyticsSDK/Core (4.4.5):
+    - SensorsAnalyticsSDK/Common
+    - SensorsAnalyticsSDK/Visualized
+  - SensorsAnalyticsSDK/Extension (4.4.5):
+    - SensorsAnalyticsSDK/Base
+  - SensorsAnalyticsSDK/Visualized (4.4.5):
+    - SensorsAnalyticsSDK/AutoTrack
+  - SnapKit (5.6.0)
+  - SSZipArchive (2.4.3)
+  - SVProgressHUD (2.2.5)
+  - SwiftGen (6.6.2)
+  - TableViewDragger (1.3.0)
+  - UMCommon (7.3.7):
+    - UMDevice
+  - UMDevice (2.2.1)
+  - WeakMapTable (1.2.0)
+  - XCoordinator (2.2.0):
+    - XCoordinator/Core (= 2.2.0)
+  - XCoordinator/Core (2.2.0)
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - Bugly
+  - IQKeyboardManager
+  - KNPhotoBrowser (from `https://github.com/coood/KNPhotoBrowser.git`, commit `7a0619a7ebdfe8979dbe6c3f1e335e7e772be9e9`)
+  - lottie-ios
+  - PLPlayerKit
+  - R.swift
+  - RCSceneCall
+  - RCSceneCommunity
+  - "RCSceneFaceBeautyKit (from `git@gitlab2.rongcloud.net:scene/ios/rongcloud-scene-beauty-kit-ios.git`)"
+  - RCSceneGameRoom
+  - RCSceneLoginKit
+  - RCSceneRadioRoom
+  - RCSceneVideoRoom
+  - RCSceneVoiceRoom
+  - ReactorKit
+  - RongCloudRTC/RongRTCPlayer
+  - RxDataSources
+  - RxGesture
+  - RxViewController
+  - SwiftGen (~> 6.0)
+  - UMCommon
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - Alamofire
+    - Bugly
+    - Differentiator
+    - FCFileManager
+    - FURenderKit
+    - GrowingTextView
+    - HXPHPicker
+    - IQKeyboardManager
+    - ISEmojiView
+    - JXSegmentedView
+    - Kingfisher
+    - lottie-ios
+    - Masonry
+    - MJRefresh
+    - Moya
+    - PLPlayerKit
+    - Pulsator
+    - R.swift
+    - R.swift.Library
+    - RCCoreKit
+    - RCLiveVideoLib
+    - RCMusicControlKit
+    - RCSceneBaseKit
+    - RCSceneCall
+    - RCSceneCallKit
+    - RCSceneChatroomKit
+    - RCSceneCommunity
+    - RCSceneGameRoom
+    - RCSceneLoginKit
+    - RCSceneNetworkKit
+    - RCSceneRadioRoom
+    - RCSceneRoom
+    - RCSceneVideoRoom
+    - RCSceneVoiceRoom
+    - RCSceneWebKit
+    - RCTinyGameLib
+    - RCVoiceRoomLib
+    - ReachabilitySwift
+    - ReactorKit
+    - Reusable
+    - RongCloudIM
+    - RongCloudOpenSource
+    - RongCloudRTC
+    - RongFUFaceBeautifier
+    - RxCocoa
+    - RxDataSources
+    - RxGesture
+    - RxRelay
+    - RxSwift
+    - RxViewController
+    - SDWebImage
+    - SensorsAnalyticsSDK
+    - SnapKit
+    - SSZipArchive
+    - SVProgressHUD
+    - SwiftGen
+    - TableViewDragger
+    - UMCommon
+    - UMDevice
+    - WeakMapTable
+    - XCoordinator
+    - YYModel
+
+EXTERNAL SOURCES:
+  KNPhotoBrowser:
+    :commit: 7a0619a7ebdfe8979dbe6c3f1e335e7e772be9e9
+    :git: https://github.com/coood/KNPhotoBrowser.git
+  RCSceneFaceBeautyKit:
+    :git: "git@gitlab2.rongcloud.net:scene/ios/rongcloud-scene-beauty-kit-ios.git"
+
+CHECKOUT OPTIONS:
+  KNPhotoBrowser:
+    :commit: 7a0619a7ebdfe8979dbe6c3f1e335e7e772be9e9
+    :git: https://github.com/coood/KNPhotoBrowser.git
+  RCSceneFaceBeautyKit:
+    :commit: aab5389c00b20670e7836dcb94406f5da2d6bf84
+    :git: "git@gitlab2.rongcloud.net:scene/ios/rongcloud-scene-beauty-kit-ios.git"
+
+SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  Bugly: b8715e6ec4004b7f7fbffab0643ba80545aee3da
+  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  FCFileManager: e0f73316e6aa2eb04d2ff4caa75fe7df1ae44270
+  FURenderKit: 3cd05abd03134d287a1d63cbaaeb95d304ba6bd6
+  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
+  HXPHPicker: a16d13ddc278e04ddf571b66e0662c731330e6c8
+  IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
+  ISEmojiView: 6c62f11cfbe1f014c3fdd03af34e393f0da0c395
+  JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
+  Kingfisher: 0086ad83719761ba9b2cdaf6ef4d5b4878cbae23
+  KNPhotoBrowser: 52e9b470754326359bc43077318f1fa532458cf8
+  lottie-ios: 9ae750cdc7820fecbd3c2f0cfc493038208fcdc4
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  PLPlayerKit: 6d377f241918be3737c811b84f8366de385c1f91
+  Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  R.swift: ec98ff71c4ab2f6fd01dd077e5afd15e63a4834c
+  R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
+  RCCoreKit: 3f143441ac62880b454cca9066f526a27c45d4ce
+  RCLiveVideoLib: 6ab914ac27ce8c21b9da1f734e5cb20c3516aeef
+  RCMusicControlKit: 79841e9b266ceccf380bf6a1c2fdec08723d2604
+  RCSceneBaseKit: c864b84feb200290f4f4c1d446d7e190125ef0ab
+  RCSceneCall: 0e940c3ce3bc4ffcf2a1d42e8a96d2a08465667c
+  RCSceneCallKit: 9a50703692eb84306ff753d9da7385d7d32ffcfc
+  RCSceneChatroomKit: 86d8c5ead5c2cb10efce95d3eea2e854e55b7942
+  RCSceneCommunity: d6cc9e1ec5ac6041916e35c8e544d411533d5394
+  RCSceneFaceBeautyKit: bd3c9d1bff49be09eb0492753012844486cbb3e9
+  RCSceneGameRoom: e615f47b53533123f79c8dfc64d9fe53959fe612
+  RCSceneLoginKit: 0db45db8d8abfa2aecc46e8ed2cc9c004f0cb358
+  RCSceneNetworkKit: 2e7d6041be424dbbd3ba5aaca4f43a4f885b5ef5
+  RCSceneRadioRoom: 000ed8497b69b7435751c5a320c31032cda6ca03
+  RCSceneRoom: 4b28ec63e29bf376f9455a2f5a7fde0c4696a989
+  RCSceneVideoRoom: 81633988f7e30a43f50e82980f4641cd31462eff
+  RCSceneVoiceRoom: 6ef46e7c34151a4bfeb982c24066d3877ac8ff4a
+  RCSceneWebKit: faaa7418a09dd075e4a7bfeb47683d511888e144
+  RCTinyGameLib: 34dc6cc854885184301f0fc7dac476f6fecf79f8
+  RCVoiceRoomLib: dcee8a8d38c85716192b44b4acc78e3c0307fc71
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
+  Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
+  RongCloudIM: 4c3befbe6e9dd813a87c499c81fb2eac54c354b3
+  RongCloudOpenSource: 6449646f6d85cbd26d50d8d52fd75bd54b9e0bd5
+  RongCloudRTC: 4ddffa66488977243b32e92923f03af9423b4f29
+  RongFUFaceBeautifier: b20f0e96d971db0db9a0d779f51f87a1508be5a8
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
+  RxGesture: f3efb47ed2d26a8082f7b660d4a59970e275a7f8
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
+  SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
+  SensorsAnalyticsSDK: 228303906b25afd21e72f4a0c1ccb0c2bc21f233
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftGen: 1366a7f71aeef49954ca5a63ba4bef6b0f24138c
+  TableViewDragger: 5933729a18d1606e16388d72f6d4fe5f3a0bcaf4
+  UMCommon: 37fe35f498e92cf57bbb06a086f02915fc35f211
+  UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
+  WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
+  XCoordinator: a5f91e43ee944f508529763921165697d3211629
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: 8ca86e83d042f676a9f94c5b52503dcb46f371d4
+
+COCOAPODS: 1.11.3
